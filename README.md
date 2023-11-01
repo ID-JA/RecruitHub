@@ -51,6 +51,20 @@ RecruitHub is an Applicant Tracking System (ATS) designed to streamline and simp
         </a>
         <br />
       </td>
+      <td align="center">
+        <a href="https://github.com/younestalibi">
+          <img
+            src="https://avatars.githubusercontent.com/u/118536564?v=4"
+            width="100px;"
+            alt="Youness"
+          />
+          <br />
+          <sub>
+            <b>younestalibi</b>
+          </sub>
+        </a>
+        <br />
+      </td>
     </tr>
   </tbody>
 </table>
