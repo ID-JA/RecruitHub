@@ -4,8 +4,16 @@ import { loginRoute } from './auth/login';
 import { RouterProvider } from '@tanstack/react-router';
 import { signUpRoute } from './auth/singup';
 import { forgotPasswordRoute } from './auth/forgot-password';
+import { homePageRoute } from './home';
+import { jobsRoute } from './jobs';
 
-const routeTree = defaultRoute.addChildren([loginRoute, signUpRoute, forgotPasswordRoute]);
+const routeTree = defaultRoute.addChildren([
+  homePageRoute,
+  loginRoute,
+  signUpRoute,
+  forgotPasswordRoute,
+  jobsRoute
+]);
 
 export const router = new Router({
   routeTree

@@ -4,11 +4,11 @@ import classes from './MainHeader.module.css';
 import { Link } from '@tanstack/react-router';
 import { RecruitHubLogo } from '../logo/logo';
 
-export function HeaderSimple() {
+export function MainHeader() {
   const [opened, { toggle }] = useDisclosure(false);
   const items = (
     [
-      ['/login', 'Jobs'],
+      ['/jobs', 'Jobs'],
       ['/login', 'Companies'],
       ['/login', 'About us']
     ] as const

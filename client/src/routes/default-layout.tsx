@@ -1,11 +1,11 @@
 import { Outlet, RootRoute } from '@tanstack/react-router';
-import { HeaderSimple } from '../components/shared/header/MainHeader';
+import { MainHeader } from '../components/shared';
 import { Container } from '@mantine/core';
 
 const Root = () => {
   return (
     <div>
-      <HeaderSimple />
+      <MainHeader />
       <Container size='xl'>
         <strong>Note : Default Layout for home, auth, jobs, companies and about us pages</strong>
         <Outlet />
