@@ -9,6 +9,9 @@ import { messagesRoute } from './messages';
 import { candidatesRoute } from './candidates';
 import { settingsRoute } from './settings';
 import { interviewsRoute } from './interviews';
+import { loginRoute } from './auth/login';
+import { signUpRoute } from './auth/singup';
+import { forgotPasswordRoute } from './auth/forgot-password';
 
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
@@ -20,7 +23,7 @@ const routeTree = rootRoute.addChildren([
     settingsRoute,
     interviewsRoute
   ]),
-  defaultLayoutRoute.addChildren([homePageRoute])
+  defaultLayoutRoute.addChildren([homePageRoute, loginRoute, signUpRoute, forgotPasswordRoute])
 ]);
 
 export const router = new Router({
