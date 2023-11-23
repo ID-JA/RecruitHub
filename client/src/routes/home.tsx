@@ -1,5 +1,5 @@
 import { Route } from '@tanstack/react-router';
-import { defaultRoute } from './default-layout';
+import { defaultLayoutRoute } from '../layouts/default-layout';
 
 function HomePage() {
   return (
@@ -10,7 +10,7 @@ function HomePage() {
 }
 
 export const homePageRoute = new Route({
-  path: '/',
+  path: '/home',
   component: HomePage,
-  getParentRoute: () => defaultRoute
+  getParentRoute: () => defaultLayoutRoute
 });

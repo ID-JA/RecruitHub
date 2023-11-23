@@ -1,5 +1,5 @@
 import { Route } from '@tanstack/react-router';
-import { defaultRoute } from '../default-layout';
+import { portalLayoutRoute } from '../../layouts/portal-layout';
 
 function Jobs() {
   return (
@@ -12,5 +12,5 @@ function Jobs() {
 export const jobsRoute = new Route({
   path: 'jobs',
   component: Jobs,
-  getParentRoute: () => defaultRoute
+  getParentRoute: () => portalLayoutRoute
 });

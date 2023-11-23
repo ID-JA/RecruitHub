@@ -1,5 +1,5 @@
 import { Route } from '@tanstack/react-router';
-import { defaultRoute } from '../default-layout';
+import { defaultLayoutRoute } from '../../layouts/default-layout';
 
 export function ForgotPassword() {
   return (
@@ -12,5 +12,5 @@ export function ForgotPassword() {
 export const forgotPasswordRoute = new Route({
   path: 'forgot-password',
   component: ForgotPassword,
-  getParentRoute: () => defaultRoute
+  getParentRoute: () => defaultLayoutRoute
 });
