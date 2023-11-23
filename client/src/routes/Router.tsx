@@ -1,11 +1,27 @@
-import { Router } from '@tanstack/react-router';
-import { defaultRoute } from './default-layout';
-import { loginRoute } from './auth/login';
+import { RootRoute, Router } from '@tanstack/react-router';
+import { defaultLayoutRoute } from '../layouts/default-layout';
 import { RouterProvider } from '@tanstack/react-router';
-import { signUpRoute } from './auth/singup';
-import { forgotPasswordRoute } from './auth/forgot-password';
+import { homePageRoute } from './home';
+import { jobsRoute } from './jobs';
+import { portalLayoutRoute } from '../layouts/portal-layout';
+import { dashboardRoute } from './dashboard';
+import { messagesRoute } from './messages';
+import { candidatesRoute } from './candidates';
+import { settingsRoute } from './settings';
+import { interviewsRoute } from './interviews';
 
-const routeTree = defaultRoute.addChildren([loginRoute, signUpRoute, forgotPasswordRoute]);
+export const rootRoute = new RootRoute();
+const routeTree = rootRoute.addChildren([
+  portalLayoutRoute.addChildren([
+    jobsRoute,
+    dashboardRoute,
+    messagesRoute,
+    candidatesRoute,
+    settingsRoute,
+    interviewsRoute
+  ]),
+  defaultLayoutRoute.addChildren([homePageRoute])
+]);
 
 export const router = new Router({
   routeTree

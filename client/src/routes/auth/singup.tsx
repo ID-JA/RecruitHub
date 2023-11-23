@@ -1,5 +1,5 @@
 import { Route } from '@tanstack/react-router';
-import { defaultRoute } from '../default-layout';
+import { defaultLayoutRoute } from '../../layouts/default-layout';
 
 export function SignUp() {
   return <h1>I am Sign up page</h1>;
@@ -8,5 +8,5 @@ export function SignUp() {
 export const signUpRoute = new Route({
   path: 'signup',
   component: SignUp,
-  getParentRoute: () => defaultRoute
+  getParentRoute: () => defaultLayoutRoute
 });

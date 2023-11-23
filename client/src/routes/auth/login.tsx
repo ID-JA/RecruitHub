@@ -1,5 +1,5 @@
 import { Link, Route } from '@tanstack/react-router';
-import { defaultRoute } from '../default-layout';
+import { defaultLayoutRoute } from '../../layouts/default-layout';
 
 const Login = () => {
   return (
@@ -13,5 +13,5 @@ const Login = () => {
 export const loginRoute = new Route({
   path: 'login',
   component: Login,
-  getParentRoute: () => defaultRoute
+  getParentRoute: () => defaultLayoutRoute
 });
