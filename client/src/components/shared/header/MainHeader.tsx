@@ -46,6 +46,9 @@ export function MainHeader() {
           <Link to='/signup'>
             <Button>Sign up</Button>
           </Link>
+          <Link to='/portal'>
+            <Button>Go to dashboard</Button>
+          </Link>
         </Group>
         <Burger opened={opened} onClick={toggle} hiddenFrom='xs' size='sm' />
       </Container>
