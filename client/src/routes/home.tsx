@@ -10,7 +10,8 @@ function HomePage() {
 }
 
 export const homePageRoute = new Route({
-  path: '/home',
+  path: '/',
+  id: 'home-page',
   component: HomePage,
   getParentRoute: () => defaultLayoutRoute
 });
