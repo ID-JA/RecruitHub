@@ -9,7 +9,6 @@ const DefaultLayout = () => {
     <>
       <MainHeader />
       <Container size='xl'>
-        <strong>Note : Default Layout for home, auth, jobs, companies and about us pages</strong>
         <Outlet />
         <TanStackRouterDevtools />
       </Container>

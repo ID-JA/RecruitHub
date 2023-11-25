@@ -12,6 +12,7 @@ import { interviewsRoute } from './interviews';
 import { loginRoute } from './auth/login';
 import { signUpRoute } from './auth/singup';
 import { forgotPasswordRoute } from './auth/forgot-password';
+import { jobBoardRoute } from './job-board/jobBoard';
 
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
@@ -23,7 +24,13 @@ const routeTree = rootRoute.addChildren([
     settingsRoute,
     interviewsRoute
   ]),
-  defaultLayoutRoute.addChildren([homePageRoute, loginRoute, signUpRoute, forgotPasswordRoute])
+  defaultLayoutRoute.addChildren([
+    homePageRoute,
+    loginRoute,
+    signUpRoute,
+    forgotPasswordRoute,
+    jobBoardRoute
+  ])
 ]);
 
 export const router = new Router({
