@@ -1,49 +1,91 @@
-import { Link, Route } from '@tanstack/react-router';
+import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
-import { Container, Divider, Group, Input } from '@mantine/core';
+import { Container, Group, Burger, Box, Anchor } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { TextInput, ActionIcon, useMantineTheme, rem } from '@mantine/core';
+import { IconSearch, IconArrowRight } from '@tabler/icons-react';
+import classes from './DoubleHeader.module.css';
+import { useState } from 'react';
 
-const JobBoard = () => {
-  return (
-    <Container
-      size='xl'
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        height: '100vh',
-        paddingTop: '50px'
+export function JobBoard() {
+  const theme = useMantineTheme();
+  const [opened, { toggle }] = useDisclosure(false);
+  const [active, setActive] = useState(0);
+
+  const mainLinks = [
+    { link: '#', label: 'For You' },
+    { link: '#', label: 'Applied Jobs' },
+    { link: '#', label: 'Saved Jobs' }
+  ];
+
+  const mainItems = mainLinks.map((item, index) => (
+    <Anchor<'a'>
+      href={item.link}
+      key={item.label}
+      className={`${classes.mainLink} ${index === active ? classes.active : ''}`}
+      data-active={index === active || undefined}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(index);
       }}
     >
-      {/* Search Input */}
-      <Group style={{ width: '70%', maxWidth: '400px' }}>
-        <Input
-          placeholder='Find your perfect job'
-          style={{ borderRadius: '40px', flex: 1, backgroundColor: '#F4F4F4' }}
-        />
-      </Group>
+      {item.label}
+    </Anchor>
+  ));
 
-      {/* Horizontal Navigation Bar */}
-      <div style={{ display: 'flex', marginTop: '20px' }}>
-        <Link to='/jobBoard' style={{ margin: '0 10px', textDecoration: 'none', color: 'black' }}>
-          For You
-        </Link>
-        <Link to='/jobBoard' style={{ margin: '0 10px', textDecoration: 'none', color: 'black' }}>
-          Applied Jobs
-        </Link>
-        <Link to='/jobBoard' style={{ margin: '0 10px', textDecoration: 'none', color: 'black' }}>
-          Saved Jobs
-        </Link>
-      </div>
+  return (
+    <Container className={classes.jobBoardContainer}>
+      {/* Add the InputWithButton component at the top center */}
 
-      {/* Divider */}
-      <Divider
-        style={{ width: '100%', backgroundColor: '#E9E9E9', height: '1.5px', margin: '20px 0' }}
+      <TextInput
+        radius='xl'
+        size='xs'
+        placeholder='Find your perfect job'
+        rightSectionWidth={50}
+        style={{ marginBottom: '0px', width: '50%' }}
+        leftSection={<IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
+        rightSection={
+          <ActionIcon size={24} radius='xl' color={theme.primaryColor} variant='filled'>
+            <IconArrowRight style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+          </ActionIcon>
+        }
       />
 
-      {/* Other components related to jobs go here */}
+      {/* DoubleHeader (Navbar) */}
+      <header className={classes.header}>
+        <Container className={classes.inner}>
+          <Box className={classes.links} visibleFrom='sm'>
+            <Group gap={0} justify='center' className={classes.mainLinks}>
+              {mainItems}
+            </Group>
+          </Box>
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            className={classes.burger}
+            size='sm'
+            hiddenFrom='sm'
+          />
+        </Container>
+      </header>
     </Container>
   );
-};
+}
+
+// ForYouContent.tsx
+/*export function ForYouContent() {
+  return <div>Content for For You tab</div>;
+}
+
+// AppliedJobsContent.tsx
+export function AppliedJobsContent() {
+  return <div>Content for Applied Jobs tab</div>;
+}
+
+// SavedJobsContent.tsx
+export function SavedJobsContent() {
+  return <div>Content for Saved Jobs tab</div>;
+}*/
 
 export const jobBoardRoute = new Route({
   path: 'jobBoard',
