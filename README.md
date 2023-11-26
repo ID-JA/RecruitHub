@@ -16,7 +16,7 @@ RecruitHub is an Applicant Tracking System (ATS) designed to streamline and simp
             width="100px;"
             alt="Jamal Id Aissa"
           />
-          <br />
+          <br/>
           <sub>
             <b>Jamal Id Aissa</b>
           </sub>
