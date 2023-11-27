@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router';
 import './Hero.css';
-// import { useState } from 'react';
 const Hero = () => {
   const tags = [
     'Equity',
@@ -16,7 +15,6 @@ const Hero = () => {
     '401K',
     'Social impact'
   ];
-  // const [oldMarginLeft,setOldMarginLeft]=useState(0);
   let oldMarginLeft = 0;
   return (
     <div className='hero-container'>

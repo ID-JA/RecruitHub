@@ -11,7 +11,7 @@ import { interviewsRoute } from './interviews';
 import { loginRoute } from './auth/login';
 import { signUpRoute } from './auth/singup';
 import { forgotPasswordRoute } from './auth/forgot-password';
-import { HomeRoute } from '../pages/Home/Home';
+import { HomeRoute } from './Home/Home';
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
   portalLayoutRoute.addChildren([
