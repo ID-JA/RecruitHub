@@ -115,8 +115,7 @@
     letter-spacing: 0.4px;
 }
 .hero-footer{
-    /* background:#68FBD0; */
-    /* box-shadow: 0 0 50px #68FBD0; */
+    margin:50px 0px;
 
     color: #47249B;
     text-align: center;
@@ -138,7 +137,10 @@
         width:auto;
     }
     .hero-desc>h3{
-        align-self:self-start;
+        align-self:center;
         width:auto;
+    }
+    .hero-buttons{
+        margin-top:0px;
     }
   }

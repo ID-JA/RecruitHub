@@ -5,7 +5,7 @@ import { Link } from '@tanstack/react-router';
 
 function Banner() {
   return (
-    <div style={{ margin: '100px 0px' }} className={classes.wrapper}>
+    <div className={classes.wrapper}>
       <div className={classes.body}>
         <Title className={classes.title}>Work from anywhere!</Title>
         <Text fw={500} fz='lg' mb={5}>
