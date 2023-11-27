@@ -28,10 +28,10 @@ const Hero = () => {
         <h3>Millions of vetted candidates</h3>
       </div>
       <div className='hero-buttons'>
-        <Link to={'/login'} className='hero-button'>
+        <Link to={'/'} className='hero-button'>
           I'm a Jobseeker
         </Link>
-        <Link to={'/login'} className='hero-button hero-hiring'>
+        <Link to={'/'} className='hero-button hero-hiring'>
           I'm Hiring
         </Link>
       </div>

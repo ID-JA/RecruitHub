@@ -55,3 +55,15 @@
 .categorie-speicalies-list>div{
     flex:1;
 }
+
+@media only screen and (max-width: 767px) {
+    .categorie-container,.categorie-speicalies-list{
+        flex-direction:column;
+    }
+    .categorie-roles::after{
+        display:none;
+    
+    }
+    
+    
+}
