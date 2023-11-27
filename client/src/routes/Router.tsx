@@ -12,6 +12,7 @@ import { loginRoute } from './auth/login';
 import { signUpRoute } from './auth/singup';
 import { forgotPasswordRoute } from './auth/forgot-password';
 import { HomeRoute } from './Home/Home';
+import { NotFoundRoute } from './NotFound/NotFound';
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
   portalLayoutRoute.addChildren([
@@ -20,7 +21,8 @@ const routeTree = rootRoute.addChildren([
     messagesRoute,
     candidatesRoute,
     settingsRoute,
-    interviewsRoute
+    interviewsRoute,
+    NotFoundRoute
   ]),
   defaultLayoutRoute.addChildren([HomeRoute, loginRoute, signUpRoute, forgotPasswordRoute])
 ]);
