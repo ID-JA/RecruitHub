@@ -4,15 +4,16 @@ import './Home.css';
 import Hero from './components/Hero/Hero';
 import Categorie from './components/Categories/Categorie';
 import Banner from './components/Banner/Banner';
+import { Container } from '@mantine/core';
 
 export const Home = () => {
   return (
-    <div className='home-container'>
+    <Container fluid={true} className='home-container'>
       <Hero />
       {/* <Test/> */}
       <Banner />
       <Categorie />
-    </div>
+    </Container>
   );
 };
 
