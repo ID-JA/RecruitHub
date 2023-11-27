@@ -9,6 +9,7 @@ export const Home = () => {
   return (
     <div className='home-container'>
       <Hero />
+      {/* <Test/> */}
       <Banner />
       <Categorie />
     </div>

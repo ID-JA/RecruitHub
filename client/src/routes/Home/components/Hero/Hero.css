@@ -1,3 +1,6 @@
+.hero-container{
+    /* background:blue */
+}
 .hero-title{
     width: 372px;
     font-family: Roboto;
@@ -65,6 +68,10 @@
     background-repeat: no-repeat;
     background-size: contain ;
     height: 528.276px;   
+
+    width: 100vw;
+    position: absolute;
+    left: 0;
 }
 .hero-tags{
     display: inline-flex;
@@ -108,6 +115,9 @@
     letter-spacing: 0.4px;
 }
 .hero-footer{
+    /* background:#68FBD0; */
+    /* box-shadow: 0 0 50px #68FBD0; */
+
     color: #47249B;
     text-align: center;
     font-family: Roboto;
@@ -119,3 +129,16 @@
     letter-spacing: 0.1px;
     width: 262px;
 }
+
+@media only screen and (max-width: 767px) {
+    .hero-desc{
+        flex-direction:column;
+    }
+    .hero-desc>p{
+        width:auto;
+    }
+    .hero-desc>h3{
+        align-self:self-start;
+        width:auto;
+    }
+  }

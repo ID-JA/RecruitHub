@@ -1,21 +1,22 @@
 import { Link } from '@tanstack/react-router';
 import './Hero.css';
+
 const Hero = () => {
-  const tags = [
-    'Equity',
-    'Startup',
-    'Remote only',
-    'Vue.js',
-    '$125K',
-    'React',
-    'Python',
-    'Biotech',
-    'Mentoriship',
-    'WFH',
-    '401K',
-    'Social impact'
-  ];
-  let oldMarginLeft = 0;
+  // const tags = [
+  //   'Equity',
+  //   'Startup',
+  //   'Remote only',
+  //   'Vue.js',
+  //   '$125K',
+  //   'React',
+  //   'Python',
+  //   'Biotech',
+  //   'Mentoriship',
+  //   'WFH',
+  //   '401K',
+  //   'Social impact'
+  // ];
+  // let oldMarginLeft = 0;
   return (
     <div className='hero-container'>
       <h1 className='hero-title'>Employ your potential.</h1>
@@ -34,12 +35,13 @@ const Hero = () => {
           I'm Hiring
         </Link>
       </div>
-      <div className='hero-quot-tags'>
+      {/* <div className='hero-quot-tags'>
         <div className='hero-quots'>
           <span className='quot'>"</span>
           <h2>This is what recruiting should look like.</h2>
           <b>Joseph G. Software Engineer</b>
         </div>
+        
         <div className='hero-tags-container'>
           {tags.map((e, i) => {
             if (i % 2 != 0) {
@@ -61,7 +63,7 @@ const Hero = () => {
             }
           })}
         </div>
-      </div>
+      </div> */}
       <center>
         <div className='hero-footer'>10,000+ innovative companies</div>
       </center>
