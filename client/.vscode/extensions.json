@@ -1,10 +1,13 @@
 {
-  "recommendations": ["csstools.postcss"],
-  "cssVariables.lookupFiles": [
-    "**/*.css",
-    "**/*.scss",
-    "**/*.sass",
-    "**/*.less",
-    "node_modules/@mantine/core/esm/index.css"
+  "recommendations": [
+    "csstools.postcss",
+    "aaron-bond.better-comments",
+    "streetsidesoftware.code-spell-checker",
+    "clinyong.vscode-css-modules",
+    "vunguyentuan.vscode-css-variables",
+    "dbaeumer.vscode-eslint",
+    "vunguyentuan.vscode-postcss",
+    "esbenp.prettier-vscode",
+    "yoavbls.pretty-ts-errors"
   ]
 }

@@ -1,0 +1,52 @@
+.root {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.tr {
+  background-color: dark-light(--mantine-color-dark-7, var(--mantine-color-white));
+  &[data-selected='true'] {
+    background-color: color(var(--mantine-color-blue-6) lightness(90%));
+  }
+}
+
+.th {
+  padding-top: var(--mantine-spacing-lg);
+  padding-bottom: var(--mantine-spacing-lg);
+  border-bottom-color: var(--mantine-color-gray-5);
+  text-align: center;
+}
+
+.td {
+  border-bottom-color: var(--mantine-color-gray-5);
+  padding-top: var(--mantine-spacing-xs);
+  padding-bottom: var(--mantine-spacing-xs);
+  text-align: center;
+}
+
+.thead {
+  z-index: 2;
+  position: sticky;
+  top: 0;
+  background-color: drak-light(var(--mantine-color-dark-7), var(--mantine-color-white));
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.scrollArea {
+  position: relative;
+  padding-bottom: var(--mantine-spacing-lg);
+}
+
+.bodyRow {
+}

@@ -1,4 +1,6 @@
 import '@mantine/core/styles.css';
+import '@mantine/core/styles.layer.css';
+import './layout.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

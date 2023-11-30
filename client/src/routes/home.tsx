@@ -3,9 +3,10 @@ import { defaultLayoutRoute } from '../layouts/default-layout';
 
 function HomePage() {
   return (
-    <div>
-      <h1>I am home page</h1>
-    </div>
+    <>
+      <h1>HELLO</h1>
+      This is home page
+    </>
   );
 }
 

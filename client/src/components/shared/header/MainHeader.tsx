@@ -10,7 +10,7 @@ export function MainHeader() {
     [
       ['/', 'Jobs'],
       ['/login', 'Companies'],
-      ['/login', 'About us']
+      ['/logins', 'About us']
     ] as const
   ).map(([to, label]) => {
     return (
