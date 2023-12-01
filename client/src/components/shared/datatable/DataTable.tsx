@@ -7,7 +7,8 @@ import {
   ScrollArea,
   Table,
   Checkbox,
-  Text
+  Text,
+  Group
 } from '@mantine/core';
 import { flexRender } from '@tanstack/react-table';
 import { ReactNode } from 'react';
@@ -287,7 +288,7 @@ function DataGridFooter({
   });
 
   return (
-    <Box px={horizontalSpacing ?? 'xs'} py='xs'>
+    <Group px={horizontalSpacing ?? 'xs'} py='xs' justify='space-between'>
       <Text size={paginationSize}>{paginationTextValue}</Text>
       <Pagination
         value={page}
@@ -296,6 +297,6 @@ function DataGridFooter({
         total={Math.ceil(totalRecords! / recordsPerPage!)}
         siblings={1}
       />
-    </Box>
+    </Group>
   );
 }
