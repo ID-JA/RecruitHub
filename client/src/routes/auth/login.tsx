@@ -11,6 +11,7 @@ import {
   Checkbox,
   Anchor
 } from '@mantine/core';
+import { RecruitHubLogo } from '../../components/shared/logo/logo';
 
 export default function Login() {
   return (
@@ -24,6 +25,9 @@ export default function Login() {
         }}
         withBorder
       >
+        <Flex justify='center' mb='md'>
+          <RecruitHubLogo />
+        </Flex>
         <TextInput label='Email' placeholder='your@gmail.com' required />
         <PasswordInput label='Password' placeholder='Your password' required mt='md' />
         <Group justify='apart' mt='lg'>

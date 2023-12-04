@@ -29,11 +29,11 @@ export function EmployerForm() {
   return (
     <div>
       <div style={{ margin: '15px' }}>
-        <Title align='center' order={3}>
+        <Title ta='center' order={3}>
           Try Recruit Hub!
         </Title>
-        <Text align='center'> We have 20k+ qualified candidates waiting for you!</Text>
-        <Text size='sm' align='center' mt={5}>
+        <Text ta='center'> We have 20k+ qualified candidates waiting for you!</Text>
+        <Text size='sm' ta='center' mt={5}>
           You already joined us?{' '}
           <Anchor href='/login' size='sm'>
             {' '}
