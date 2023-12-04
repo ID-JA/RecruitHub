@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import { Paper, Container, Grid, rem, Tabs } from '@mantine/core';

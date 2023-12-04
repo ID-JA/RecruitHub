@@ -41,8 +41,8 @@ export default function Login() {
       >
         <TextInput label='Email' placeholder='your@gmail.com' required />
         <PasswordInput label='Password' placeholder='Your password' required mt='md' />
-        <Group position='apart' mt='lg'>
-          <Checkbox label='Remember me' sx={{ lineHeight: 1 }} />
+        <Group justify='apart' mt='lg'>
+          <Checkbox label='Remember me' />
           <Anchor href='/forgot-password' size='sm'>
             {' '}
             Forgot password?
