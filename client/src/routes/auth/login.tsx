@@ -1,16 +1,15 @@
-import { Link, Route } from '@tanstack/react-router';
+import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
   TextInput,
   PasswordInput,
   Paper,
-  Text,
   Group,
   Button,
-  Divider,
-  Stack,
   rem,
-  Flex
+  Flex,
+  Checkbox,
+  Anchor
 } from '@mantine/core';
 import { RecruitHubLogo } from '../../components/shared/logo/logo';
 
@@ -26,31 +25,21 @@ export default function Login() {
         }}
         withBorder
       >
-        <Flex justify='center'>
+        <Flex justify='center' mb='md'>
           <RecruitHubLogo />
         </Flex>
-
-        <Text c='dimmed' size='sm' ta='center' mt='sm'>
-          Empower your journey in our Applicant Tracking System.
-        </Text>
-
-        <Divider my='lg' />
-        <form>
-          <Stack>
-            <TextInput required label='Email' />
-            <PasswordInput required label='Password' />
-          </Stack>
-          <Group justify='space-between' mt='xl'>
-            <Link to='/signup'>
-              <Text component='span' c='dimmed' tt='none' size='sm'>
-                Don't have an account? Register
-              </Text>
-            </Link>
-            <Button type='submit' radius='xl'>
-              Sign in
-            </Button>
-          </Group>
-        </form>
+        <TextInput label='Email' placeholder='your@gmail.com' required />
+        <PasswordInput label='Password' placeholder='Your password' required mt='md' />
+        <Group justify='apart' mt='lg'>
+          <Checkbox label='Remember me' />
+          <Anchor href='/forgot-password' size='sm'>
+            {' '}
+            Forgot password?
+          </Anchor>
+        </Group>
+        <Button fullWidth mt='xl'>
+          Sign in
+        </Button>
       </Paper>
     </Flex>
   );
