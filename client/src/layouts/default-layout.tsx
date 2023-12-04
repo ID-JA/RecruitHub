@@ -1,17 +1,19 @@
-import { Outlet, Route } from '@tanstack/react-router';
-import { Container } from '@mantine/core';
+import { Outlet, Route, useRouter } from '@tanstack/react-router';
 import { MainHeader } from '../components/shared';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { rootRoute } from '../routes/Router';
+import { Background } from '../components/shared/Background/Background';
 
-const DefaultLayout = () => {
+const excludedLinks = ['/login', '/signup'];
+
+const DefaultLayout = (): JSX.Element => {
+  const router = useRouter();
   return (
     <>
-      <MainHeader />
-      <Container size='xl'>
-        <Outlet />
-        <TanStackRouterDevtools />
-      </Container>
+      <Background />
+      {!excludedLinks.includes(router.state.location.href) && <MainHeader />}
+      <Outlet />
+      <TanStackRouterDevtools />
     </>
   );
 };

@@ -1,14 +1,15 @@
-import { TextInput, Button, Group, Title, Text, Box, Divider, Anchor } from '@mantine/core';
+import { TextInput, Button, Group, Title, Text, Box, Divider } from '@mantine/core';
+import { Link } from '@tanstack/react-router';
 
 export function TalentForm() {
   return (
     <>
       <Box mt='lg'>
-        <Title order={2} fw={700} ta='center'>
+        <Title order={2} fw={700} ta='center' mb='sm'>
           We Bring Job Offers to You!
         </Title>
-        <Text ta='center' size='sm'>
-          Join thousands of people who’ve found their dream job using RecruitHub.
+        <Text ta='center' size='sm' mx='auto' maw='310px'>
+          20k+ found dream jobs on RecruitHub. Join them
         </Text>
       </Box>
       <Divider my='xl' />
@@ -25,9 +26,11 @@ export function TalentForm() {
           <Text size='sm'>
             Already have an account?
             <br />
-            <Anchor href='/login' size='sm'>
-              Sign in
-            </Anchor>
+            <Link to='/login'>
+              <Text component='span' c='blue' size='sm'>
+                Sign in
+              </Text>
+            </Link>
           </Text>
           <Button type='submit'>Get Started</Button>
         </Group>

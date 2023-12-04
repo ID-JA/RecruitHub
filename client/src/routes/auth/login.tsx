@@ -3,61 +3,62 @@ import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
   TextInput,
   PasswordInput,
-  Checkbox,
-  Anchor,
   Paper,
-  Title,
   Text,
-  Container,
   Group,
-  Button
+  Button,
+  Divider,
+  Stack,
+  rem,
+  Flex
 } from '@mantine/core';
+import { RecruitHubLogo } from '../../components/shared/logo/logo';
 
 export default function Login() {
   return (
-    <Container size={420} my={40}>
-      {<Link to='/profile'>go to profile page</Link>}
-      <Title fw='900' ta='center'>
-        Welcome back!
-      </Title>
-      <Text ta='center'> you've been missed</Text>
-      <Text color='dimmed' size='sm' ta='center' mt={5}>
-        Do not have an account yet?{' '}
-        <Anchor href='/signup' size='sm'>
-          {' '}
-          Create account
-        </Anchor>
-      </Text>
-
+    <Flex justify='center' align='center' h='100vh' w='100vw'>
       <Paper
-        withBorder
-        shadow='md'
-        p={30}
-        mt={30}
-        radius='md'
+        radius='lg'
         style={{
-          backgroundColor: '#F5F7F8'
+          padding: rem(40),
+          maxWidth: '28rem',
+          width: '100%'
         }}
+        withBorder
       >
-        <TextInput label='Email' placeholder='your@gmail.com' required />
-        <PasswordInput label='Password' placeholder='Your password' required mt='md' />
-        <Group justify='apart' mt='lg'>
-          <Checkbox label='Remember me' />
-          <Anchor href='/forgot-password' size='sm'>
-            {' '}
-            Forgot password?
-          </Anchor>
-        </Group>
-        <Button fullWidth mt='xl'>
-          Sign in
-        </Button>
+        <Flex justify='center'>
+          <RecruitHubLogo />
+        </Flex>
+
+        <Text c='dimmed' size='sm' ta='center' mt='sm'>
+          Empower your journey in our Applicant Tracking System.
+        </Text>
+
+        <Divider my='lg' />
+        <form>
+          <Stack>
+            <TextInput required label='Email' />
+            <PasswordInput required label='Password' />
+          </Stack>
+          <Group justify='space-between' mt='xl'>
+            <Link to='/signup'>
+              <Text component='span' c='dimmed' tt='none' size='sm'>
+                Don't have an account? Register
+              </Text>
+            </Link>
+            <Button type='submit' radius='xl'>
+              Sign in
+            </Button>
+          </Group>
+        </form>
       </Paper>
-    </Container>
+    </Flex>
   );
 }
 
 export const loginRoute = new Route({
   path: 'login',
+  id: 'signin',
   component: Login,
   getParentRoute: () => defaultLayoutRoute
 });

@@ -1,24 +1,25 @@
 import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
-import { Container, rem, Paper } from '@mantine/core';
+import { rem, Paper, Flex } from '@mantine/core';
 
-import { SignUpForm } from '../../components/auth/SignupTabs';
+import { SignUpForm } from '../../components/auth/SignupForm';
 
 export function SignUp() {
   return (
-    <Container size='lg'>
+    <Flex justify='center' align='center' h='100vh' w='100vw'>
       <Paper
+        shadow='sm'
+        radius='lg'
         style={{
-          maxWidth: rem(600),
-          margin: 'auto',
-          padding: rem(20),
-          marginTop: '40px'
+          padding: rem(40),
+          maxWidth: '28rem',
+          width: '100%'
         }}
         withBorder
       >
         <SignUpForm />
       </Paper>
-    </Container>
+    </Flex>
   );
 }
 
