@@ -3,7 +3,6 @@ import { useDisclosure } from '@mantine/hooks';
 import classes from './MainHeader.module.css';
 import { Link } from '@tanstack/react-router';
 import { RecruitHubLogo } from '../logo/logo';
-import { ColorSchemaToggler } from '../ColorShemaToggler/ColorShemaToggler';
 
 export function MainHeader() {
   const [opened, { toggle }] = useDisclosure(false);
@@ -50,7 +49,6 @@ export function MainHeader() {
           <Link to='/portal'>
             <Button>Go to dashboard</Button>
           </Link>
-          <ColorSchemaToggler />
         </Group>
         <Burger opened={opened} onClick={toggle} hiddenFrom='xs' size='sm' />
       </Container>
