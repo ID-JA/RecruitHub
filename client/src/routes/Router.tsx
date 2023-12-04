@@ -12,7 +12,8 @@ import { interviewsRoute } from './interviews';
 import { loginRoute } from './auth/login';
 import { signUpRoute } from './auth/singup';
 import { forgotPasswordRoute } from './auth/forgot-password';
-
+import { resetPasswordRoute } from './auth/reset-password';
+import { profileRoute } from './profile/profile';
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
   portalLayoutRoute.addChildren([
@@ -23,7 +24,14 @@ const routeTree = rootRoute.addChildren([
     settingsRoute,
     interviewsRoute
   ]),
-  defaultLayoutRoute.addChildren([homePageRoute, loginRoute, signUpRoute, forgotPasswordRoute])
+  defaultLayoutRoute.addChildren([
+    homePageRoute,
+    loginRoute,
+    signUpRoute,
+    forgotPasswordRoute,
+    resetPasswordRoute,
+    profileRoute
+  ])
 ]);
 
 export const router = new Router({
