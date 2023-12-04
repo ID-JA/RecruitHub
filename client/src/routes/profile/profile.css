@@ -1,0 +1,7 @@
+.myDiv {
+    width: 25%;
+    box-sizing: border-box;
+    background-color: #3498db; /* Set your desired color */
+    height: 100vh; /* Set the height to 100% of the viewport height */
+  }
+  
