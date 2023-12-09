@@ -4,9 +4,6 @@ import { Container, Tabs } from '@mantine/core';
 import { TextInput, ActionIcon, rem } from '@mantine/core';
 import { IconSearch, IconArrowRight } from '@tabler/icons-react';
 import classes from './DoubleHeader.module.css';
-import ForYou from './ForYou';
-import SavedJobs from './SavedJobs';
-import AppliedJobs from './AppliedJobs';
 
 export function JobBoard() {
   return (
@@ -25,30 +22,13 @@ export function JobBoard() {
         }
       />
 
-      <Tabs defaultValue='foryou' style={{ width: '100%', marginBottom: '20px' }}>
-        <Tabs.List justify='center' style={{ marginBottom: '10px' }}>
-          <Tabs.Tab value='foryou' style={{ fontWeight: 700 }}>
-            For You
-          </Tabs.Tab>
-          <Tabs.Tab value='appliedjobs' style={{ fontWeight: 700 }}>
-            Applied Jobs
-          </Tabs.Tab>
-          <Tabs.Tab value='savedjobs' style={{ fontWeight: 700 }}>
-            Saved Jobs
-          </Tabs.Tab>
+      {/* Add the Tabs component here */}
+      <Tabs defaultValue='first'>
+        <Tabs.List justify='center'>
+          <Tabs.Tab value='first'>First tab</Tabs.Tab>
+          <Tabs.Tab value='second'>Second tab</Tabs.Tab>
+          <Tabs.Tab value='third'>Third tab</Tabs.Tab>
         </Tabs.List>
-
-        <Tabs.Panel value='foryou' style={{ width: '100%', marginTop: '8px' }}>
-          <ForYou />
-        </Tabs.Panel>
-
-        <Tabs.Panel value='appliedjobs'>
-          <AppliedJobs />
-        </Tabs.Panel>
-
-        <Tabs.Panel value='savedjobs'>
-          <SavedJobs />
-        </Tabs.Panel>
       </Tabs>
     </Container>
   );
