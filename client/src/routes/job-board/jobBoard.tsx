@@ -1,51 +1,55 @@
 import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
-import { Container, Burger, Tabs } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { TextInput, ActionIcon, useMantineTheme, rem } from '@mantine/core';
+import { Container, Tabs } from '@mantine/core';
+import { TextInput, ActionIcon, rem } from '@mantine/core';
 import { IconSearch, IconArrowRight } from '@tabler/icons-react';
 import classes from './DoubleHeader.module.css';
+import ForYou from './ForYou';
+import SavedJobs from './SavedJobs';
+import AppliedJobs from './AppliedJobs';
 
 export function JobBoard() {
-  const theme = useMantineTheme();
-  const [opened, { toggle }] = useDisclosure(false);
-
   return (
     <Container className={classes.jobBoardContainer}>
       <TextInput
         radius='xl'
-        size='xs'
+        size='s'
         placeholder='Find your perfect job'
-        rightSectionWidth={50}
-        style={{ marginBottom: '0px', width: '50%' }}
-        leftSection={<IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
+        rightSectionWidth={90}
+        style={{ marginBottom: '10px', width: '500px' }}
+        leftSection={<IconSearch style={{ width: rem(22), height: rem(22) }} stroke={1.5} />}
         rightSection={
-          <ActionIcon size={24} radius='xl' color={theme.primaryColor} variant='filled'>
-            <IconArrowRight style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+          <ActionIcon size={28} radius='xl' color='#53A8E6' variant='filled'>
+            <IconArrowRight style={{ width: rem(26), height: rem(26) }} stroke={1.5} />
           </ActionIcon>
         }
       />
 
-      {/* Add the Tabs component here */}
-      <Tabs defaultValue='first'>
-        <Tabs.List justify='center'>
-          <Tabs.Tab value='first'>First tab</Tabs.Tab>
-          <Tabs.Tab value='second'>Second tab</Tabs.Tab>
-          <Tabs.Tab value='third'>Third tab</Tabs.Tab>
+      <Tabs defaultValue='foryou' style={{ width: '100%', marginBottom: '20px' }}>
+        <Tabs.List justify='center' style={{ marginBottom: '10px' }}>
+          <Tabs.Tab value='foryou' style={{ fontWeight: 700 }}>
+            For You
+          </Tabs.Tab>
+          <Tabs.Tab value='appliedjobs' style={{ fontWeight: 700 }}>
+            Applied Jobs
+          </Tabs.Tab>
+          <Tabs.Tab value='savedjobs' style={{ fontWeight: 700 }}>
+            Saved Jobs
+          </Tabs.Tab>
         </Tabs.List>
-      </Tabs>
 
-      <header className={classes.header}>
-        <Container className={classes.inner}>
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            className={classes.burger}
-            size='sm'
-            hiddenFrom='sm'
-          />
-        </Container>
-      </header>
+        <Tabs.Panel value='foryou' style={{ width: '100%', marginTop: '8px' }}>
+          <ForYou />
+        </Tabs.Panel>
+
+        <Tabs.Panel value='appliedjobs'>
+          <AppliedJobs />
+        </Tabs.Panel>
+
+        <Tabs.Panel value='savedjobs'>
+          <SavedJobs />
+        </Tabs.Panel>
+      </Tabs>
     </Container>
   );
 }
