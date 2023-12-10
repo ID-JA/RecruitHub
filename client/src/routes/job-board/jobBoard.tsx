@@ -10,7 +10,7 @@ import AppliedJobs from './AppliedJobs';
 
 export function JobBoard() {
   return (
-    <Container className={classes.jobBoardContainer}>
+    <Container fluid={true} className={classes.jobBoardContainer}>
       <TextInput
         radius='xl'
         size='s'
@@ -25,7 +25,7 @@ export function JobBoard() {
         }
       />
 
-      <Tabs defaultValue='foryou' style={{ width: '100%', marginBottom: '20px' }}>
+      <Tabs defaultValue='foryou' style={{ width: '95%', marginBottom: '0px' }}>
         <Tabs.List justify='center' style={{ marginBottom: '10px' }}>
           <Tabs.Tab value='foryou' style={{ fontWeight: 700 }}>
             For You
