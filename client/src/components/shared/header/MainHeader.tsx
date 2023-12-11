@@ -14,7 +14,7 @@ export function MainHeader() {
     ] as const
   ).map(([to, label]) => {
     return (
-      <div key={to}>
+      <div key={label}>
         <Link
           to={to}
           className={classes.link}
