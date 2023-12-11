@@ -60,7 +60,7 @@ RecruitHub is an Applicant Tracking System (ATS) designed to streamline and simp
           />
           <br />
           <sub>
-            <b>younestalibi</b>
+            <b>Younes Talibi</b>
           </sub>
         </a>
         <br />
