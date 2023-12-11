@@ -30,13 +30,12 @@ class User extends Authenticatable
     
     public function profile()
     {
-        if ($this->role === 'candidate') {
+        if ($this->type === 'candidate') {
             return $this->hasOne(Candidate::class);
-        } elseif ($this->role === 'recruiter') {
+        } elseif ($this->type === 'recruiter') {
             return $this->hasOne(Recruiter::class);
         }
 
-        // Add other roles as needed
         return null;
     }
 
