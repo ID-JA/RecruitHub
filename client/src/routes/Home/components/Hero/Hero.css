@@ -142,5 +142,7 @@
     }
     .hero-buttons{
         margin-top:0px;
+        flex-direction: row;
+        display: inline-flex;
     }
   }
