@@ -4,9 +4,9 @@ import { Container, Tabs } from '@mantine/core';
 import { TextInput, ActionIcon, rem } from '@mantine/core';
 import { IconSearch, IconArrowRight } from '@tabler/icons-react';
 import classes from './DoubleHeader.module.css';
-import ForYou from './ForYou';
-import SavedJobs from './SavedJobs';
-import AppliedJobs from './AppliedJobs';
+import ForYou from '../../components/jobs-board/ForYou';
+import AppliedJobs from '../../components/jobs-board/AppliedJobs';
+import SavedJobs from '../../components/jobs-board/SavedJobs';
 
 export function JobBoard() {
   return (
@@ -25,7 +25,7 @@ export function JobBoard() {
         }
       />
 
-      <Tabs defaultValue='foryou' style={{ width: '95%', marginBottom: '0px' }}>
+      <Tabs defaultValue='appliedjobs' style={{ width: '95%', marginBottom: '0px' }}>
         <Tabs.List justify='center' style={{ marginBottom: '10px' }}>
           <Tabs.Tab value='foryou' style={{ fontWeight: 700 }}>
             For You
@@ -55,7 +55,7 @@ export function JobBoard() {
 }
 
 export const jobBoardRoute = new Route({
-  path: 'jobBoard',
+  path: 'jobs-board',
   component: JobBoard,
   getParentRoute: () => defaultLayoutRoute
 });

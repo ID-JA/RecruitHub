@@ -12,7 +12,7 @@ import { interviewsRoute } from './interviews';
 import { loginRoute } from './auth/login';
 import { signUpRoute } from './auth/singup';
 import { forgotPasswordRoute } from './auth/forgot-password';
-import { jobBoardRoute } from './job-board/jobBoard';
+import { jobBoardRoute } from './job-board/jobs-board';
 
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
