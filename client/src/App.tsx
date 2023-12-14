@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppRouter } from './routes/Router';
 import { MantineProvider, createTheme } from '@mantine/core';
+import './global.css';
 
 const theme = createTheme({});
 

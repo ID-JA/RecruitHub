@@ -22,6 +22,24 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+    
+
+    /**
+     * The methods of the user model
+     */
+    
+    public function profile()
+    {
+        if ($this->type === 'candidate') {
+            return $this->hasOne(Candidate::class);
+        } elseif ($this->type === 'recruiter') {
+            return $this->hasOne(Recruiter::class);
+        }
+
+        return null;
+    }
+
+
 
     /**
      * The attributes that should be hidden for serialization.
