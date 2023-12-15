@@ -21,9 +21,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        dd( $request->user()->profile());
-    });
-
+    Route::get('/user', [AuthController::class, 'user']);
     Route::delete('/logout', [AuthController::class, 'logout']);
 });
