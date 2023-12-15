@@ -9,6 +9,10 @@ class Candidate extends Model
 {
     use HasFactory;
 
+    protected $fillable=[
+        'resume_path','user_id'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
