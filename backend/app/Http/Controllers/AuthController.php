@@ -8,9 +8,15 @@ use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
     public function register(Request $request)
     {
         $validatedUser = $request->validate([
@@ -33,9 +39,14 @@ class AuthController extends Controller
         } elseif ($validatedUser['role'] === 'recruiter') {
             $user->profile()->create($validatedRecruiter);
         }
-        $user->profile;
         
         $token = $user->createToken('authToken')->plainTextToken;
+        event(new Registered($user));
+
+        $user->profile;
+
+
+        // $user->sendEmailVerificationNotification();
         return response()->json(['token' => $token,'user' => $user], 201);
     }
     
