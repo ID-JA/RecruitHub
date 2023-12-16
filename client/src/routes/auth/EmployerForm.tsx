@@ -40,7 +40,7 @@ export function EmployerForm() {
           </Anchor>
         </Text>
       </div>
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <form>
         <TextInput
           variant='filled'
           label='Full Name'

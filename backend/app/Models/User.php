@@ -42,4 +42,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function profile()
+    {
+        if ($this->type == 'candidate') {
+            return $this->hasOne(Candidate::class);
+        } elseif ($this->type == 'recruiter') {
+            return $this->hasOne(Recruiter::class);
+        } else {
+            return null;
+        }
+
+    }
 }

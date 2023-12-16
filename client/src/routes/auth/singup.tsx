@@ -25,7 +25,6 @@ export function SignUp() {
     Talent: talentImage,
     Employer: employerImage
   };
-  //styling tabs
 
   return (
     <Container size='lg'>
