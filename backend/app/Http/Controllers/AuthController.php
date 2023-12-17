@@ -40,14 +40,10 @@ class AuthController extends Controller
             $user->profile()->create($validatedRecruiter);
         }
         
-        $token = $user->createToken('authToken')->plainTextToken;
+        // $user->createToken('authToken')->plainTextToken;
+        Auth::login($user);
         event(new Registered($user));
-
-        $user->profile;
-
-
-        // $user->sendEmailVerificationNotification();
-        return response()->json(['token' => $token,'user' => $user], 201);
+        return response()->json(['message' => 'Verification email sent. Please check your email.'], 201);
     }
     
     public function login(Request $request)
