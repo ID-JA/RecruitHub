@@ -39,27 +39,33 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
+        $credentials['password'] = Hash::make($credentials['password']);
+
         if (Auth::Attempt($credentials)) {
             $user = auth()->user();
             $token = $user->createToken('AuthToken')->plainTextToken;
-
             return response(['token' => $token, 'user' => $user], 201);
 
         } else {
             return response(['message' => 'invalid credentails'], 401);
         }
-
     }
 
     public function logout(Request $request)
     {
-        Auth::user()->tokens()->delete();
+        // if(Auth::check()){
+        //     Auth::logout();
+        //     return response()->json(['message' => 'Successfully logged out']);
+        // }else
+        //     return response()->json(['message' => 'user not authenticated']);
 
-        return response()->json(['message' => 'Successfully logged out']);
+
+         Auth::user()->tokens()->delete();
+
+       
     }
 }
