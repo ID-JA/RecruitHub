@@ -3,7 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\CodeCheckController;
+use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +22,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 */
 
 
-Route::post('/login', [AuthController::class, 'login'])->middleware('verified');
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-
-Route::get('/login',  [AuthController::class, 'login'])->name('login');
 
 Route::middleware(['auth:sanctum','verified'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
@@ -33,3 +36,6 @@ Route::middleware(['auth:sanctum','verified'])->group(function () {
     });
 });
 
+
+Route::post('password/email', [PasswordController::class, 'send']);
+Route::post('password/reset', [PasswordController::class, 'reset']);

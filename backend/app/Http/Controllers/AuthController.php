@@ -12,13 +12,11 @@ use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
-    public function showLoginForm()
-    {
-        return view('auth.login');
-    }
+
 
     public function register(Request $request)
     {
+        
         $validatedUser = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
