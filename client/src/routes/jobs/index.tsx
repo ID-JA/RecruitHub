@@ -1,10 +1,16 @@
-import { Route } from '@tanstack/react-router';
+import { Link, Route } from '@tanstack/react-router';
 import { portalLayoutRoute } from '../../layouts/portal-layout';
+import {Group,Button} from "@mantine/core"
+import { IconPlus } from '@tabler/icons-react';
+import CreateJobModal from '../../components/jobs/CreateJobModal';
 
-function Jobs() {
+export function Jobs() {
   return (
     <div>
-      <h1>Jobs (List of jobs)</h1>
+      <Group justify='space-between'>
+        <h1>Jobs (List of jobs)</h1>
+          <CreateJobModal/>
+      </Group>
     </div>
   );
 }

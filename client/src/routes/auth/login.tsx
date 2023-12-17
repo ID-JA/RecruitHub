@@ -47,7 +47,6 @@ export default function Login() {
 
 export const loginRoute = new Route({
   path: 'login',
-  id: 'signin',
   component: Login,
   getParentRoute: () => defaultLayoutRoute
 });

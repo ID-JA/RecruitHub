@@ -13,13 +13,12 @@ const DefaultLayout = (): JSX.Element => {
       <Background />
       {!excludedLinks.includes(router.state.location.href) && <MainHeader />}
       <Outlet />
-      <TanStackRouterDevtools />
     </>
   );
 };
 
 export const defaultLayoutRoute = new Route({
-  path: '/',
+  id: 'default-layout',
   getParentRoute: () => rootRoute,
   component: DefaultLayout
 });
