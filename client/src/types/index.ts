@@ -9,3 +9,13 @@ export interface LocationAutocompleteHook {
   suggestions: LocationSuggestion[];
   loading: boolean;
 }
+
+export type JobProps = {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  status: string;
+  applicants: number;
+  created: string;
+};
