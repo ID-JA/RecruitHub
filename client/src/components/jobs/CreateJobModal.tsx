@@ -1,8 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import '@mantine/tiptap/styles.css';
-
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Flex,
   Button,
@@ -22,19 +18,23 @@ import {
   Select,
   Textarea
 } from '@mantine/core';
+
 import { useDisclosure, useFocusTrap, useHotkeys } from '@mantine/hooks';
-import classes from './CreateJobModal.module.css';
 import { IconPlus, IconX } from '@tabler/icons-react';
-import Highlight from '@tiptap/extension-highlight';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
+
+import { TextEditor } from '../shared/text-editor';
+import { useGeoLocation } from '../../hook/use-geolocation';
+
+import classes from './CreateJobModal.module.css';
+
+const content =
+  '<h2 style="text-align: center;">Welcome to Mantine rich text editor</h2><p><code>RichTextEditor</code> component focuses on usability and is designed to be as simple as possible to bring a familiar editing experience to regular users. <code>RichTextEditor</code> is based on <a href="https://tiptap.dev/" rel="noopener noreferrer" target="_blank">Tiptap.dev</a> and supports all of its features:</p><ul><li>General text formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strike-through</s> </li><li>Headings (h1-h6)</li><li>Sub and super scripts (<sup>&lt;sup /&gt;</sup> and <sub>&lt;sub /&gt;</sub> tags)</li><li>Ordered and bullet lists</li><li>Text align&nbsp;</li><li>And all <a href="https://tiptap.dev/extensions" target="_blank" rel="noopener noreferrer">other extensions</a></li></ul>';
 
 export default function CreateJobModal() {
   const [withRange, setWithRange] = useState(false);
   const [opened, { open, close }] = useDisclosure();
   useHotkeys([['escape', () => close()]]);
+  const { value, onInputChange, suggestions, loading } = useGeoLocation();
 
   const [scrollPosition, setScrollPosition] = useState({ top: 0, bottom: 0 });
 
@@ -72,42 +72,54 @@ export default function CreateJobModal() {
       {opened && (
         <RemoveScroll>
           <div ref={focusTrapRef}>
-            <Box
-              role='presentation'
-              style={{
-                position: 'fixed',
-                zIndex: '500',
-                inset: '0px',
-                backgroundColor: 'var(--ds-blanket, rgba(9, 30, 66, 0.54))',
-                overflowY: 'auto',
-                pointerEvents: 'initial'
-              }}
-            >
+            <Box role='presentation' className={classes.presentation}>
               <Paper bg='transparent' className={classes.paper}>
                 <section className={classes.dialog}>
-                  <ModalHeader handleClose={close} />
+                  <Flex className={classes.dialogHeader}>
+                    <Title order={3}>Create job</Title>
+                    <div>
+                      <ActionIcon
+                        onClick={close}
+                        variant='subtle'
+                        color='gray.7'
+                        aria-label='Exit full screen'
+                      >
+                        <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                      </ActionIcon>
+                    </div>
+                  </Flex>
                   <ScrollArea
                     viewportRef={scrollableDivRef}
                     type='always'
-                    styles={{
-                      viewport: {
-                        padding: '20px 0px'
-                      },
-                      root: {
-                        borderTop:
-                          scrollPosition.top > 0 ? 'solid 1px #ccc' : 'solid 1px transparent',
-                        borderBottom:
-                          scrollPosition.bottom > 0 ? 'solid 1px #ccc' : 'solid 1px transparent'
-                      }
-                    }}
+                    className={classes.scrollArea}
+                    data-scroll={
+                      scrollPosition.top > 0
+                        ? scrollPosition.bottom > 0
+                          ? 'both'
+                          : 'top'
+                        : scrollPosition.bottom > 0
+                          ? 'bottom'
+                          : ''
+                    }
                   >
                     <Text c='gray' size='sm' px='md'>
                       Required fields are marked with an asterisk{' '}
                       <span style={{ color: 'var(--mantine-color-red-6' }}>*</span>
                     </Text>
                     <Stack mt='lg' px='xl'>
+                      <div></div>
                       <TextInput label='Job Title' placeholder='e.g., Product Manager' />
-                      <TextInput label='Job Location' />
+                      <Select
+                        searchable
+                        label='Job Location'
+                        placeholder='e.g., San Francisco, CA'
+                        value={value}
+                        onSearchChange={onInputChange}
+                        data={suggestions.map((suggestion) => ({
+                          value: suggestion.displayName,
+                          label: suggestion.displayName
+                        }))}
+                      />
 
                       <TextInput label='Job Title' placeholder='Job Title' />
                       <Radio.Group name='employmentType' label='Job type' withAsterisk>
@@ -118,7 +130,7 @@ export default function CreateJobModal() {
                           <Radio value='temporary' label='Temporary' />
                         </Group>
                       </Radio.Group>
-                      <Demo />
+                      <TextEditor content={content} />
                       <div>
                         <Group align='end' grow>
                           <NumberInput label='Salary' placeholder='Enter Amount' />
@@ -193,7 +205,7 @@ export default function CreateJobModal() {
                       <Button onClick={close} variant='transparent'>
                         Cancel
                       </Button>
-                      <Button onClick={close} variant='outlined'>
+                      <Button onClick={close} variant='outline'>
                         Draft
                       </Button>
                       <Button>Publish</Button>
@@ -207,91 +219,5 @@ export default function CreateJobModal() {
       )}
       <Button onClick={open}>Create job</Button>
     </>
-  );
-}
-
-function ModalHeader({ handleClose }: { handleClose: () => void }) {
-  return (
-    <Flex className={classes.dialogHeader}>
-      <Title order={3}>Create job</Title>
-      <div>
-        <ActionIcon
-          onClick={handleClose}
-          variant='subtle'
-          color='gray.7'
-          aria-label='Exit full screen'
-        >
-          <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
-        </ActionIcon>
-      </div>
-    </Flex>
-  );
-}
-
-import { RichTextEditor, Link } from '@mantine/tiptap';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-
-const content =
-  '<h2 style="text-align: center;">Welcome to Mantine rich text editor</h2><p><code>RichTextEditor</code> component focuses on usability and is designed to be as simple as possible to bring a familiar editing experience to regular users. <code>RichTextEditor</code> is based on <a href="https://tiptap.dev/" rel="noopener noreferrer" target="_blank">Tiptap.dev</a> and supports all of its features:</p><ul><li>General text formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strike-through</s> </li><li>Headings (h1-h6)</li><li>Sub and super scripts (<sup>&lt;sup /&gt;</sup> and <sub>&lt;sub /&gt;</sub> tags)</li><li>Ordered and bullet lists</li><li>Text align&nbsp;</li><li>And all <a href="https://tiptap.dev/extensions" target="_blank" rel="noopener noreferrer">other extensions</a></li></ul>';
-
-function Demo() {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
-      TextAlign.configure({ types: ['heading', 'paragraph'] })
-    ],
-    content
-  });
-
-  return (
-    <RichTextEditor editor={editor}>
-      <RichTextEditor.Toolbar sticky stickyOffset={60}>
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Bold />
-          <RichTextEditor.Italic />
-          <RichTextEditor.Underline />
-          <RichTextEditor.Strikethrough />
-          <RichTextEditor.ClearFormatting />
-          <RichTextEditor.Highlight />
-          <RichTextEditor.Code />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.H1 />
-          <RichTextEditor.H2 />
-          <RichTextEditor.H3 />
-          <RichTextEditor.H4 />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Blockquote />
-          <RichTextEditor.Hr />
-          <RichTextEditor.BulletList />
-          <RichTextEditor.OrderedList />
-          <RichTextEditor.Subscript />
-          <RichTextEditor.Superscript />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Link />
-          <RichTextEditor.Unlink />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.AlignLeft />
-          <RichTextEditor.AlignCenter />
-          <RichTextEditor.AlignJustify />
-          <RichTextEditor.AlignRight />
-        </RichTextEditor.ControlsGroup>
-      </RichTextEditor.Toolbar>
-
-      <RichTextEditor.Content />
-    </RichTextEditor>
   );
 }
