@@ -16,7 +16,8 @@ import {
   Stack,
   NumberInput,
   Select,
-  Textarea
+  Textarea,
+  MultiSelect
 } from '@mantine/core';
 
 import { useDisclosure, useFocusTrap, useHotkeys } from '@mantine/hooks';
@@ -24,17 +25,15 @@ import { IconPlus, IconX } from '@tabler/icons-react';
 
 import { TextEditor } from '../shared/text-editor';
 import { useGeoLocation } from '../../hook/use-geolocation';
+import { currencies, industries, salaryTimeFrame } from '../../data';
 
 import classes from './CreateJobModal.module.css';
-
-const content =
-  '<h2 style="text-align: center;">Welcome to Mantine rich text editor</h2><p><code>RichTextEditor</code> component focuses on usability and is designed to be as simple as possible to bring a familiar editing experience to regular users. <code>RichTextEditor</code> is based on <a href="https://tiptap.dev/" rel="noopener noreferrer" target="_blank">Tiptap.dev</a> and supports all of its features:</p><ul><li>General text formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strike-through</s> </li><li>Headings (h1-h6)</li><li>Sub and super scripts (<sup>&lt;sup /&gt;</sup> and <sub>&lt;sub /&gt;</sub> tags)</li><li>Ordered and bullet lists</li><li>Text align&nbsp;</li><li>And all <a href="https://tiptap.dev/extensions" target="_blank" rel="noopener noreferrer">other extensions</a></li></ul>';
 
 export default function CreateJobModal() {
   const [withRange, setWithRange] = useState(false);
   const [opened, { open, close }] = useDisclosure();
   useHotkeys([['escape', () => close()]]);
-  const { value, onInputChange, suggestions, loading } = useGeoLocation();
+  const { value, onInputChange, suggestions } = useGeoLocation();
 
   const [scrollPosition, setScrollPosition] = useState({ top: 0, bottom: 0 });
 
@@ -53,18 +52,21 @@ export default function CreateJobModal() {
       handleScroll();
     };
 
-    if (scrollableDivRef.current) {
+    const scrollableDiv = scrollableDivRef.current;
+
+    if (scrollableDiv) {
       handleScroll();
 
-      scrollableDivRef.current.addEventListener('scroll', handleScroll);
+      scrollableDiv.addEventListener('scroll', handleScroll);
       window.addEventListener('resize', handleResize);
 
       return () => {
-        scrollableDivRef.current?.removeEventListener('scroll', handleScroll);
+        scrollableDiv.removeEventListener('scroll', handleScroll);
         window.removeEventListener('resize', handleResize);
       };
     }
   }, [handleScroll, scrollableDivRef, opened]);
+
   const focusTrapRef = useFocusTrap();
 
   return (
@@ -91,7 +93,10 @@ export default function CreateJobModal() {
                   <ScrollArea
                     viewportRef={scrollableDivRef}
                     type='always'
-                    className={classes.scrollArea}
+                    classNames={{
+                      root: classes.scrollAreaRoot,
+                      viewport: classes.scrollAreaViewport
+                    }}
                     data-scroll={
                       scrollPosition.top > 0
                         ? scrollPosition.bottom > 0
@@ -107,8 +112,11 @@ export default function CreateJobModal() {
                       <span style={{ color: 'var(--mantine-color-red-6' }}>*</span>
                     </Text>
                     <Stack mt='lg' px='xl'>
-                      <div></div>
-                      <TextInput label='Job Title' placeholder='e.g., Product Manager' />
+                      <TextInput
+                        label='Job Title'
+                        placeholder='e.g., Product Manager'
+                        withAsterisk
+                      />
                       <Select
                         searchable
                         label='Job Location'
@@ -119,9 +127,9 @@ export default function CreateJobModal() {
                           value: suggestion.displayName,
                           label: suggestion.displayName
                         }))}
+                        withAsterisk
                       />
 
-                      <TextInput label='Job Title' placeholder='Job Title' />
                       <Radio.Group name='employmentType' label='Job type' withAsterisk>
                         <Group mt='xs'>
                           <Radio value='fullTime' label='Full Time' />
@@ -130,10 +138,16 @@ export default function CreateJobModal() {
                           <Radio value='temporary' label='Temporary' />
                         </Group>
                       </Radio.Group>
-                      <TextEditor content={content} />
+                      <MultiSelect
+                        label='Job Category'
+                        placeholder='Pick value'
+                        data={industries}
+                        withAsterisk
+                      />
+                      <TextEditor content='' />
                       <div>
                         <Group align='end' grow>
-                          <NumberInput label='Salary' placeholder='Enter Amount' />
+                          <NumberInput label='Salary' placeholder='Enter Amount' withAsterisk />
                           <div>
                             <Button
                               styles={{
@@ -156,8 +170,12 @@ export default function CreateJobModal() {
                                 gap: '10px'
                               }}
                             >
-                              <span>~</span>
-                              <NumberInput w='100%' placeholder='Enter Max Amount' />
+                              <NumberInput
+                                w='100%'
+                                aria-label='Enter Max Amount'
+                                placeholder='Enter Max Amount'
+                                withAsterisk
+                              />
                               <ActionIcon
                                 variant='subtle'
                                 color='blue.7'
@@ -172,19 +190,20 @@ export default function CreateJobModal() {
                         <Group align='end' grow mt='lg'>
                           <Select
                             aria-label='currency'
-                            placeholder='Pick value'
-                            data={['React', 'Angular', 'Vue', 'Svelte']}
+                            data={currencies}
+                            defaultChecked
+                            value='USD'
                           />
-
                           <Select
                             aria-label='salary time frame'
-                            placeholder='Pick value'
-                            data={['React', 'Angular', 'Vue', 'Svelte']}
+                            data={salaryTimeFrame}
+                            defaultChecked
+                            value='Annually'
                           />
                         </Group>
                         <Checkbox mt='md' label='Show salary to job seekers Recommended!' />
                       </div>
-                      <Textarea label='Additional Application Instructions' />
+                      <Textarea label='Additional Application Instructions' autosize minRows={2} />
                       <Textarea
                         label='Why Work at This Company?'
                         maxLength={140}
