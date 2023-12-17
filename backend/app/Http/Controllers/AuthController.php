@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Candidate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,60 +11,42 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        //validation
-
-        $request->validate([
-            'name' => 'required|string',
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-        ]);
-        $user = new User([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-
-        ]);
-        $user->save();
-        // Create a candidate associated with the user
-        $candidate = Candidate::create([
-            'user_id' => $user->id,
-            // Add other candidate-specific data
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
-        $token = $user->createToken('AuthToken')->accessToken;
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password'])
+        ]);
 
-        return response(['token' => $token, 'user' => $user], 201);
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        return response()->json(['token' => $token], 201);
     }
-
+    
     public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required',
         ]);
-        $credentials['password'] = Hash::make($credentials['password']);
 
-        if (Auth::Attempt($credentials)) {
-            $user = auth()->user();
-            $token = $user->createToken('AuthToken')->plainTextToken;
-            return response(['token' => $token, 'user' => $user], 201);
-
-        } else {
-            return response(['message' => 'invalid credentails'], 401);
+        if (Auth::attempt($credentials)) {
+            $token = Auth::user()->createToken('authToken')->plainTextToken;
+            return response()->json(['token' => $token], 200);
         }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     public function logout(Request $request)
     {
-        // if(Auth::check()){
-        //     Auth::logout();
-        //     return response()->json(['message' => 'Successfully logged out']);
-        // }else
-        //     return response()->json(['message' => 'user not authenticated']);
+        Auth::user()->tokens()->delete();
 
-
-         Auth::user()->tokens()->delete();
-
-       
+        return response()->json(['message' => 'Successfully logged out']);
     }
 }

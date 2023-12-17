@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests\jobRequest;
 use App\Models\Job;
-use Validator;
 class JobController extends Controller
 {
      
@@ -44,4 +42,5 @@ class JobController extends Controller
 
         return response()->json(true);
     }
+
 }
