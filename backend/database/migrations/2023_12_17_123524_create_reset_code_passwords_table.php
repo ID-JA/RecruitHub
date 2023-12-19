@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidates', function (Blueprint $table) {
+        Schema::create('reset_code_passwords', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('resume_path')->nullable();
-            $table->timestamps();
+            $table->string('email')->index();
+            $table->string('code');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidates');
+        Schema::dropIfExists('reset_code_passwords');
     }
 };

@@ -3,7 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\CodeCheckController;
+use App\Http\Controllers\NewPasswordController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\ForgotPasswordController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,14 +22,20 @@ use App\Http\Controllers\AuthController;
 */
 
 
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
+Route::middleware(['auth:sanctum','verified'])->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
     Route::delete('/logout', [AuthController::class, 'logout']);
+    
+    Route::prefix('email')->group(function () {
+        Route::get('/verify', [VerificationController::class, 'notice'])->name('verification.notice')->middleware('auth:sanctum')->withoutMiddleware("verified");
+        Route::post('/verification-notification', [VerificationController::class, 'send'])->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send')->withoutMiddleware("verified");
+        Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->withoutMiddleware(['auth:sanctum', 'verified']);
+    });
 });
+
+
+Route::post('password/email', [PasswordController::class, 'send']);
+Route::post('password/reset', [PasswordController::class, 'reset']);
