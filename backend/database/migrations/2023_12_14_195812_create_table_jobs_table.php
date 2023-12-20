@@ -19,7 +19,13 @@ return new class extends Migration
             $table->string('location');
             $table->decimal('salary');
             $table->text('form');
+            $table->boolean('status')->default(true);
             $table->timestamps();
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+           
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
 
     }

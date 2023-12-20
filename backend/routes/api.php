@@ -26,9 +26,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
-    });
-
-    Route::delete('/logout', [AuthController::class, 'logout']);
+    } 
+);
+Route::get('/jobs', [JobController::class, 'showRecruiterJobs']);
+Route::delete('/logout', [AuthController::class, 'logout']);
 });
 //api resources 
 Route::apiResources([
@@ -36,3 +37,5 @@ Route::apiResources([
     //add here ur route like for example 
     // 'companies' => CompanyController::class
  ]);
+ 
+Route::get('/jobs', [JobController::class, 'showRecruiterJobs']);

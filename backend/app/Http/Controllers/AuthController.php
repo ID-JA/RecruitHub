@@ -14,13 +14,15 @@ class AuthController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
+            'type' => 'required',
         ]);
 
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password'])
+            'password' => Hash::make($validatedData['password']),
+            'type' => $validatedData['type']
         ]);
 
         $token = $user->createToken('authToken')->plainTextToken;
@@ -34,6 +36,8 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        $credentials['password']=bcrypt($credentials['password']);
 
         if (Auth::attempt($credentials)) {
             $token = Auth::user()->createToken('authToken')->plainTextToken;

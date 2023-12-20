@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_id');
-            $table->unsignedBigInteger('applicant_id');
+            $table->unsignedBigInteger('user_id');
             $table->text('cover_letter');
             $table->string('resume');
             $table->enum('status', ['pending', 'progress','done'])->default('pending');
             $table->timestamps();
 
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
-            $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

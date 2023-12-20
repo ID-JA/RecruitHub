@@ -33,7 +33,7 @@ class jobRequest extends FormRequest
             'status' => ['bail', 'required','boolean'],
             'form' => ['bail', 'required','string'],
             'location' => ['bail', 'required','string'],
-            'employer_id' => ['bail', 'required', Rule::exists(User::class, 'id')],
+            'user_id' => ['bail', 'required', Rule::exists(User::class, 'id')],
             'company_id' => ['bail', 'required',Rule::exists(Company::class, 'id')],
         ];
     }

@@ -39,6 +39,10 @@ class User extends Authenticatable
 
         return null;
     }
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
 
 
 
@@ -62,15 +66,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function profile()
-    {
-        if ($this->type == 'candidate') {
-            return $this->hasOne(Candidate::class);
-        } elseif ($this->type == 'recruiter') {
-            return $this->hasOne(Recruiter::class);
-        } else {
-            return null;
-        }
-
-    }
 }
