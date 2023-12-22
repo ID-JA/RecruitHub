@@ -33,7 +33,6 @@ function NotFound() {
 
 export const NotFoundRoute = new Route({
   path: '*',
-  id: 'notFound-page',
   component: NotFound,
   getParentRoute: () => defaultLayoutRoute
 });
