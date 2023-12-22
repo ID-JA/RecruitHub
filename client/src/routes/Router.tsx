@@ -15,6 +15,7 @@ import { HomeRoute } from './Home/Home';
 import { NotFoundRoute } from './NotFound/NotFound';
 import { resetPasswordRoute } from './auth/reset-password';
 import { profileRoute } from './profile/profile';
+import { jobsBoardRoute } from './job-board/jobs-board';
 
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
@@ -34,7 +35,8 @@ const routeTree = rootRoute.addChildren([
     signUpRoute,
     forgotPasswordRoute,
     resetPasswordRoute,
-    profileRoute
+    profileRoute,
+    jobsBoardRoute
   ])
 ]);
 

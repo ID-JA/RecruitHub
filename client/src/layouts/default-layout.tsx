@@ -7,9 +7,11 @@ const excludedLinks = ['/login', '/signup'];
 
 const DefaultLayout = (): JSX.Element => {
   const router = useRouter();
+  console.log('🚀 ~ file: default-layout.tsx:10 ~ DefaultLayout ~ router:', router.state);
+  console.log('🚀 ~ file: default-layout.tsx:7 ~ excludedLinks:', excludedLinks);
   return (
     <>
-      <Background />
+      {router.state.location.href !== '/jobs-board' && <Background />}
       {!excludedLinks.includes(router.state.location.href) && <MainHeader />}
       <Outlet />
     </>
