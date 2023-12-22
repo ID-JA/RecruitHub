@@ -3,7 +3,7 @@ import { PortalNavbar } from '../components/shared/Navbar/PortalNavbar';
 import { rootRoute } from '../routes/Router';
 
 import { useDisclosure } from '@mantine/hooks';
-import { ActionIcon, AppShell, Box, Group } from '@mantine/core';
+import { ActionIcon, AppShell, Box, Container, Group } from '@mantine/core';
 import { RecruitHubLogo } from '../components/shared/logo/logo';
 import { IconCaretLeft, IconCaretRight } from '@tabler/icons-react';
 
@@ -60,7 +60,9 @@ export function PortalLayout() {
         </Box>
       </AppShell.Navbar>
       <AppShell.Main>
-        <Outlet />
+        <Container size='lg'>
+          <Outlet />
+        </Container>
       </AppShell.Main>
     </AppShell>
   );
