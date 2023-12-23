@@ -12,7 +12,7 @@ import {
   Anchor
 } from '@mantine/core';
 import { RecruitHubLogo } from '../../components/shared/logo/logo';
-import { authenticationSchema, useAuthenticate } from '../../services/auth-service';
+import { authenticationSchema, useAuthenticate } from '../../api/auth-service';
 
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useForm } from '@mantine/form';

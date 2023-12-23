@@ -1,6 +1,5 @@
 import { Outlet, Route, useRouter } from '@tanstack/react-router';
 import { MainHeader } from '../components/shared';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { rootRoute } from '../routes/Router';
 import { Background } from '../components/shared/Background/Background';
 
