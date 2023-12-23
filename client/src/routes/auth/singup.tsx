@@ -11,7 +11,7 @@ export function SignUp() {
   return (
     <Container size='lg' h='100vh'>
       <Flex justify='center' align='center' h='100%'>
-        <Grid justify='center' align='center'>
+        {/* <Grid justify='center' align='center'>
           <Grid.Col span={6} visibleFrom='md'>
             <Image
               src={activeTab === 'talent' ? '/talent.png' : '/recruiter.png'}
@@ -28,28 +28,29 @@ export function SignUp() {
             style={{ minHeight: rem(120) }}
           >
             <Paper p='xl' withBorder>
-              <Tabs
-                color='indigo'
-                variant='outline'
-                defaultValue='talent'
-                onChange={(value) => setActiveTab(value || 'talent')}
-              >
-                <Tabs.List grow>
-                  <Tabs.Tab value='talent'>Talent</Tabs.Tab>
-
-                  <Tabs.Tab value='employer'>Employer</Tabs.Tab>
-                </Tabs.List>
-                <Tabs.Panel value='talent'>
-                  <TalentForm />
-                </Tabs.Panel>
-
-                <Tabs.Panel value='employer'>
-                  <EmployerForm />
-                </Tabs.Panel>
-              </Tabs>
+              
             </Paper>
           </Grid.Col>
-        </Grid>
+        </Grid> */}
+        <Tabs
+          keepMounted={false}
+          bg='white'
+          p='xl'
+          radius='lg'
+          defaultValue='talent'
+          onChange={(value) => setActiveTab(value || 'talent')}
+        >
+          <Tabs.List grow>
+            <Tabs.Tab value='talent'>Employer</Tabs.Tab>
+            <Tabs.Tab value='employer'>Talent</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value='talent'>
+            <TalentForm />
+          </Tabs.Panel>
+          <Tabs.Panel value='employer'>
+            <EmployerForm />
+          </Tabs.Panel>
+        </Tabs>
       </Flex>
     </Container>
   );

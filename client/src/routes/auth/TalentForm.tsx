@@ -9,28 +9,37 @@ import {
   Anchor
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { z } from 'zod';
+import { zodResolver } from 'mantine-form-zod-resolver';
+
+const signUpSchemaRecruiter = z.object({
+  firstName: z.string().min(2, { message: 'First name should have at least 2 characters' }),
+  lastName: z.string().min(2, { message: 'Last name should have at least 2 characters' }),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password should have at least 6 characters' }),
+  companyName: z.string().min(1, { message: 'Company name should have at least 1 characters' })
+});
 
 export function TalentForm() {
   const form = useForm({
     initialValues: {
-      fname: '',
-      lname: '',
+      firstName: '',
+      lastName: '',
       company: '',
       email: '',
       password: ''
     },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email')
-    }
+    validate: zodResolver(signUpSchemaRecruiter)
   });
   return (
     <div>
       <div style={{ margin: '15px' }}>
         <Title ta='center' order={3}>
-          We Bring Job Offers to You!
+          Try Recruit Hub!
         </Title>
-        <Text ta='center'> Join thousands of people who’ve found their dream job using Hired.</Text>
+        <Text ta='center' size='xs'>
+          We have 20k+ qualified candidates waiting for you!
+        </Text>
         <Text size='sm' ta='center' mt={5}>
           You already joined us?{' '}
           <Anchor href='/login' size='sm'>
@@ -50,7 +59,7 @@ export function TalentForm() {
             mt='10px'
             styles={{ root: { flex: 1 } }}
             placeholder='your first name'
-            {...form.getInputProps('fname')}
+            {...form.getInputProps('firstName')}
           />
           <TextInput
             variant='filled'
@@ -60,7 +69,7 @@ export function TalentForm() {
             mt='10px'
             styles={{ root: { flex: 1 } }}
             placeholder='your last name'
-            {...form.getInputProps('lname')}
+            {...form.getInputProps('lastName')}
           />
         </div>
         <TextInput
@@ -69,7 +78,7 @@ export function TalentForm() {
           radius='md'
           mb='16px'
           placeholder='your company name'
-          {...form.getInputProps('company')}
+          {...form.getInputProps('companyName')}
         />
         <TextInput
           withAsterisk

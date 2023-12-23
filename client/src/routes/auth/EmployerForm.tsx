@@ -10,28 +10,37 @@ import {
   Anchor
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { z } from 'zod';
+import { zodResolver } from 'mantine-form-zod-resolver';
+
+const signUpSchemaRecruiter = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password should have at least 6 characters' }),
+  companyName: z.string()
+});
 
 export function EmployerForm() {
   const form = useForm({
     initialValues: {
-      fname: '',
-      lname: '',
+      firstName: '',
+      lastName: '',
       company: '',
       email: '',
       password: ''
     },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email')
-    }
+    validate: zodResolver(signUpSchemaRecruiter)
   });
   return (
     <div>
       <div style={{ margin: '15px' }}>
         <Title ta='center' order={3}>
-          Try Recruit Hub!
+          We Bring Job Offers to You!
         </Title>
-        <Text ta='center'> We have 20k+ qualified candidates waiting for you!</Text>
+        <Text ta='center' maw='430px' size='xs'>
+          Join thousands of people who’ve found their dream job using Hired.
+        </Text>
         <Text size='sm' ta='center' mt={5}>
           You already joined us?{' '}
           <Anchor href='/login' size='sm'>
