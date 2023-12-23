@@ -1,4 +1,4 @@
-import { Link, Outlet, Route } from '@tanstack/react-router';
+import { Link, Outlet, Route, redirect } from '@tanstack/react-router';
 import { PortalNavbar } from '../components/shared/Navbar/PortalNavbar';
 import { rootRoute } from '../routes/Router';
 
@@ -6,6 +6,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { ActionIcon, AppShell, Box, Container, Group } from '@mantine/core';
 import { RecruitHubLogo } from '../components/shared/logo/logo';
 import { IconCaretLeft, IconCaretRight } from '@tabler/icons-react';
+import { jwtDecode } from 'jwt-decode';
 
 export function PortalLayout() {
   const [opened, { toggle }] = useDisclosure();
@@ -60,7 +61,7 @@ export function PortalLayout() {
         </Box>
       </AppShell.Navbar>
       <AppShell.Main>
-        <Container size="lg">
+        <Container size='lg'>
           <Outlet />
         </Container>
       </AppShell.Main>
@@ -71,5 +72,43 @@ export function PortalLayout() {
 export const portalLayoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'portal',
-  component: PortalLayout
+  component: PortalLayout,
+  beforeLoad: async ({ location }) => {
+    if (!isAuthenticated()) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href
+        }
+      });
+    }
+  }
 });
+const isAuthenticated = () => {
+  const user = getUserFromAppState();
+  if (user) {
+    return true;
+  }
+
+  const token = localStorage.getItem('token');
+  console.log(isValidToken(token));
+  if (token && isValidToken(token)) {
+    return true;
+  }
+
+  return false;
+};
+
+const getUserFromAppState = () => {
+  return null;
+};
+
+const isValidToken = (token: string) => {
+  if (!token) {
+    return false;
+  }
+
+  const decodedToken = jwtDecode(token);
+  const currentTime = Date.now() / 1000;
+  return decodedToken.exp && decodedToken.exp > currentTime;
+};
