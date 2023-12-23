@@ -50,10 +50,9 @@ export default function Login() {
           mt='md'
           {...form.getInputProps('password')}
         />
-        <Group justify='apart' mt='lg'>
+        <Group justify='space-between' mt='lg'>
           <Checkbox label='Remember me' />
           <Anchor href='/forgot-password' size='sm'>
-            {' '}
             Forgot password?
           </Anchor>
         </Group>

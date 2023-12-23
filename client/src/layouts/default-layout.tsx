@@ -3,7 +3,7 @@ import { MainHeader } from '../components/shared';
 import { rootRoute } from '../routes/Router';
 import { Background } from '../components/shared/Background/Background';
 
-const excludedLinks = ['/login', '/signup'];
+const excludedLinks = ['/login', '/signup', '/forgot-password'];
 
 const DefaultLayout = (): JSX.Element => {
   const router = useRouter();
