@@ -16,7 +16,7 @@ import {
   IconBookmark
 } from '@tabler/icons-react';
 
-type JobDetails = {
+/*type JobDetails = {
   id: number;
   companyName: string;
   jobTitle: string;
@@ -27,7 +27,7 @@ type JobDetails = {
   jobType: string;
   companySize: string;
   companyLogo: string;
-};
+};*/
 
 export function JobOfferPreviewCard() {
   return (

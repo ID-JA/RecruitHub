@@ -1,5 +1,5 @@
-import companyLogo1 from '../../assets/company1.webp';
-import companyLogo2 from '../../assets/company2.webp';
+import companyLogo1 from '../../../assets/company1.webp';
+import companyLogo2 from '../../../assets/company1.webp';
 
 // Sample job data
 

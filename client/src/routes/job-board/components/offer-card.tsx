@@ -1,4 +1,4 @@
-import { Card, Grid, ActionIcon, Text, Paper, Box } from '@mantine/core';
+import { Grid, ActionIcon, Text, Paper, Box } from '@mantine/core';
 import { IconBookmark, IconDeviceLaptop } from '@tabler/icons-react';
 
 export interface JobCardProps {
@@ -20,7 +20,7 @@ export function JobOfferCard({
   companyLogo,
   jobType
 }: JobCardProps): JSX.Element {
-  const isSelected: boolean = id === 0;
+  //  const isSelected: boolean = id === 0;
 
   return (
     <Paper

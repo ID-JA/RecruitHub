@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { jobData } from './jobData';
 import { JobOfferCard } from './offer-card';
 import { JobOfferPreviewCard } from './preview-card';
+import { Grid, Stack } from '@mantine/core';
 
-const ForYou: React.FC = () => {
+export const ForYou: React.FC = () => {
   const [selectedJob, setSelectedJob] = useState<number | null>(jobData[0]?.id || null);
 
   const handleJobCardClick = (id: number) => {
@@ -19,17 +20,23 @@ const ForYou: React.FC = () => {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 3fr',
-          gap: '18px'
-        }}
-      >
-        <div>{jobList}</div>
-        {/* TODO: if offer is selected render the JobOfferPreviewCard otherwise render the JobOfferPreviewPlaceHolder */}
-        <div>{selectedJobDetails && <JobOfferPreviewCard />}</div>
-      </div>
+      <Grid>
+        <Grid.Col
+          span={{
+            md: 6,
+            xs: 12
+          }}
+        >
+          <Stack gap='md'>{jobList}</Stack>
+          <div>{jobList}</div>
+        </Grid.Col>
+        <Grid.Col span={6} visibleFrom='md'>
+          <div>
+            {/* TODO: if offer is selected render the JobOfferPreviewCard otherwise render the JobOfferPreviewPlaceHolder */}
+            {selectedJobDetails && <JobOfferPreviewCard />}{' '}
+          </div>
+        </Grid.Col>
+      </Grid>
     </div>
   );
 };
