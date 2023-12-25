@@ -20,7 +20,7 @@ class AuthController extends Controller
         $validatedUser = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string',
             'role'=>'required|in:candidate,recruiter'
         ]);
         $validatedRecruiter = $request->validate([
@@ -40,7 +40,7 @@ class AuthController extends Controller
         
         // $user->createToken('authToken')->plainTextToken;
         Auth::login($user);
-        event(new Registered($user));
+        // event(new Registered($user));
         return response()->json(['message' => 'Verification email sent. Please check your email.'], 201);
     }
     
