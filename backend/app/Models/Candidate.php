@@ -9,8 +9,23 @@ class Candidate extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
-        'resume_path','user_id'
+    protected $fillable = [
+        'skills',
+        'bio',
+        'experience',
+        'education',
+        'resume',
+        'title',
+        'city',
+        'country',
+        'social',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'skills' => 'json',
+        'experience' => 'json',
+        'social' => 'json',
     ];
 
     public function user()

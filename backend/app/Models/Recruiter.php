@@ -9,12 +9,19 @@ class Recruiter extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
-        'user_id','experience'
+    protected $fillable = [
+        'website',
+        'experience',
+        'industry',
+        'about',
+        'location',
+        'zip',
+        'user_id',
     ];
 
+
     protected $casts = [
-        'experience' => 'array',
+        'experience' => 'json',
     ];
 
     public function user()
