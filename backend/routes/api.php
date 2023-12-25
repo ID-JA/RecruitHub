@@ -25,7 +25,7 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 
 
-// Route::middleware('web')->group(function () {
+// Route::middleware('web')->group(function ( ) {
     Route::middleware(['auth:sanctum','verified'])->group(function () {
         Route::get('/user', [AuthController::class, 'user']);
         Route::delete('/logout', [AuthController::class, 'logout']);
