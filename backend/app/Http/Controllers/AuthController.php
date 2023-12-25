@@ -12,8 +12,6 @@ use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
-
-
     public function register(Request $request)
     {
         
@@ -24,10 +22,23 @@ class AuthController extends Controller
             'role'=>'required|in:candidate,recruiter'
         ]);
         $validatedRecruiter = $request->validate([
-            'experience'=>'nullable',
+            'experience' => ['nullable', 'array'],
+            'website' => ['nullable', 'string'],
+            'industry' => ['nullable', 'string'],
+            'about' => ['nullable', 'string'],
+            'location' => ['nullable', 'string'],
+            'zip' => ['nullable', 'string'],
         ]);
         $validatedCandidate = $request->validate([
-            'resume_path'=>'nullable'
+            'skills' => 'nullable|array',
+            'bio' => 'nullable|string',
+            'experience' => 'nullable|array',
+            'education' => 'nullable|string',
+            'resume' => 'nullable|string',
+            'title' => 'nullable|string',
+            'city' => 'nullable|string',
+            'country' => 'nullable|string',
+            'social' => 'nullable|array',
         ]);
 
         $validatedUser['password']=Hash::make($validatedUser['password']);
@@ -40,7 +51,7 @@ class AuthController extends Controller
         
         // $user->createToken('authToken')->plainTextToken;
         Auth::login($user);
-        event(new Registered($user));
+        // event(new Registered($user));
         return response()->json(['message' => 'Verification email sent. Please check your email.'], 201);
     }
     
