@@ -22,6 +22,8 @@ export const Notifications = () => {
       //copy this code and put it in the compocnent where notification lives
 
       // when you click on notification you will post reqeust to (/notifications/read/Notification_id) to set it to read
+      // if read_at is null make the notification look bold
+      // send get reqeust to /notifications to get all notification and the count of unread ones
     });
     return () => {
       window.Echo.leave('App.Models.User.1');
