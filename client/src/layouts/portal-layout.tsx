@@ -1,4 +1,4 @@
-import { Link, Outlet, Route } from '@tanstack/react-router';
+import { Link, Outlet, Route, redirect, useRouter } from '@tanstack/react-router';
 import { PortalNavbar } from '../components/shared/Navbar/PortalNavbar';
 import { rootRoute } from '../routes/Router';
 
@@ -15,8 +15,8 @@ import { useAuthStore } from '../store';
 export function PortalLayout() {
   const [opened, { toggle }] = useDisclosure();
 
-  const { setUser, isLoggedIn } = useAuthStore();
-
+  const { setUser, isLoggedIn, logout } = useAuthStore();
+  const router = useRouter();
   useQuery({
     queryKey: ['current-user'],
     queryFn: async () => {
@@ -26,9 +26,6 @@ export function PortalLayout() {
     }
   });
 
-  if (!isLoggedIn) {
-    return null;
-  }
   return (
     <AppShell
       header={{ height: 60 }}
@@ -61,7 +58,13 @@ export function PortalLayout() {
               <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
                 Settings
               </Menu.Item>
-              <Menu.Item leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}>
+              <Menu.Item
+                onClick={() => {
+                  logout();
+                  router.history.replace('/');
+                }}
+                leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+              >
                 Log out
               </Menu.Item>
             </Menu.Dropdown>
@@ -110,5 +113,27 @@ export function PortalLayout() {
 export const portalLayoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'portal',
-  component: PortalLayout
+  component: PortalLayout,
+  beforeLoad: async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw redirect({
+        to: '/'
+      });
+    }
+    try {
+      const { data } = await axiosInstance.get('/user');
+      if (!data || !data.id) {
+        localStorage.removeItem('token');
+        throw redirect({
+          to: '/'
+        });
+      }
+    } catch (error) {
+      localStorage.removeItem('token');
+      throw redirect({
+        to: '/'
+      });
+    }
+  }
 });
