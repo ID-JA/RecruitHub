@@ -43,6 +43,26 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class);
+    }
+
+    /**
+     * Get the messages sent by the user.
+     */
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'user_id');
+    }
+
+    /**
+     * Get the messages received by the user.
+     */
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
