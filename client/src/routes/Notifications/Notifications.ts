@@ -24,6 +24,8 @@ export const Notifications = () => {
       // when you click on notification you will post reqeust to (/notifications/read/Notification_id) to set it to read
       // if read_at is null make the notification look bold
       // send get reqeust to /notifications to get all notification and the count of unread ones
+      //send post to /notifications/read-all to clear all notifications and make them read
+      //send delete to /notifications/destroy to delete all notifications
     });
     return () => {
       window.Echo.leave('App.Models.User.1');
