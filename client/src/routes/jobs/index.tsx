@@ -1,10 +1,20 @@
 import { Route } from '@tanstack/react-router';
-import { portalLayoutRoute } from '../../layouts/portal-layout';
+import { Group } from '@mantine/core';
 
-function Jobs() {
+import { portalLayoutRoute } from '../../layouts/portal-layout';
+import CreateJobModal from '../../components/jobs/create-job-modal';
+import JobsContainer from '../../components/jobs/jobs-container';
+
+export function Jobs() {
   return (
     <div>
-      <h1>Jobs (List of jobs)</h1>
+      <Group justify='space-between'>
+        <h1>Jobs (List of jobs)</h1>
+        <CreateJobModal />
+      </Group>
+      <section>
+        <JobsContainer />
+      </section>
     </div>
   );
 }

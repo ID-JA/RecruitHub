@@ -18,7 +18,6 @@ export const Home = () => {
 
 export const HomeRoute = new Route({
   path: '/',
-  id: 'home-page',
   component: Home,
   getParentRoute: () => defaultLayoutRoute
 });
