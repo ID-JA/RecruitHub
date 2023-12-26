@@ -96,7 +96,7 @@ function CompanyDetails({ form }: { form: any }) {
           />
           <TextInput
             label='Website'
-            {...form.getInputProps('companyDetails.webstie')}
+            {...form.getInputProps('companyDetails.website')}
             variant='filled'
           />
           <TextInput

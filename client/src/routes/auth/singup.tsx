@@ -8,6 +8,7 @@ import CompanyDetails from './company-details';
 import { useForm } from '@mantine/form';
 import { z } from 'zod';
 import { zodResolver } from 'mantine-form-zod-resolver';
+import CandidateDetail from './candidate-detail';
 
 export interface IRecruiterInfo {
   firstName: string;
@@ -34,7 +35,7 @@ const signUpSchemaRecruiter = z
 
 const companyDetailSchema = z.object({
   industry: z.string().min(2, { message: 'Industry should have at least 2 characters' }),
-  webstie: z.string().url({ message: 'Please enter a valid website' }),
+  website: z.string().url({ message: 'Please enter a valid website' }),
   location: z.string().min(2, { message: 'Location should have at least 2 characters' }),
   zip: z.string().min(2, { message: 'Zip code should have at least 2 characters' }),
   about: z.string().min(2, { message: 'About should have at least 2 characters' }),
@@ -42,8 +43,7 @@ const companyDetailSchema = z.object({
 });
 
 const signUpCandidateSchema = z.object({
-  firstName: z.string().min(2, { message: 'First name should have at least 2 characters' }),
-  lastName: z.string().min(2, { message: 'Last name should have at least 2 characters' }),
+  fullName: z.string().min(2, { message: 'First name should have at least 2 characters' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
   password: z.string().min(6, { message: 'Password should have at least 6 characters' }),
   confirmPassword: z.string().min(6, { message: 'Password should have at least 6 characters' }),
@@ -132,7 +132,7 @@ const useSignUpSchema = (
           ...recruiterInitialValues,
           companyDetails: {
             industry: '',
-            webstie: '',
+            website: '',
             location: '',
             zip: '',
             about: '',
@@ -187,6 +187,8 @@ export function SignUp() {
         <Paper withBorder radius='md' w='100%' maw='500px' p='xl'>
           {state.location.hash === 'company-details' ? (
             <CompanyDetails form={form} />
+          ) : state.location.hash === 'candidate-details' ? (
+            <CandidateDetail />
           ) : (
             <Tabs
               keepMounted={false}
@@ -201,7 +203,7 @@ export function SignUp() {
                 <Tabs.Tab value='employer-details'>Employer</Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel value='candidate-credentials'>
-                <TalentForm />
+                <TalentForm form={form} />
               </Tabs.Panel>
               <Tabs.Panel value='employer-details'>
                 <EmployerForm form={form} />
