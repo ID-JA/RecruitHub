@@ -1,4 +1,4 @@
-import { Route } from '@tanstack/react-router';
+import { Link, Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
   Paper,
@@ -10,7 +10,6 @@ import {
   Group,
   Anchor,
   Center,
-  Box,
   rem,
   Flex
 } from '@mantine/core';
@@ -32,7 +31,9 @@ export function ForgotPassword() {
             <Anchor c='dimmed' size='sm'>
               <Center inline>
                 <IconArrowLeft style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
-                <Box ml={5}>Back to the login page</Box>
+                <Link to='/login'>
+                  <Text ml={5}>Back to the login page</Text>
+                </Link>
               </Center>
             </Anchor>
             <Button>Reset password</Button>

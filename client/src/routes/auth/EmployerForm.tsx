@@ -1,7 +1,6 @@
 import {
   TextInput,
   PasswordInput,
-  Textarea,
   Checkbox,
   Button,
   Group,
@@ -9,37 +8,18 @@ import {
   Text,
   Anchor
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { z } from 'zod';
-import { zodResolver } from 'mantine-form-zod-resolver';
+import { useRouter } from '@tanstack/react-router';
 
-const signUpSchemaRecruiter = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-  password: z.string().min(6, { message: 'Password should have at least 6 characters' }),
-  companyName: z.string()
-});
-
-export function EmployerForm() {
-  const form = useForm({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      company: '',
-      email: '',
-      password: ''
-    },
-    validate: zodResolver(signUpSchemaRecruiter)
-  });
+export function EmployerForm({ form }: { form: any }) {
+  const router = useRouter();
   return (
     <div>
       <div style={{ margin: '15px' }}>
         <Title ta='center' order={3}>
-          We Bring Job Offers to You!
+          Try Recruit Hub!
         </Title>
-        <Text ta='center' maw='430px' size='xs'>
-          Join thousands of people who’ve found their dream job using Hired.
+        <Text ta='center' size='xs'>
+          We have 20k+ qualified candidates waiting for you!
         </Text>
         <Text size='sm' ta='center' mt={5}>
           You already joined us?{' '}
@@ -49,23 +29,35 @@ export function EmployerForm() {
           </Anchor>
         </Text>
       </div>
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+
+      <form
+        onSubmit={form.onSubmit(() => {
+          router.history.push('/signup#company-details');
+        })}
+      >
+        <Group mb='md' grow>
+          <TextInput
+            variant='filled'
+            label='First Name'
+            radius='md'
+            placeholder='your first name'
+            {...form.getInputProps('firstName')}
+          />
+          <TextInput
+            variant='filled'
+            label='Last Name'
+            radius='md'
+            placeholder='your last name'
+            {...form.getInputProps('lastName')}
+          />
+        </Group>
         <TextInput
           variant='filled'
-          label='Full Name'
+          label='Company Name'
           radius='md'
           mb='16px'
-          mt='10px'
-          placeholder='your full name'
-          {...form.getInputProps('fname')}
-        />
-        <Textarea
-          variant='filled'
-          radius='md'
-          mb='16px'
-          label='where do you live'
-          placeholder='your place'
-          {...form.getInputProps('live')}
+          placeholder='your company name'
+          {...form.getInputProps('companyName')}
         />
         <TextInput
           withAsterisk
@@ -92,18 +84,14 @@ export function EmployerForm() {
           label='Confirm Password'
           radius='md'
           mb='16px'
-          placeholder='confirm your password'
-          {...form.getInputProps('password')}
-        />
-
-        <Checkbox
-          mt='md'
-          label='I agree to sell my privacy'
-          {...form.getInputProps('termsOfService', { type: 'checkbox' })}
+          placeholder='Enter your password'
+          {...form.getInputProps('confirmPassword')}
         />
 
         <Group justify='flex-end' mt='md'>
-          <Button type='submit'>Get Started</Button>
+          <Button type='submit' radius='md' onClick={() => {}}>
+            Get Started
+          </Button>
         </Group>
       </form>
     </div>

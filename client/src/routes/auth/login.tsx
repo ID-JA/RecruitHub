@@ -1,4 +1,4 @@
-import { Route } from '@tanstack/react-router';
+import { Link, Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
   TextInput,
@@ -9,7 +9,8 @@ import {
   rem,
   Flex,
   Checkbox,
-  Anchor
+  Anchor,
+  Text
 } from '@mantine/core';
 import { RecruitHubLogo } from '../../components/shared/logo/logo';
 import { authenticationSchema, useAuthenticate } from '../../api/auth-service';
@@ -52,13 +53,16 @@ export default function Login() {
         />
         <Group justify='space-between' mt='lg'>
           <Checkbox label='Remember me' />
-          <Anchor href='/forgot-password' size='sm'>
-            Forgot password?
-          </Anchor>
+          <Link to='/forgot-password'>
+            <Text size='sm'>Forgot password?</Text>
+          </Link>
         </Group>
         <Button fullWidth mt='xl' type='submit' loading={mutation.isPending}>
           Sign in
         </Button>
+        <Text mt='md' c='dimmed' size='sm' ta='center'>
+          <Link to='/signup'>Create account</Link>
+        </Text>
       </Paper>
     </Flex>
   );

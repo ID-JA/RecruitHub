@@ -1,16 +1,34 @@
-import { Link, Outlet, Route, redirect } from '@tanstack/react-router';
+import { Link, Outlet, Route } from '@tanstack/react-router';
 import { PortalNavbar } from '../components/shared/Navbar/PortalNavbar';
 import { rootRoute } from '../routes/Router';
 
 import { useDisclosure } from '@mantine/hooks';
-import { ActionIcon, AppShell, Box, Container, Group } from '@mantine/core';
+import { ActionIcon, AppShell, Avatar, Box, Container, Group, Menu, rem } from '@mantine/core';
 import { RecruitHubLogo } from '../components/shared/logo/logo';
-import { IconCaretLeft, IconCaretRight } from '@tabler/icons-react';
-import { jwtDecode } from 'jwt-decode';
+import { IconCaretLeft, IconCaretRight, IconLogout } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '../utils';
+import { IconSettings } from '@tabler/icons-react';
+import { IconUserCircle } from '@tabler/icons-react';
+import { useAuthStore } from '../store';
 
 export function PortalLayout() {
   const [opened, { toggle }] = useDisclosure();
 
+  const { setUser, isLoggedIn } = useAuthStore();
+
+  useQuery({
+    queryKey: ['current-user'],
+    queryFn: async () => {
+      const response = await axiosInstance.get('/user');
+      setUser(response.data);
+      return response.data;
+    }
+  });
+
+  if (!isLoggedIn) {
+    return null;
+  }
   return (
     <AppShell
       header={{ height: 60 }}
@@ -18,7 +36,7 @@ export function PortalLayout() {
       padding='md'
     >
       <AppShell.Header>
-        <Group h='100%' px='md'>
+        <Group h='100%' px='md' mx='xl' justify='space-between'>
           <Link
             to='/portal'
             style={{
@@ -28,6 +46,26 @@ export function PortalLayout() {
           >
             <RecruitHubLogo />
           </Link>
+          <Menu shadow='md' width={200}>
+            <Menu.Target>
+              <Avatar src='' />
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Label>Application</Menu.Label>
+              <Menu.Item
+                leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
+              >
+                Profile
+              </Menu.Item>
+              <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
+                Settings
+              </Menu.Item>
+              <Menu.Item leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}>
+                Log out
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>
@@ -72,43 +110,5 @@ export function PortalLayout() {
 export const portalLayoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'portal',
-  component: PortalLayout,
-  beforeLoad: async ({ location }) => {
-    if (!isAuthenticated()) {
-      throw redirect({
-        to: '/login',
-        search: {
-          redirect: location.href
-        }
-      });
-    }
-  }
+  component: PortalLayout
 });
-const isAuthenticated = () => {
-  const user = getUserFromAppState();
-  if (user) {
-    return true;
-  }
-
-  const token = localStorage.getItem('token');
-  console.log(isValidToken(token));
-  if (token && isValidToken(token)) {
-    return true;
-  }
-
-  return false;
-};
-
-const getUserFromAppState = () => {
-  return null;
-};
-
-const isValidToken = (token: string) => {
-  if (!token) {
-    return false;
-  }
-
-  const decodedToken = jwtDecode(token);
-  const currentTime = Date.now() / 1000;
-  return decodedToken.exp && decodedToken.exp > currentTime;
-};

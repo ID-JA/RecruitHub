@@ -22,6 +22,7 @@ function App() {
       <MantineProvider theme={theme}>
         <Notifications position='top-right' />
         <AppRouter />
+
         <ReactQueryDevtools initialIsOpen={false} />
       </MantineProvider>
     </QueryClientProvider>
