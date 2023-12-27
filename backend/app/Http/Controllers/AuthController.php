@@ -18,7 +18,7 @@ class AuthController extends Controller
         $validatedUser = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string',
+            'password' => 'required|string|min:6|confirmed',
             'role'=>'required|in:candidate,recruiter'
         ]);
         $validatedRecruiter = $request->validate([
@@ -52,8 +52,7 @@ class AuthController extends Controller
         // $user->createToken('authToken')->plainTextToken;
         Auth::login($user);
         // event(new Registered($user));
-        return response()->json(['message' => 'Verification email sent. Please check your email. i blocked the send of verification for while'], 201);
-
+        return response()->json(['message' => 'Verification email sent. Please check your email.i blocked the send of verification for while'], 201);
     }
     
     public function login(Request $request)
@@ -63,11 +62,11 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $credentials['password']=bcrypt($credentials['password']);
-
         if (Auth::attempt($credentials)) {
-            $token = Auth::user()->createToken('authToken')->plainTextToken;
-            return response()->json(['token' => $token], 200);
+            $user=Auth::user();
+            $token = $user->createToken('authToken')->plainTextToken;
+            $user->profile;
+            return response()->json(['token' => $token,'user',$user], 200);
         }
 
         return response()->json(['error' => 'Unauthorized'], 401);
