@@ -22,13 +22,8 @@ class JobController extends Controller
     public function showRecruiterJobs()
     {
         $user = Auth::user();
-      
-        if ($user) {
-            $jobs = $user->jobs;
-            return response()->json($jobs);
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        $jobs = $user->jobs;
+        return response()->json($jobs);
     }
 
     public function store(jobRequest $request)
