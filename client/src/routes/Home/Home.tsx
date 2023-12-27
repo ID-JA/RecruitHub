@@ -147,13 +147,15 @@ export const Home = () => {
                 Information Technology
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -162,7 +164,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
@@ -206,16 +208,18 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Mobile Development
+                Mobile <br></br>Development
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -224,7 +228,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
@@ -271,13 +275,15 @@ export const Home = () => {
                 Acounting & Management
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -286,7 +292,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
@@ -333,13 +339,15 @@ export const Home = () => {
                 Database Administration
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -348,7 +356,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
@@ -394,13 +402,15 @@ export const Home = () => {
                 Science
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -409,7 +419,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
@@ -456,13 +466,15 @@ export const Home = () => {
                 Human Resources
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -471,7 +483,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
@@ -517,13 +529,15 @@ export const Home = () => {
                 Accounting
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -532,7 +546,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
@@ -579,13 +593,15 @@ export const Home = () => {
                 Finance
               </Text>
               <Text
+                size='sm'
                 style={{
                   color: '#76797C',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -594,7 +610,7 @@ export const Home = () => {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Details
+                View job
               </Text>
             </Box>
           </Paper>
