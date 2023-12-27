@@ -30,4 +30,12 @@ class SavedJobController extends Controller
 
         return response()->json(['message' => 'Job unsaved successfully']);
     }
+
+    public function getSavedJobs()
+    {
+        $user = Auth::user(); 
+        $savedJobs = $user->savedJobs;
+
+        return response()->json(['saved_jobs' => $savedJobs]);
+    }
 }

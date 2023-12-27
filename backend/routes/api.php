@@ -75,6 +75,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 ///////////saved jobs
     Route::post('/save-job/{jobId}', [SavedJobController::class, 'saveJob']);
     Route::post('/unsave-job/{jobId}', [SavedJobController::class, 'unsaveJob']);
+    Route::get('/saved-jobs', [SavedJobController::class, 'getSavedJobs']);
+
     
     Route::prefix('company')->group(function () {
         Route::get('/', [CompanyController::class, 'index']);
