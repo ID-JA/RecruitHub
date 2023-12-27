@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('applicant_id');
             $table->text('cover_letter');
-            $table->string('resume');
             $table->enum('status', ['pending', 'progress','done'])->default('pending');
             $table->timestamps();
 

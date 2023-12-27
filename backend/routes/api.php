@@ -10,6 +10,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PasswordController;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\CodeCheckController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
@@ -27,8 +28,6 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */ 
-
-
 
 // Route::middleware('web')->group(function ( ) {
     Route::middleware(['auth:sanctum'])->group(function () {
@@ -56,7 +55,13 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
             Route::get('/', [ChatController::class, 'index']);
         });
 
-        
+        Route::prefix('applications')->group(function () {
+            Route::post('/{job}', [ApplicationController::class, 'apply']);
+            Route::delete('/{job}', [ApplicationController::class, 'cancelApplication']);
+            Route::get('/{job}/status', [ApplicationController::class, 'checkStatus']);
+            Route::post('/{job}/accept', [ApplicationController::class, 'acceptApplication']);
+            Route::post('/{job}/reject', [ApplicationController::class, 'rejectApplication']);
+        });
     });
 
     Route::post('/login', [AuthController::class, 'login']);

@@ -17,4 +17,10 @@ class Job extends Model
         return $this->belongsTo(User::class, 'employer_id');
     }
 
+    public function applicants()
+    {
+        return $this->belongsToMany(User::class, 'applications')
+        ->withPivot('status');
+    }
+
 }

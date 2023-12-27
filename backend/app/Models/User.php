@@ -65,6 +65,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * 
+     */
+    public function applications()
+    {
+        return $this->belongsToMany(Job::class, 'applications')
+        ->withPivot('status');
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
