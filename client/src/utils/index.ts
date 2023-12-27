@@ -1,3 +1,4 @@
+import axios from 'axios';
 import ms from 'ms';
 
 export const timeAgo = (
@@ -23,3 +24,23 @@ export const timeAgo = (
   }
   return `${ms(diff)}${withAgo ? ' ago' : ''}`;
 };
+
+export const version = 'v1';
+export const baseURL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://www.recruite.hub/api'
+    : 'http://localhost:8000/api';
+
+export const axiosInstance = axios.create({
+  baseURL,
+  headers: { 'Content-Type': 'application/json', charset: 'utf-8' }
+});
+
+// TODO: we need to set token one time
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (config.headers && token) {
+    config.headers.Authorization = token ? `Bearer ${token}` : '';
+  }
+  return config;
+});

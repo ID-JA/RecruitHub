@@ -43,7 +43,7 @@ export function MainHeader() {
           <Link to='/login'>
             <Button variant='outline'>Sign in</Button>
           </Link>
-          <Link to='/signup'>
+          <Link to='/signup' hash='employer-details'>
             <Button>Sign up</Button>
           </Link>
           <Link to='/portal'>

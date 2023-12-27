@@ -12,22 +12,33 @@ use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
-
-
     public function register(Request $request)
     {
         
         $validatedUser = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string',
             'role'=>'required|in:candidate,recruiter'
         ]);
         $validatedRecruiter = $request->validate([
-            'experience'=>'nullable',
+            'experience' => ['nullable', 'array'],
+            'website' => ['nullable', 'string'],
+            'industry' => ['nullable', 'string'],
+            'about' => ['nullable', 'string'],
+            'location' => ['nullable', 'string'],
+            'zip' => ['nullable', 'string'],
         ]);
         $validatedCandidate = $request->validate([
-            'resume_path'=>'nullable'
+            'skills' => 'nullable|array',
+            'bio' => 'nullable|string',
+            'experience' => 'nullable|array',
+            'education' => 'nullable|string',
+            'resume' => 'nullable|string',
+            'title' => 'nullable|string',
+            'city' => 'nullable|string',
+            'country' => 'nullable|string',
+            'social' => 'nullable|array',
         ]);
 
         $validatedUser['password']=Hash::make($validatedUser['password']);
@@ -40,8 +51,9 @@ class AuthController extends Controller
         
         // $user->createToken('authToken')->plainTextToken;
         Auth::login($user);
-        event(new Registered($user));
-        return response()->json(['message' => 'Verification email sent. Please check your email.'], 201);
+        // event(new Registered($user));
+        return response()->json(['message' => 'Verification email sent. Please check your email. i blocked the send of verification for while'], 201);
+
     }
     
     public function login(Request $request)
@@ -50,6 +62,8 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        $credentials['password']=bcrypt($credentials['password']);
 
         if (Auth::attempt($credentials)) {
             $token = Auth::user()->createToken('authToken')->plainTextToken;

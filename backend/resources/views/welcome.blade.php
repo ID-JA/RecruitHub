@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -136,5 +137,21 @@
                 </div>
             </div>
         </div>
+
+        <!-- <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('61bc94533d695032d318', {
+      cluster: 'eu'
+    });
+
+    var channel = pusher.subscribe('App.Models.User.1');
+    channel.bind('myevent', function(data) {
+      alert(JSON.stringify(data));
+    });
+  </script> -->
     </body>
 </html>

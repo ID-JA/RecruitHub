@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import './Categorie.css';
+import { Fragment } from 'react';
 
 const Categorie = () => {
   const roles = [
@@ -48,12 +49,12 @@ const Categorie = () => {
       <div className='categorie-roles'>
         <div className='categorie-title'>Roles</div>
         {roles.map((e, i) => (
-          <>
+          <Fragment key={i}>
             <Link className='categories-item' to={'/login'} key={i}>
               {e}
             </Link>
             <br />
-          </>
+          </Fragment>
         ))}
       </div>
       <div className='categorie-speicalies'>
@@ -62,34 +63,34 @@ const Categorie = () => {
           <div>
             {specialtiesArray1 &&
               specialtiesArray1.map((e, i) => (
-                <>
+                <Fragment key={i}>
                   <Link className='categories-item' to={'/login'} key={i}>
                     {e}
                   </Link>
                   <br />
-                </>
+                </Fragment>
               ))}
           </div>
           <div>
             {specialtiesArray2 &&
               specialtiesArray2.map((e, i) => (
-                <>
+                <Fragment key={i}>
                   <Link className='categories-item' to={'/login'} key={i}>
                     {e}
                   </Link>
                   <br />
-                </>
+                </Fragment>
               ))}
           </div>
           <div>
             {specialtiesArray3 &&
               specialtiesArray3.map((e, i) => (
-                <>
+                <Fragment key={i}>
                   <Link className='categories-item' to={'/login'} key={i}>
                     {e}
                   </Link>
                   <br />
-                </>
+                </Fragment>
               ))}
           </div>
         </div>

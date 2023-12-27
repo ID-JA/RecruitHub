@@ -10,7 +10,6 @@ export const Home = () => {
   return (
     <Container fluid={true} className='home-container'>
       <Hero />
-      {/* <Test/> */}
       <Banner />
       <Categorie />
     </Container>
