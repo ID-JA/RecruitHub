@@ -1,16 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Group,
-  NumberInput,
-  Paper,
-  Select,
-  Stack,
-  TextInput,
-  Textarea,
-  Title
-} from '@mantine/core';
+import { Button, Divider, Group, Select, Stack, TextInput, Textarea, Title } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { registerUser } from '../../api/auth-service';
@@ -20,7 +8,7 @@ function CompanyDetails({ form }: { form: any }) {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
+    onSuccess: () => {
       router.history.replace('/login');
       notifications.show({
         message: 'Verify your email address to complete registration'
