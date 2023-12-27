@@ -9,6 +9,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\SavedJobController;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CodeCheckController;
@@ -60,16 +61,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     
     // --------note , make middleware for candid&recruir----------
+    ///////candidate and applications stuff
     Route::get('/candidate/applied-jobs', [CandidateController::class, 'appliedJobs']);
     Route::get('/candidate/application/{applicationId}', [CandidateController::class, 'applicationDetails']);
     Route::post('/candidate/apply/{jobId}', [CandidateController::class, 'applyForJob']);
     Route::delete('/candidate/cancel-application/{applicationId}', [CandidateController::class, 'cancelApplication']);
     // --------note , make middleware for candid&recruir----------
+    ///////recruiter and applications stuff
     Route::get('/recruiter/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
     Route::get('/recruiter/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
     Route::post('/recruiter/accept-application/{applicationId}', [RecruiterController::class, 'acceptApplication']);
     Route::post('/recruiter/reject-application/{applicationId}', [RecruiterController::class, 'rejectApplication']);
-
+///////////saved jobs
+    Route::post('/save-job/{jobId}', [SavedJobController::class, 'saveJob']);
+    Route::post('/unsave-job/{jobId}', [SavedJobController::class, 'unsaveJob']);
+    
     Route::prefix('company')->group(function () {
         Route::get('/', [CompanyController::class, 'index']);
         Route::get('/read/{id}', [CompanyController::class, 'read']);
