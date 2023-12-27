@@ -8,7 +8,7 @@ export function MainHeader() {
   const [opened, { toggle }] = useDisclosure(false);
   const items = (
     [
-      ['/', 'Jobs'],
+      ['/jobs-board', 'Jobs'],
       ['/login', 'Companies'],
       ['/login', 'About us']
     ] as const
