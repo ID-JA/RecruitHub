@@ -3,63 +3,59 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recruiter;
+use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RecruiterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function receivedApplications($jobId)
     {
-        //
+        $job = Auth::user()->jobs()->findOrFail($jobId);
+        $job->applications;
+        return response()->json([
+            "applications"=>$job,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function applicationDetails($applicationId)
     {
-        //
+        $application = Application::find($applicationId);
+        if($application){
+            return response()->json([
+                "applications"=>$application,
+            ]);
+        }else{
+            return response()->json([
+                'error'=>"Application is not found",
+            ],404);
+        }
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function acceptApplication(Request $request, $applicationId)
     {
-        //
+        $application = Application::findOrFail($applicationId);
+        $application->update(['status' => 'accepted']);
+
+        // Notify candidate  !important
+
+        return response()->json([
+            'success'=>"applications was accepted successfully",
+            'application'=>$application
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Recruiter $recruiter)
+    public function rejectApplication(Request $request, $applicationId)
     {
-        //
-    }
+        $application = Application::findOrFail($applicationId);
+        $application->update(['status' => 'rejected']);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Recruiter $recruiter)
-    {
-        //
-    }
+        // Notify candidate !!!!!!!!!!!!!!!11
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Recruiter $recruiter)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Recruiter $recruiter)
-    {
-        //
+        return response()->json([
+            'success'=>"applications was rejected successfully",
+            'application'=>$application
+        ]);
     }
 }

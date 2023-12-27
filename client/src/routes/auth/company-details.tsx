@@ -1,10 +1,7 @@
 import {
-  Box,
   Button,
   Divider,
   Group,
-  NumberInput,
-  Paper,
   Select,
   Stack,
   TextInput,
@@ -20,7 +17,7 @@ function CompanyDetails({ form }: { form: any }) {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
+    onSuccess: () => {
       router.history.replace('/login');
       notifications.show({
         message: 'Verify your email address to complete registration'
