@@ -9,7 +9,6 @@ import {
   rem,
   Flex,
   Checkbox,
-  Anchor,
   Text
 } from '@mantine/core';
 import { RecruitHubLogo } from '../../components/shared/logo/logo';

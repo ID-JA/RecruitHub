@@ -14,13 +14,16 @@ class Application extends Model
 
     protected $fillable = ['job_id', 'applicant_id', 'cover_letter', 'resume', 'status'];
 
-    public function job()
-    {
-        return $this->belongsTo(Job::class);
-    }
 
-    public function applicant()
+    public function candidate()
     {
         return $this->belongsTo(User::class, 'applicant_id');
     }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class,'user_id');
+    }
+    
+
 }

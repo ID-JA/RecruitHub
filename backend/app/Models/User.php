@@ -73,6 +73,19 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * 
+     */
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'user_id');
+    }
+
+    public function savedJobs()
+    {
+        return $this->belongsToMany(Job::class, 'saved_jobs', 'user_id', 'job_id')->withTimestamps();
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
