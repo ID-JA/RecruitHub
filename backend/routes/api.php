@@ -2,12 +2,17 @@
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Notifications\Notifications;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PasswordController;
+use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\CodeCheckController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\NewPasswordController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -25,16 +30,37 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 */ 
 
 
-
-
 Route::middleware(['auth:sanctum','verified'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::delete('/logout', [AuthController::class, 'logout']);
 
-    Route::prefix('email')->group(function () {
-        Route::get('/verify', [VerificationController::class, 'notice'])->name('verification.notice')->middleware('auth:sanctum')->withoutMiddleware("verified");
-        Route::post('/verification-notification', [VerificationController::class, 'send'])->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send')->withoutMiddleware("verified");
-        Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->withoutMiddleware(['auth:sanctum', 'verified']);
+// Route::middleware('web')->group(function ( ) {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/user', [AuthController::class, 'user']);
+        Route::delete('/logout', [AuthController::class, 'logout']);
+
+        Route::prefix('notifications')->group(function () {
+            Route::post('/read/{notificationId}',[NotificationController::class,'read']);
+            Route::get('/',[NotificationController::class,'index']);
+            Route::delete('/destroy',[NotificationController::class,'delete']);
+            Route::post('/read-all',[NotificationController::class,'readAll']);
+        });
+        
+        Route::prefix('email')->group(function () {
+            Route::get('/verify', [VerificationController::class, 'notice'])->name('verification.notice')->middleware('auth:sanctum')->withoutMiddleware("verified");
+            Route::post('/verification-notification', [VerificationController::class, 'send'])->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send')->withoutMiddleware("verified");
+            Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->withoutMiddleware(['auth:sanctum', 'verified']);
+        });
+
+        Route::prefix('chats')->group(function () {
+            Route::get('/{chat}', [ChatController::class, 'show']);
+            Route::post('/messages/send', [MessageController::class, 'send']);
+            Route::get('/messages/mark-as-read', [MessageController::class, 'markMessageAsRead']);
+            Route::delete('/{chat}', [ChatController::class, 'delete']);
+            Route::get('/', [ChatController::class, 'index']);
+        });
+
+        
     });
     Route::prefix('company')->group(function () {
         Route::get('/', [CompanyController::class, 'index']);
@@ -46,9 +72,9 @@ Route::middleware(['auth:sanctum','verified'])->group(function () {
     });
 });
 
-
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
 
 
 Route::prefix('password')->group(function () {

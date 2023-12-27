@@ -65,26 +65,29 @@ export function TalentForm({ form }: { form: any }) {
           {...form.getInputProps('location')}
         />
         <TextInput
+          name='email'
           withAsterisk
           variant='filled'
           label='Email'
           radius='md'
           mb='16px'
           placeholder='your@email.com'
-          {...form.getInputProps('email')}
+          onChange={handleInputChanges}
+          value={userData.email}
         />
 
         <PasswordInput
+          name='password'
           withAsterisk
           variant='filled'
           label='Password'
           radius='md'
           mb='16px'
           placeholder='Enter your password'
-          {...form.getInputProps('password')}
+          onChange={handleInputChanges}
+          value={userData.name}
         />
         <PasswordInput
-          withAsterisk
           variant='filled'
           label='Confirm Password'
           radius='md'

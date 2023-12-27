@@ -30,7 +30,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role',
-
     ];
 
 
@@ -47,7 +46,31 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return null;
     }
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
 
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class);
+    }
+
+    /**
+     * Get the messages sent by the user.
+     */
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'user_id');
+    }
+
+    /**
+     * Get the messages received by the user.
+     */
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -68,4 +91,5 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
 }
