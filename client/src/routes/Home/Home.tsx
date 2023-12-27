@@ -62,18 +62,21 @@ export const Home = () => {
                 >
                   Looking for?
                 </Text>
+
                 <TextInput
                   radius='xl'
                   size='lg'
-                  placeholder='Job title, keywords, or category'
+                  placeholder='Job title, keywords, or location'
                   rightSectionWidth={90}
                   leftSection={
                     <IconSearch style={{ width: rem(22), height: rem(22) }} stroke={2} />
                   }
                   rightSection={
-                    <ActionIcon size={28} radius='xl' variant='filled'>
-                      <IconArrowRight style={{ width: rem(26), height: rem(26) }} stroke={3} />
-                    </ActionIcon>
+                    <a href='/search-job'>
+                      <ActionIcon size={28} radius='xl' variant='filled'>
+                        <IconArrowRight style={{ width: rem(26), height: rem(26) }} stroke={3} />
+                      </ActionIcon>
+                    </a>
                   }
                 />
               </div>
