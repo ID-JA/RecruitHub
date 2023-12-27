@@ -1,5 +1,221 @@
-@media only screen and (max-width: 767px) {
-    .home-container{
-        text-align:center;
-    }
+/*-----------------------------------*\
+  #CUSTOM PROPERTY
+\*-----------------------------------*/
+
+:root {
+  /**
+     * colors
+     */
+  --majorelle-blue: hsl(245, 67%, 59%);
+  --ghost-white-1: #fcfcfc;
+  --lavender-web: hsl(247, 69%, 95%);
+  --cool-gray: hsl(244, 17%, 61%);
+  --white: hsl(0, 0%, 100%);
+
+  /**
+     * typography
+     */
+  --fs-0: 46px;
+  --fs-1: 36px;
+  --fs-2: 28px;
+  --fs-3: 20px;
+  --fs-4: 17px;
+  --fs-5: 16px;
+  --fs-6: 15px;
+  --fs-7: 14px;
+
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-700: 700;
+
+  /**
+     * transition
+     */
+  --transition: 0.25s ease;
+
+  /**
+     * spacing
+     */
+  --section-padding: 20px;
+}
+
+/*-----------------------------------*\
+    #RESET
+  \*-----------------------------------*/
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+a,
+img,
+span,
+input,
+label,
+button,
+ion-icon,
+textarea {
+  display: block;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ghost-white-1);
+}
+
+/*-----------------------------------*\
+    #REUSED STYLE
+  \*-----------------------------------*/
+
+.container {
+  padding-inline: 15px;
+  max-width: 1150px;
+  margin-inline: auto;
+}
+
+.section-title {
+  text-align: center;
+}
+
+.section-text {
+  color: var(--cool-gray);
+  font-size: var(--fs-6);
+  line-height: 1.7;
+  text-align: center;
+  max-width: 450px;
+  margin-inline: auto;
+  margin-bottom: 80px;
+}
+
+/*-----------------------------------*\
+    #HERO
+  \*-----------------------------------*/
+
+.hero {
+  padding: 20px;
+  background: var(--ghost-white-1);
+}
+
+.hero-title {
+  margin-bottom: 30px;
+  font-weight: var(--fw-500);
+  font-size: var(--fs-0);
+}
+
+.hero-text {
+  color: var(--cool-gray);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-500);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.hero-banner img {
+  width: 120%;
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+/*-----------------------------------*\
+    #CATEGORIES
+  \*-----------------------------------*/
+
+.my-container {
+  padding: 15px 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin: auto;
+  max-width: 1000px;
+}
+
+.my-paper {
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+  border-radius: 5%;
+  align-items: flex-start;
+}
+
+@media (min-width: 600px) {
+  .my-container {
+    grid-template-columns: repeat(auto-fit, minmax(calc(50% - 20px), 1fr));
   }
+}
+
+@media (min-width: 900px) {
+  .my-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/*-----------------------------------*\
+    #UNDERCreateAccount
+  \*-----------------------------------*/
+
+.my-container-2 {
+  padding: 40px 70px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin: auto;
+  max-width: 1000px;
+}
+.my-paper-2 {
+  width: 160px;
+  height: 160px;
+  border-radius: 5%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10px;
+}
+@media (min-width: 600px) {
+  .my-container-2 {
+    grid-template-columns: repeat(auto-fit, minmax(calc(50% - 20px), 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .my-container-2 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.footer-grid {
+  padding: 50px 80px 60px 140px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Add these styles to your existing CSS file or style block */
+
+.footer-list-title {
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 10px;
+  color: #76797c;
+}
+
+.footer-column p {
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 10px;
+  color: #76797c;
+}
