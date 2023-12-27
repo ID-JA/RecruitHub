@@ -57,7 +57,8 @@ export const Home = () => {
                   style={{
                     fontWeight: 'var(--fw-700)',
                     lineHeight: '1.8',
-                    marginBottom: '15px '
+                    marginBottom: '10px ',
+                    marginLeft: '10px '
                   }}
                 >
                   Looking for?
@@ -74,10 +75,11 @@ export const Home = () => {
                   rightSection={
                     <a href='/search-job'>
                       <ActionIcon size={28} radius='xl' variant='filled'>
-                        <IconArrowRight style={{ width: rem(26), height: rem(26) }} stroke={3} />
+                        <IconArrowRight style={{ width: rem(22), height: rem(22) }} stroke={2} />
                       </ActionIcon>
                     </a>
                   }
+                  style={{ width: '440px' }}
                 />
               </div>
             </Grid.Col>
@@ -834,7 +836,7 @@ export const Home = () => {
                     size='xl'
                     style={{
                       fontWeight: '600',
-                      textDecoration: 'underline',
+
                       marginBottom: '10px',
                       color: '#76797c'
                     }}
@@ -856,7 +858,6 @@ export const Home = () => {
                     size='xl'
                     style={{
                       fontWeight: '600',
-                      textDecoration: 'underline',
                       marginBottom: '10px',
                       color: '#76797c'
                     }}

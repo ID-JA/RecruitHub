@@ -122,12 +122,12 @@ body {
   font-size: var(--fs-6);
   font-weight: var(--fw-500);
   line-height: 1.8;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   max-width: 600px;
 }
 
 .hero-banner img {
-  width: 120%;
+  width: 100%;
   max-width: 1000px;
   margin-inline: auto;
 }
@@ -199,10 +199,10 @@ body {
 }
 
 .footer-grid {
-  padding: 50px 80px 60px 180px;
+  padding: 80px 80px 50px 170px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 30px;
 }
 
 

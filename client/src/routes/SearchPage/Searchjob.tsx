@@ -21,7 +21,7 @@ export const Searchjob = () => {
                 <Text
                   style={{
                     lineHeight: '1.8',
-                    marginBottom: '5px ',
+                    marginBottom: '10px ',
                     color: 'var(--cool-gray)',
                     marginLeft: '5px '
                   }}
