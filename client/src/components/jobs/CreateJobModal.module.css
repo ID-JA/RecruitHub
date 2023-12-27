@@ -84,7 +84,7 @@
   flex-direction: inherit;
   -webkit-box-flex: 1;
   flex-grow: 1;
-  overflow: hidden auto;
+  /* overflow: hidden auto; */
 }
 
 .actionButton {

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Job;
+use App\Models\Company;
+
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -14,6 +16,10 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class);
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -24,14 +30,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role',
-
     ];
-    
+
 
     /**
      * The methods of the user model
      */
-    
+
     public function profile()
     {
         if ($this->role === 'candidate') {
@@ -41,7 +46,10 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return null;
     }
-
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
 
     public function chats()
     {
@@ -69,8 +77,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function applications()
     {
-        return $this->belongsToMany(Job::class, 'applications')
-        ->withPivot('status');
+        return $this->hasMany(Application::class, 'user_id');
     }
 
     /**
@@ -92,4 +99,5 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
 }

@@ -18,7 +18,7 @@ class AuthController extends Controller
         $validatedUser = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string',
             'role'=>'required|in:candidate,recruiter'
         ]);
         $validatedRecruiter = $request->validate([
@@ -53,6 +53,7 @@ class AuthController extends Controller
         Auth::login($user);
         // event(new Registered($user));
         return response()->json(['message' => 'Verification email sent. Please check your email. i blocked the send of verification for while'], 201);
+
     }
     
     public function login(Request $request)
@@ -61,6 +62,8 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        $credentials['password']=bcrypt($credentials['password']);
 
         if (Auth::attempt($credentials)) {
             $token = Auth::user()->createToken('authToken')->plainTextToken;

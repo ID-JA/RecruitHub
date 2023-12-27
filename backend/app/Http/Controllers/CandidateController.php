@@ -1,65 +1,54 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Candidate;
+use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CandidateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function appliedJobs()
     {
-        //
+        $applications = Auth::user()->applications;
+        return response()->json([
+            'applications'=>$applications,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function applicationDetails($applicationId)
     {
-        //
+        $application = Application::findOrFail($applicationId);
+        return response()->json([
+            "application"=>$application,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function applyForJob(Request $request, $jobId)
     {
-        //
+        Auth::user()->applications()->create([
+            'job_id' => $jobId,
+            'status' => 'pending',
+            "cover_letter"=>'something',
+            'resume'=>'resume',
+        ]);
+
+        //don't forget to notify user type recritrue here!!!! important
+
+        return response()->json([
+            'success'=>'Application was added successfully',
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Candidate $candidate)
+    public function cancelApplication(Request $request, $applicationId)
     {
-        //
-    }
+        $application = Auth::user()->applications()->findOrFail($applicationId);
+        $application->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Candidate $candidate)
-    {
-        //
-    }
+        // Notify user !! important
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Candidate $candidate)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Candidate $candidate)
-    {
-        //
+        return response()->json([
+            'success'=>"Application was deleted successfully",
+        ]);
     }
 }

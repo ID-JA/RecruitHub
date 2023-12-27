@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('applicant_id');
-            $table->text('cover_letter');
-            $table->enum('status', ['pending', 'progress','done'])->default('pending');
+            $table->string('resume')->nullable();
+            $table->text('cover_letter')->nullable();
+            $table->enum('status', ['pending', 'accepted','rejected'])->default('pending');
             $table->timestamps();
 
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
-            $table->foreign('applicant_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

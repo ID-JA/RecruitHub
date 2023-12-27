@@ -13,16 +13,21 @@ return new class extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->text('description');
             $table->text('requirements');
-            $table->unsignedBigInteger('employer_id');
             $table->string('location');
             $table->decimal('salary');
             $table->text('form');
+            $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('employer_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+           
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+
     }
 
     /**
