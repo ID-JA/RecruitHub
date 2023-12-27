@@ -1,6 +1,7 @@
 import {
   TextInput,
   PasswordInput,
+  Textarea,
   Checkbox,
   Button,
   Group,
@@ -8,29 +9,65 @@ import {
   Text,
   Anchor
 } from '@mantine/core';
+import { ChangeEvent, useState } from 'react';
 import { useForm } from '@mantine/form';
+import { z } from 'zod';
+import { zodResolver } from 'mantine-form-zod-resolver';
+
+const signUpSchemaRecruiter = z
+  .object({
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string().email({ message: 'Please enter a valid email address' }),
+    password: z.string().min(6, { message: 'Password should have at least 6 characters' }),
+    confirmPassword: z.string().min(6, { message: 'Password should have at least 6 characters' }),
+    companyName: z.string()
+  })
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords did not match'
+      });
+    }
+  });
 
 export function TalentForm() {
   const form = useForm({
     initialValues: {
-      fname: '',
-      lname: '',
-      company: '',
+      firstName: '',
+      lastName: '',
+      companyName: '',
       email: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email')
-    }
+    validate: zodResolver(signUpSchemaRecruiter)
   });
+  const [userData, setuserData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
+  //  handle input changes
+  const handleInputChanges = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setuserData({
+      ...userData,
+      [name]: value
+    });
+  };
+
   return (
     <div>
       <div style={{ margin: '15px' }}>
         <Title ta='center' order={3}>
           We Bring Job Offers to You!
         </Title>
-        <Text ta='center'> Join thousands of people who’ve found their dream job using Hired.</Text>
+        <Text ta='center' maw='430px' size='xs'>
+          Join thousands of people who’ve found their dream job using Hired.
+        </Text>
         <Text size='sm' ta='center' mt={5}>
           You already joined us?{' '}
           <Anchor href='/login' size='sm'>
@@ -41,75 +78,57 @@ export function TalentForm() {
       </div>
 
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <TextInput
-            variant='filled'
-            label='First Name'
-            radius='md'
-            mb='16px'
-            mt='10px'
-            styles={{ root: { flex: 1 } }}
-            placeholder='your first name'
-            {...form.getInputProps('fname')}
-          />
-          <TextInput
-            variant='filled'
-            label='Last Name'
-            radius='md'
-            mb='16px'
-            mt='10px'
-            styles={{ root: { flex: 1 } }}
-            placeholder='your last name'
-            {...form.getInputProps('lname')}
-          />
-        </div>
         <TextInput
           variant='filled'
-          label='Company Name'
+          label='Full Name'
           radius='md'
           mb='16px'
-          placeholder='your company name'
-          {...form.getInputProps('company')}
+          mt='10px'
+          placeholder='your full name'
+          {...form.getInputProps('fname')}
+        />
+        <Textarea
+          variant='filled'
+          radius='md'
+          mb='16px'
+          label='where do you live'
+          placeholder='your place'
+          {...form.getInputProps('live')}
         />
         <TextInput
+          name='email'
           withAsterisk
           variant='filled'
           label='Email'
           radius='md'
           mb='16px'
           placeholder='your@email.com'
-          {...form.getInputProps('email')}
+          onChange={handleInputChanges}
+          value={userData.email}
         />
 
         <PasswordInput
+          name='password'
           withAsterisk
           variant='filled'
           label='Password'
           radius='md'
           mb='16px'
           placeholder='Enter your password'
-          {...form.getInputProps('password')}
+          onChange={handleInputChanges}
+          value={userData.name}
         />
         <PasswordInput
-          withAsterisk
           variant='filled'
           label='Confirm Password'
           radius='md'
           mb='16px'
-          placeholder='Enter your password'
+          placeholder='confirm your password'
           {...form.getInputProps('password')}
         />
 
-        <Checkbox
-          mt='md'
-          label='I agree to sell my privacy'
-          {...form.getInputProps('termsOfService', { type: 'checkbox' })}
-        />
-
         <Group justify='flex-end' mt='md'>
-          <Button type='submit' radius='md'>
-            Get Started
-          </Button>
+          <Button type='submit'>Get Started</Button>
         </Group>
       </form>
     </div>
