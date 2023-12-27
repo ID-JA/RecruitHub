@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+
 class Application extends Model
 {
     use HasFactory;
@@ -22,5 +23,4 @@ class Application extends Model
     {
         return $this->belongsTo(User::class, 'applicant_id');
     }
-
 }

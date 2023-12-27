@@ -10,6 +10,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PasswordController;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\CodeCheckController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
@@ -29,6 +30,9 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 */ 
 
 
+Route::middleware(['auth:sanctum','verified'])->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::delete('/logout', [AuthController::class, 'logout']);
 
 // Route::middleware('web')->group(function ( ) {
     Route::middleware(['auth:sanctum'])->group(function () {
@@ -58,13 +62,22 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
         
     });
-
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
-
-    Route::prefix('password')->group(function () {
-        Route::post('/email', [PasswordController::class, 'send']);
-        Route::post('/reset', [PasswordController::class, 'reset']);
+    Route::prefix('company')->group(function () {
+        Route::get('/', [CompanyController::class, 'index']);
+        Route::get('/read/{id}', [CompanyController::class, 'read']);
+        Route::get('/showRecruiterCompanies', [CompanyController::class, 'showRecruiterCompanies']);
+        Route::post('/create', [CompanyController::class, 'create']);
+        Route::post('/update/{id}', [CompanyController::class, 'updateStatus']);
+        Route::delete('/delete/{id}', [CompanyController::class, 'destory']);
     });
-// });
+});
 
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+
+
+Route::prefix('password')->group(function () {
+    Route::post('/email', [PasswordController::class, 'send']);
+    Route::post('/reset', [PasswordController::class, 'reset']);
+});
