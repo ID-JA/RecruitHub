@@ -52,8 +52,8 @@ class AuthController extends Controller
         // $user->createToken('authToken')->plainTextToken;
         Auth::login($user);
         // event(new Registered($user));
+        return response()->json(['message' => 'Verification email sent. Please check your email. i blocked the send of verification for while'], 201);
 
-        return response()->json(['message' => 'Verification email sent. Please check your email.i blocked the send of verification for while'], 201);
     }
     
     public function login(Request $request)

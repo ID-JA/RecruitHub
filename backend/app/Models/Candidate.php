@@ -12,7 +12,6 @@ class Candidate extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
-
         'skills',
         'bio',
         'experience',

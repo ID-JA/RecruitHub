@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,8 +25,6 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 */ 
 
 
-
-
 Route::middleware(['auth:sanctum','verified'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -46,7 +43,6 @@ Route::middleware(['auth:sanctum','verified'])->group(function () {
         Route::delete('/delete/{id}', [CompanyController::class, 'destory']);
     });
 });
-
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
