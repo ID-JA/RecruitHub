@@ -26,11 +26,16 @@ class CandidateController extends Controller
 
     public function applyForJob(Request $request, $jobId)
     {
+        $request->validate([
+            'resume' => 'required|mimes:pdf,doc,docx', 
+        ]);
+    
+        $resumePath = $request->file('resume')->store('resumes', 'public');
+    
         Auth::user()->applications()->create([
             'job_id' => $jobId,
-            'status' => 'pending',
-            "cover_letter"=>'something',
-            'resume'=>'resume',
+            'cover_letter' => $request->input('cover_letter'),
+            'resume' => $resumePath,
         ]);
 
         //don't forget to notify user type recritrue here!!!! important

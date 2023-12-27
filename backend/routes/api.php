@@ -59,12 +59,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     
-    // --------note , make middleware for candid&recruir---------
+    // --------note , make middleware for candid&recruir----------
     Route::get('/candidate/applied-jobs', [CandidateController::class, 'appliedJobs']);
     Route::get('/candidate/application/{applicationId}', [CandidateController::class, 'applicationDetails']);
     Route::post('/candidate/apply/{jobId}', [CandidateController::class, 'applyForJob']);
     Route::delete('/candidate/cancel-application/{applicationId}', [CandidateController::class, 'cancelApplication']);
-    // --------note , make middleware for candid&recruir---------
+    // --------note , make middleware for candid&recruir----------
     Route::get('/recruiter/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
     Route::get('/recruiter/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
     Route::post('/recruiter/accept-application/{applicationId}', [RecruiterController::class, 'acceptApplication']);

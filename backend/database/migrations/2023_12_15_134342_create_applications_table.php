@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_id');
-            $table->unsignedBigInteger('applicant_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('resume')->nullable();
             $table->text('cover_letter')->nullable();
             $table->enum('status', ['pending', 'accepted','rejected'])->default('pending');
