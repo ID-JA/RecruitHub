@@ -63,6 +63,8 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        $credentials['password']=bcrypt($credentials['password']);
+
         if (Auth::attempt($credentials)) {
             $token = Auth::user()->createToken('authToken')->plainTextToken;
             return response()->json(['token' => $token], 200);

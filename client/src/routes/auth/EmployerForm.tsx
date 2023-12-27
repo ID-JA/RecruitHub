@@ -30,6 +30,7 @@ export function EmployerForm({ form }: { form: any }) {
         </Text>
       </div>
 
+
       <form
         onSubmit={form.onSubmit(() => {
           router.history.push('/signup#company-details');

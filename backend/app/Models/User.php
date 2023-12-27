@@ -30,7 +30,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role',
-
     ];
 
 
@@ -46,6 +45,10 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->hasOne(Recruiter::class);
         }
         return null;
+    }
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
     }
 
 
@@ -68,4 +71,5 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
 }

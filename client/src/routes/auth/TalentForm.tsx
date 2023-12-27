@@ -9,6 +9,7 @@ import {
   Text,
   Anchor
 } from '@mantine/core';
+import { ChangeEvent, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { z } from 'zod';
 import { zodResolver } from 'mantine-form-zod-resolver';
@@ -43,6 +44,21 @@ export function TalentForm() {
     },
     validate: zodResolver(signUpSchemaRecruiter)
   });
+  const [userData, setuserData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
+  //  handle input changes
+  const handleInputChanges = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setuserData({
+      ...userData,
+      [name]: value
+    });
+  };
+
   return (
     <div>
       <div style={{ margin: '15px' }}>
@@ -60,6 +76,7 @@ export function TalentForm() {
           </Anchor>
         </Text>
       </div>
+
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <TextInput
           variant='filled'
@@ -79,26 +96,29 @@ export function TalentForm() {
           {...form.getInputProps('live')}
         />
         <TextInput
+          name='email'
           withAsterisk
           variant='filled'
           label='Email'
           radius='md'
           mb='16px'
           placeholder='your@email.com'
-          {...form.getInputProps('email')}
+          onChange={handleInputChanges}
+          value={userData.email}
         />
 
         <PasswordInput
+          name='password'
           withAsterisk
           variant='filled'
           label='Password'
           radius='md'
           mb='16px'
           placeholder='Enter your password'
-          {...form.getInputProps('password')}
+          onChange={handleInputChanges}
+          value={userData.name}
         />
         <PasswordInput
-          withAsterisk
           variant='filled'
           label='Confirm Password'
           radius='md'
