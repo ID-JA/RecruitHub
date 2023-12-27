@@ -9,6 +9,21 @@ class Recruiter extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'website',
+        'experience',
+        'industry',
+        'about',
+        'location',
+        'zip',
+        'user_id',
+    ];
+
+
+    protected $casts = [
+        'experience' => 'json',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

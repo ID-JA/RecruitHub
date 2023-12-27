@@ -12,9 +12,9 @@ export function MainHeader() {
       ['/login', 'Companies'],
       ['/login', 'About us']
     ] as const
-  ).map(([to, label]) => {
+  ).map(([to, label], index) => {
     return (
-      <div key={label}>
+      <div key={index}>
         <Link
           to={to}
           className={classes.link}
@@ -43,7 +43,7 @@ export function MainHeader() {
           <Link to='/login'>
             <Button variant='outline'>Sign in</Button>
           </Link>
-          <Link to='/signup'>
+          <Link to='/signup' hash='employer-details'>
             <Button>Sign up</Button>
           </Link>
           <Link to='/portal'>

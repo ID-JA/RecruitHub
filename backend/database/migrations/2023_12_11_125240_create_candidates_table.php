@@ -13,8 +13,17 @@ return new class extends Migration
     {
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('resume_path')->nullable();
+            $table->json('skills')->nullable();
+            $table->text('bio')->nullable();
+            $table->json('experience')->nullable();
+            $table->text('education')->nullable();
+            $table->string('resume')->nullable();
+            $table->string('title')->nullable();
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();
+            $table->json('social')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

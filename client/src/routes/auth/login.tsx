@@ -1,4 +1,4 @@
-import { Route } from '@tanstack/react-router';
+import { Link, Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
   TextInput,
@@ -9,11 +9,25 @@ import {
   rem,
   Flex,
   Checkbox,
-  Anchor
+  Anchor,
+  Text
 } from '@mantine/core';
 import { RecruitHubLogo } from '../../components/shared/logo/logo';
+import { authenticationSchema, useAuthenticate } from '../../api/auth-service';
+
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { useForm } from '@mantine/form';
 
 export default function Login() {
+  const { authenticate, mutation } = useAuthenticate();
+
+  const form = useForm({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validate: zodResolver(authenticationSchema)
+  });
   return (
     <Flex justify='center' align='center' h='100vh' w='100vw'>
       <Paper
@@ -24,22 +38,31 @@ export default function Login() {
           width: '100%'
         }}
         withBorder
+        component='form'
+        onSubmit={form.onSubmit(authenticate)}
       >
         <Flex justify='center' mb='md'>
           <RecruitHubLogo />
         </Flex>
-        <TextInput label='Email' placeholder='your@gmail.com' required />
-        <PasswordInput label='Password' placeholder='Your password' required mt='md' />
-        <Group justify='apart' mt='lg'>
+        <TextInput label='Email' placeholder='your@gmail.com' {...form.getInputProps('email')} />
+        <PasswordInput
+          label='Password'
+          placeholder='Your password'
+          mt='md'
+          {...form.getInputProps('password')}
+        />
+        <Group justify='space-between' mt='lg'>
           <Checkbox label='Remember me' />
-          <Anchor href='/forgot-password' size='sm'>
-            {' '}
-            Forgot password?
-          </Anchor>
+          <Link to='/forgot-password'>
+            <Text size='sm'>Forgot password?</Text>
+          </Link>
         </Group>
-        <Button fullWidth mt='xl'>
+        <Button fullWidth mt='xl' type='submit' loading={mutation.isPending}>
           Sign in
         </Button>
+        <Text mt='md' c='dimmed' size='sm' ta='center'>
+          <Link to='/signup'>Create account</Link>
+        </Text>
       </Paper>
     </Flex>
   );
@@ -47,7 +70,6 @@ export default function Login() {
 
 export const loginRoute = new Route({
   path: 'login',
-  id: 'signin',
   component: Login,
   getParentRoute: () => defaultLayoutRoute
 });

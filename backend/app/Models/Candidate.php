@@ -12,8 +12,23 @@ class Candidate extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
 
+        'skills',
+        'bio',
+        'experience',
+        'education',
+        'resume',
+        'title',
+        'city',
+        'country',
+        'social',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'skills' => 'json',
+        'experience' => 'json',
+        'social' => 'json',
     ];
 
     public function user()
