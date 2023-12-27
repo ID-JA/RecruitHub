@@ -641,7 +641,7 @@ export const Home = () => {
       {/*------------------------------
                    FindYourNeed
       ----------------------------------*/}
-      <section className='hero' id='hero' style={{ padding: '40px 0px 100px 0px' }}>
+      <section className='hero' id='hero' style={{ padding: '40px 0px  80px 0px' }}>
         <Container>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Text
