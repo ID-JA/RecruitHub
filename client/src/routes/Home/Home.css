@@ -148,8 +148,10 @@ body {
   width: 200px;
   height: 200px;
   margin: 10px;
-  border-radius: 5%;
-  align-items: flex-start;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @media (min-width: 600px) {
@@ -178,7 +180,6 @@ body {
 .my-paper-2 {
   width: 160px;
   height: 160px;
-  border-radius: 5%;
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -198,24 +199,23 @@ body {
 }
 
 .footer-grid {
-  padding: 50px 80px 60px 140px;
+  padding: 50px 80px 60px 180px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
+
+
 /* Add these styles to your existing CSS file or style block */
 
-.footer-list-title {
-  font-weight: 600;
-  text-decoration: none;
-  margin-bottom: 10px;
-  color: #76797c;
-}
+
 
 .footer-column p {
   font-weight: 600;
   text-decoration: none;
   margin-bottom: 10px;
-  color: #76797c;
+  color: grey;
 }
+
+

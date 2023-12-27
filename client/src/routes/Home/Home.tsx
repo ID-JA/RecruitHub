@@ -92,62 +92,50 @@ export const Home = () => {
                  Categories
       -----------------------------*/}
       <section style={{ backgroundColor: '#F0F5FC', paddingBottom: '60px' }}>
-        <Container>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Text
-              style={{
-                fontSize: 'var(--fs-1)',
-                fontWeight: 'var(--fw-500)',
-                lineHeight: '1.8',
-                marginTop: '40px'
-              }}
-            >
-              High Demanding Job <br></br>Category
-            </Text>
-            <a href='/signup'>
-              <Text
-                style={{
-                  fontWeight: 'var(--fw-500)',
-                  lineHeight: '1.8',
-                  margin: '90px 10px 0px',
-                  textAlign: 'right',
-                  color: '#0A66C2',
-                  textDecoration: 'underline',
-                  cursor: 'pointer'
-                }}
-              >
-                Explore more Jobs..
-              </Text>
-            </a>
-          </div>
+        <Container style={{ paddingTop: '60px' }}>
+          <Text
+            style={{
+              fontSize: '30px',
+              fontWeight: 'var(--fw-500)',
+              lineHeight: '1.8',
+              textAlign: 'center'
+            }}
+          >
+            High Demanding Job Category
+          </Text>
         </Container>
 
         <Container className='my-container'>
           {/* Card 1 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-                backgroundColor: '#F9FBFF',
-                borderRadius: '5%',
+                backgroundColor: '#F0F5FC',
+                borderRadius: '-60%',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
             >
-              <IconDeviceLaptop color='#0A66C2'></IconDeviceLaptop>
+              <IconDeviceLaptop size={28} color='#0A66C2'></IconDeviceLaptop>
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -159,7 +147,14 @@ export const Home = () => {
                 Information Technology
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -173,7 +168,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 2 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
@@ -191,13 +186,18 @@ export const Home = () => {
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -209,7 +209,14 @@ export const Home = () => {
                 Mobile Development
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -223,7 +230,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 3 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
@@ -241,13 +248,18 @@ export const Home = () => {
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -259,7 +271,14 @@ export const Home = () => {
                 Acounting & Management
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -273,7 +292,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 4 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
@@ -291,13 +310,18 @@ export const Home = () => {
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -309,7 +333,14 @@ export const Home = () => {
                 Database Administration
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -323,7 +354,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 5 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
@@ -340,13 +371,18 @@ export const Home = () => {
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -358,7 +394,14 @@ export const Home = () => {
                 Science
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -372,7 +415,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 6 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
@@ -390,13 +433,18 @@ export const Home = () => {
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -408,7 +456,14 @@ export const Home = () => {
                 Human Resources
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -422,7 +477,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 7 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
@@ -439,13 +494,18 @@ export const Home = () => {
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -457,7 +517,14 @@ export const Home = () => {
                 Accounting
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -471,7 +538,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 8 */}
-          <Paper className='my-paper' p='lg'>
+          <Paper className='my-paper' p='lg' shadow='md'>
             <div
               style={{
                 width: '20%',
@@ -489,13 +556,18 @@ export const Home = () => {
             </div>
             <Box>
               <Text
-                size='lg'
+                size='md'
                 style={{
                   fontWeight: 600,
                   textDecoration: 'none',
                   transition: 'text-decoration 0.3s',
                   marginBottom: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
@@ -507,7 +579,14 @@ export const Home = () => {
                 Finance
               </Text>
               <Text
-                style={{ color: '#76797C' }}
+                style={{
+                  color: '#76797C',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center'
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
@@ -732,20 +811,37 @@ export const Home = () => {
             <div className='footer-column'>
               <ul>
                 <li>
-                  <Text size='xl' className='footer-list-title'>
+                  <Text
+                    size='xl'
+                    style={{
+                      fontWeight: '600',
+                      textDecoration: 'underline',
+                      marginBottom: '10px',
+                      color: '#76797c'
+                    }}
+                  >
+                    {' '}
                     Contact
                   </Text>
                 </li>
               </ul>
-              <p>+212 661656789</p>
+              <p>+212661656789</p>
               <p>recruit-hub@gmail.com</p>
-              <p>Tétouan</p>
+              <p>Tétouan, Morocco</p>
             </div>
 
             <div className='footer-column'>
               <ul>
                 <li>
-                  <Text size='xl' className='footer-list-title'>
+                  <Text
+                    size='xl'
+                    style={{
+                      fontWeight: '600',
+                      textDecoration: 'underline',
+                      marginBottom: '10px',
+                      color: '#76797c'
+                    }}
+                  >
                     Services
                   </Text>
                 </li>
@@ -779,10 +875,8 @@ export const Home = () => {
             <div className='footer-column'>
               <Text size='xl' className='footer-list-title'>
                 <br></br>
-                <br></br>
-                <br></br>
               </Text>
-              <div className='social-icons' style={{ display: 'flex', flexDirection: 'row' }}>
+              <div className='social-icons' style={{ display: 'flex', flexDirection: 'column' }}>
                 <a href='#'>
                   <IconBrandFacebook color='#0A66C2'></IconBrandFacebook>
                 </a>
