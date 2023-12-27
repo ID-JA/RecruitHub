@@ -164,7 +164,7 @@ export function SignUp() {
   });
 
   useEffect(() => {
-    const handleBeforeUnload = (e: any) => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent): string | undefined => {
       if (form.isDirty()) {
         const message = 'You have unsaved changes. Are you sure you want to leave?';
         e.returnValue = message;
@@ -181,8 +181,6 @@ export function SignUp() {
 
   return (
     <Container size='lg' h='100vh'>
-      <pre>{JSON.stringify(form.errors, null, 2)}</pre>
-
       <Flex justify='center' align='center' h='100%'>
         <Paper withBorder radius='md' w='100%' maw='500px' p='xl'>
           {state.location.hash === 'company-details' ? (
