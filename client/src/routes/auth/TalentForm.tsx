@@ -72,8 +72,7 @@ export function TalentForm({ form }: { form: any }) {
           radius='md'
           mb='16px'
           placeholder='your@email.com'
-          onChange={handleInputChanges}
-          value={userData.email}
+          {...form.getInputProps('email')}
         />
 
         <PasswordInput
@@ -84,8 +83,7 @@ export function TalentForm({ form }: { form: any }) {
           radius='md'
           mb='16px'
           placeholder='Enter your password'
-          onChange={handleInputChanges}
-          value={userData.name}
+          {...form.getInputProps('password')}
         />
         <PasswordInput
           variant='filled'
