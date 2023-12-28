@@ -87,6 +87,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/update/{id}', [CompanyController::class, 'updateStatus']);
         Route::delete('/delete/{id}', [CompanyController::class, 'destory']);
     });
+
+    Route::prefix('jobs')->group(function () {
+        Route::get('/', [JobController::class, 'index'])->withoutMiddleware('auth:sanctum');
+        Route::get('/{job}', [JobController::class, 'show'])->withoutMiddleware('auth:sanctum');
+        Route::get('/recruiter', [JobController::class, 'showRecruiterJobs']);
+        Route::post('/', [JobController::class, 'store']);
+        Route::put('/{job}', [JobController::class, 'update']);
+        Route::delete('/{job}', [JobController::class, 'destroy']);
+    });
+
+    
 });  
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -96,12 +107,3 @@ Route::prefix('password')->group(function () {
     Route::post('/reset', [PasswordController::class, 'reset']);
 });
 
-
-Route::apiResources([
-    'jobs' => JobController::class, 
-    //add here ur route like for example 
-    // 'companies' => CompanyController::class
- ]);
- 
-
-Route::get('/jobs', [JobController::class, 'showRecruiterJobs']);
