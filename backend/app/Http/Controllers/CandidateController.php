@@ -42,7 +42,7 @@ class CandidateController extends Controller
         $recruiter=$job->recruiter;
         $data=[
             'id'=>$recruiter->id,
-            'title'=>'Someone just applied for your offer✨',
+            'title'=>'Someone just applied for your offer ✨',
             'body'=>"$user->name has applied for your offer '$job->title' 😎"
         ];
         $recruiter->notify(new Notifications($data));
