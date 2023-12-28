@@ -43,9 +43,9 @@ class CandidateController extends Controller
         $data=[
             'id'=>$recruiter->id,
             'title'=>'Someone just applied for your offer✨',
-            'body'=>"$user->name has applied for your offer '$job->title'"
+            'body'=>"$user->name has applied for your offer '$job->title' 😎"
         ];
-        // $recruiter->notify(new Notifications($data));
+        $recruiter->notify(new Notifications($data));
 
         return response()->json([
             'success'=>'Application was added successfully',
@@ -62,9 +62,9 @@ class CandidateController extends Controller
         $data=[
             'id'=>$recruiter->id,
             'title'=>'Someone just cancelled for your offer',
-            'body'=>"$user->name has cancelled his application for your offer '$job->title'"
+            'body'=>"$user->name has cancelled his application for your offer '$job->title' 😐"
         ];
-        // $recruiter->notify(new Notifications($data));
+        $recruiter->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"Application was deleted successfully",

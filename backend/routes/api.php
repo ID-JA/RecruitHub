@@ -40,10 +40,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
 
     Route::prefix('notifications')->group(function () {
-        Route::post('/read/{notificationId}',[NotificationController::class,'read']);
-        Route::get('/',[NotificationController::class,'index']);
+            Route::post('/read/{notificationId}',[NotificationController::class,'read']);
+            Route::get('/',[NotificationController::class,'index']);
         Route::delete('/destroy',[NotificationController::class,'delete']);
-        Route::post('/read-all',[NotificationController::class,'readAll']);
+            Route::post('/read-all',[NotificationController::class,'readAll']);
     });
     
     Route::prefix('email')->group(function () {

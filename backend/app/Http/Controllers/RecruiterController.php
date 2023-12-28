@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
 use App\Models\Recruiter;
 use App\Models\Application;
 use Illuminate\Http\Request;
@@ -43,9 +44,9 @@ class RecruiterController extends Controller
         $data=[
             'id'=>$candidate->id,
             'title'=>'congratulations 🎉',
-            'body'=>"Your application was for offer '$job->title' was accepted!"
+            'body'=>"Your application for offer '$job->title' was accepted!😁"
         ];
-        // $candidate->notify(new Notifications($data));
+        $candidate->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"applications was accepted successfully",
@@ -63,9 +64,9 @@ class RecruiterController extends Controller
         $data=[
             'id'=>$candidate->id,
             'title'=>'Update!',
-            'body'=>"Your application was for offer '$job->title' was rejected!"
+            'body'=>"Your application for offer '$job->title' was rejected 😐!"
         ];
-        // $candidate->notify(new Notifications($data));
+        $candidate->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"applications was rejected successfully",
