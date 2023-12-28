@@ -38,6 +38,8 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::delete('/logout', [AuthController::class, 'logout']);
+    
+  
 
     Route::prefix('notifications')->group(function () {
         Route::post('/read/{notificationId}',[NotificationController::class,'read']);
@@ -97,11 +99,11 @@ Route::prefix('password')->group(function () {
 });
 
 
+
+
+Route::get('/jobs/search', [JobController::class, 'searchJobs']);
+
+Route::get('/myJobs', [JobController::class, 'showRecruiterJobs']);
 Route::apiResources([
     'jobs' => JobController::class, 
-    //add here ur route like for example 
-    // 'companies' => CompanyController::class
  ]);
- 
-
-Route::get('/jobs', [JobController::class, 'showRecruiterJobs']);
