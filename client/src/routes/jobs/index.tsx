@@ -9,7 +9,7 @@ export function Jobs() {
   return (
     <div>
       <Group justify='space-between'>
-        <h1>Jobs (List of jobs)</h1>
+        <h1>Jobs Advertisements</h1>
         <CreateJobModal />
       </Group>
       <section>

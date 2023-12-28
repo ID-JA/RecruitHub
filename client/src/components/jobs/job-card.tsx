@@ -3,8 +3,9 @@ import { type JobProps } from '../../types';
 import { timeAgo } from '../../utils';
 import { IconDots } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
+import { JobData } from './jobs-container';
 
-function JobCard({ props }: { props: JobProps }) {
+function JobCard({ props }: { props: JobData }) {
   const [opened, { open, close }] = useDisclosure();
   return (
     <Paper radius='md' withBorder p='md' component='li'>
@@ -53,7 +54,7 @@ function JobCard({ props }: { props: JobProps }) {
                 </Text>
                 <Text size='xs' c='gray'>
                   Created{' '}
-                  {new Date(props.created).toLocaleDateString('en-us', {
+                  {new Date(props.created_at).toLocaleDateString('en-us', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric'
@@ -63,11 +64,11 @@ function JobCard({ props }: { props: JobProps }) {
             </Popover>
 
             <Text size='sm' fw={600} c='gray'>
-              {props.company}
+              {props.company_id}
             </Text>
             <p style={{ margin: 0 }}>•</p>
             <Text size='sm' fw={400} c='gray'>
-              {timeAgo(new Date(props.created), { withAgo: true })}
+              {timeAgo(new Date(props.created_at), { withAgo: true })}
             </Text>
           </Group>
         </div>

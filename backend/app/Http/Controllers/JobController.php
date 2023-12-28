@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\jobRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Job;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
@@ -18,11 +19,23 @@ class JobController extends Controller
         $jobs = Job::all();
         return response()->json($jobs);
     }
-
-    public function showRecruiterJobs()
+    public function showRecruiterJobs(Request $request)
     {
         $user = Auth::user();
-        $jobs = $user->jobs;
+    
+        $jobs = $user->jobs()
+            ->when($request->filled('company'), function ($query) use ($request) {
+                $query->where('company_id', $request->query('company'));
+            })
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $query->where('status', $request->query('status'));
+            })
+            ->when($request->filled('title'), function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->query('title') . '%');
+            })
+            ->orderBy('created_at', 'asc') // Uncomment if needed
+            ->get();
+    
         return response()->json($jobs);
     }
 

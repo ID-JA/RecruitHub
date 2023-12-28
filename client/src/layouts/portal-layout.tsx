@@ -3,27 +3,64 @@ import { PortalNavbar } from '../components/shared/Navbar/PortalNavbar';
 import { rootRoute } from '../routes/Router';
 
 import { useDisclosure } from '@mantine/hooks';
-import { ActionIcon, AppShell, Avatar, Box, Container, Group, Menu, rem } from '@mantine/core';
+import {
+  ActionIcon,
+  AppShell,
+  Avatar,
+  Box,
+  Container,
+  Group,
+  Menu,
+  Select,
+  Skeleton,
+  rem
+} from '@mantine/core';
 import { RecruitHubLogo } from '../components/shared/logo/logo';
 import { IconCaretLeft, IconCaretRight, IconLogout } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { axiosInstance } from '../utils';
 import { IconSettings } from '@tabler/icons-react';
 import { IconUserCircle } from '@tabler/icons-react';
-import { useAuthStore } from '../store';
+import { ICompanyData, useAuthStore } from '../store';
 
 export function PortalLayout() {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened, { toggle }] = useDisclosure(true);
 
-  const { setUser, isLoggedIn, logout } = useAuthStore();
+  const { setUser, setCompanies, logout, setSelectedCompany } = useAuthStore();
   const router = useRouter();
-  useQuery({
-    queryKey: ['current-user'],
-    queryFn: async () => {
-      const response = await axiosInstance.get('/user');
-      setUser(response.data);
-      return response.data;
-    }
+  useQueries({
+    queries: [
+      {
+        queryKey: ['current-user'],
+        queryFn: async () => {
+          const response = await axiosInstance.get('/user');
+          setUser(response.data);
+          return response.data;
+        },
+        staleTime: Infinity
+      },
+      {
+        queryKey: ['user-companies'],
+        queryFn: async () => {
+          const response = await axiosInstance.get('/company');
+          if (response.data.length) {
+            setCompanies(
+              response.data.length > 0 &&
+                response.data.map((item: ICompanyData) => ({
+                  value: item.id.toString(),
+                  label: item.title
+                }))
+            );
+            setSelectedCompany({
+              value: response.data[0].id.toString(),
+              label: response.data[0].title
+            });
+          }
+          return response.data.length;
+        },
+        staleTime: Infinity
+      }
+    ]
   });
 
   return (
@@ -43,32 +80,36 @@ export function PortalLayout() {
           >
             <RecruitHubLogo />
           </Link>
-          <Menu shadow='md' width={200}>
-            <Menu.Target>
-              <Avatar src='' />
-            </Menu.Target>
+          <Group>
+            <Menu shadow='md' width={200}>
+              <Menu.Target>
+                <Avatar src='' />
+              </Menu.Target>
 
-            <Menu.Dropdown>
-              <Menu.Label>Application</Menu.Label>
-              <Menu.Item
-                leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
-              >
-                Profile
-              </Menu.Item>
-              <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
-                Settings
-              </Menu.Item>
-              <Menu.Item
-                onClick={() => {
-                  logout();
-                  router.history.replace('/');
-                }}
-                leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-              >
-                Log out
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+              <Menu.Dropdown>
+                <Menu.Label>Application</Menu.Label>
+                <Menu.Item
+                  leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
+                >
+                  Profile
+                </Menu.Item>
+                <Menu.Item
+                  leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
+                >
+                  Settings
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    logout();
+                    router.history.replace('/');
+                  }}
+                  leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                >
+                  Log out
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>
