@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Job;
 use App\Models\Candidate;
 use App\Models\Application;
 use Illuminate\Http\Request;
@@ -31,13 +32,20 @@ class CandidateController extends Controller
         ]);
     
         $resumePath = $request->file('resume')->store('resumes', 'public');
-    
         Auth::user()->applications()->create([
             'job_id' => $jobId,
             'cover_letter' => $request->input('cover_letter'),
             'resume' => $resumePath,
+            'status'=>'pending'
         ]);
-
+dd(Job::find($jobId));
+        // $user=auth()->user();
+    // $data=[
+    //     'id'=>$user->id,
+    //     'title'=>'hello world title',
+    //     'body'=>'body'
+    // ];
+    // $user->notify(new Notifications($data));
         //don't forget to notify user type recritrue here!!!! important
 
         return response()->json([

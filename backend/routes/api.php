@@ -86,6 +86,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/update/{id}', [CompanyController::class, 'updateStatus']);
         Route::delete('/delete/{id}', [CompanyController::class, 'destory']);
     });
+    
 });  
 
 Route::post('/login', [AuthController::class, 'login']);
