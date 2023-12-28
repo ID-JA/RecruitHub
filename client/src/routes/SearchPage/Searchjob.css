@@ -1,0 +1,111 @@
+/*-----------------------------------*\
+  #CUSTOM PROPERTY
+\*-----------------------------------*/
+
+:root {
+  /**
+       * colors
+       */
+  --majorelle-blue: hsl(245, 67%, 59%);
+  --ghost-white-1: #fcfcfc;
+  --lavender-web: hsl(247, 69%, 95%);
+  --cool-gray: hsl(244, 17%, 61%);
+  --white: hsl(0, 0%, 100%);
+
+  /**
+       * typography
+       */
+  --fs-0: 46px;
+  --fs-1: 36px;
+  --fs-2: 28px;
+  --fs-3: 20px;
+  --fs-4: 17px;
+  --fs-5: 16px;
+  --fs-6: 15px;
+  --fs-7: 14px;
+
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-700: 700;
+
+  /**
+       * transition
+       */
+  --transition: 0.25s ease;
+
+  /**
+       * spacing
+       */
+}
+
+/*-----------------------------------*\
+      #RESET
+    \*-----------------------------------*/
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+a,
+img,
+span,
+input,
+label,
+button,
+ion-icon,
+textarea {
+  display: block;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ghost-white-1);
+}
+
+/*-----------------------------------*\
+      #REUSED STYLE
+    \*-----------------------------------*/
+
+.container {
+  padding-inline: 15px;
+  max-width: 1150px;
+  margin-inline: auto;
+}
+
+
+
+/*-----------------------------------*\
+      #1
+    \*-----------------------------------*/
+
+.heroS {
+  background: white;
+}
+
+.heroS-title {
+  margin-bottom: 30px;
+  font-weight: var(--fw-500);
+  font-size: 36px;
+  color: #0a66c2;
+}
+
+.img img {
+  width: 100%;
+  max-width: 390px;
+  margin-inline: auto;
+}

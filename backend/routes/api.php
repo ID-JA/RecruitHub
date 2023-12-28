@@ -19,6 +19,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\JobController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 /*
@@ -95,3 +96,13 @@ Route::prefix('password')->group(function () {
     Route::post('/email', [PasswordController::class, 'send']);
     Route::post('/reset', [PasswordController::class, 'reset']);
 });
+
+
+Route::apiResources([
+    'jobs' => JobController::class, 
+    //add here ur route like for example 
+    // 'companies' => CompanyController::class
+ ]);
+ 
+
+Route::get('/jobs', [JobController::class, 'showRecruiterJobs']);
