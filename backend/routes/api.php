@@ -42,10 +42,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
   
 
     Route::prefix('notifications')->group(function () {
-        Route::post('/read/{notificationId}',[NotificationController::class,'read']);
-        Route::get('/',[NotificationController::class,'index']);
+            Route::post('/read/{notificationId}',[NotificationController::class,'read']);
+            Route::get('/',[NotificationController::class,'index']);
         Route::delete('/destroy',[NotificationController::class,'delete']);
-        Route::post('/read-all',[NotificationController::class,'readAll']);
+            Route::post('/read-all',[NotificationController::class,'readAll']);
     });
     
     Route::prefix('email')->group(function () {
@@ -62,19 +62,26 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [ChatController::class, 'index']);
     });
 
+
+
+
     
-    // --------note , make middleware for candid&recruir----------
-    ///////candidate and applications stuff
-    Route::get('/candidate/applied-jobs', [CandidateController::class, 'appliedJobs']);
-    Route::get('/candidate/application/{applicationId}', [CandidateController::class, 'applicationDetails']);
-    Route::post('/candidate/apply/{jobId}', [CandidateController::class, 'applyForJob']);
-    Route::delete('/candidate/cancel-application/{applicationId}', [CandidateController::class, 'cancelApplication']);
-    // --------note , make middleware for candid&recruir----------
-    ///////recruiter and applications stuff
-    Route::get('/recruiter/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
-    Route::get('/recruiter/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
-    Route::post('/recruiter/accept-application/{applicationId}', [RecruiterController::class, 'acceptApplication']);
-    Route::post('/recruiter/reject-application/{applicationId}', [RecruiterController::class, 'rejectApplication']);
+    // --------note , make middleware for candidate&recruiter----------
+    ///////candidate&recruiter and applications stuff
+    Route::prefix('candidate')->group(function () {
+        Route::get('/applied-jobs', [CandidateController::class, 'appliedJobs']);
+        Route::get('/application/{applicationId}', [CandidateController::class, 'applicationDetails']);
+        Route::post('/apply/{jobId}', [CandidateController::class, 'applyForJob']);
+        Route::delete('/cancel-application/{applicationId}', [CandidateController::class, 'cancelApplication']);
+    });
+    Route::prefix('recruiter')->group(function () {
+        Route::get('/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
+        Route::get('/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
+        Route::post('/accept-application/{applicationId}', [RecruiterController::class, 'acceptApplication']);
+        Route::post('/reject-application/{applicationId}', [RecruiterController::class, 'rejectApplication']);
+    });
+
+    
 ///////////saved jobs
     Route::post('/save-job/{jobId}', [SavedJobController::class, 'saveJob']);
     Route::post('/unsave-job/{jobId}', [SavedJobController::class, 'unsaveJob']);
