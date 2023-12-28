@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Recruiter;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use App\Notifications\Notifications;
 use Illuminate\Support\Facades\Auth;
 
 class RecruiterController extends Controller
@@ -37,8 +38,14 @@ class RecruiterController extends Controller
     {
         $application = Application::findOrFail($applicationId);
         $application->update(['status' => 'accepted']);
-
-        // Notify candidate  !important
+        $job=$application->job;
+        $candidate=$application->candidate;
+        $data=[
+            'id'=>$candidate->id,
+            'title'=>'congratulations 🎉',
+            'body'=>"Your application was for offer '$job->title' was accepted!"
+        ];
+        // $candidate->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"applications was accepted successfully",
@@ -51,7 +58,14 @@ class RecruiterController extends Controller
         $application = Application::findOrFail($applicationId);
         $application->update(['status' => 'rejected']);
 
-        // Notify candidate !!!!!!!!!!!!!!!11
+        $job=$application->job;
+        $candidate=$application->candidate;
+        $data=[
+            'id'=>$candidate->id,
+            'title'=>'Update!',
+            'body'=>"Your application was for offer '$job->title' was rejected!"
+        ];
+        // $candidate->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"applications was rejected successfully",

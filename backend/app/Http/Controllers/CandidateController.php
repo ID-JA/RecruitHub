@@ -5,6 +5,7 @@ use App\Models\Job;
 use App\Models\Candidate;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use App\Notifications\Notifications;
 use Illuminate\Support\Facades\Auth;
 
 class CandidateController extends Controller
@@ -16,7 +17,6 @@ class CandidateController extends Controller
             'applications'=>$applications,
         ]);
     }
-
     public function applicationDetails($applicationId)
     {
         $application = Application::findOrFail($applicationId);
@@ -30,23 +30,22 @@ class CandidateController extends Controller
         $request->validate([
             'resume' => 'required|mimes:pdf,doc,docx', 
         ]);
-    
+        $user=Auth::user();
+        $job=Job::find($jobId);
         $resumePath = $request->file('resume')->store('resumes', 'public');
-        Auth::user()->applications()->create([
+        $user->applications()->create([
             'job_id' => $jobId,
             'cover_letter' => $request->input('cover_letter'),
             'resume' => $resumePath,
             'status'=>'pending'
         ]);
-dd(Job::find($jobId));
-        // $user=auth()->user();
-    // $data=[
-    //     'id'=>$user->id,
-    //     'title'=>'hello world title',
-    //     'body'=>'body'
-    // ];
-    // $user->notify(new Notifications($data));
-        //don't forget to notify user type recritrue here!!!! important
+        $recruiter=$job->recruiter;
+        $data=[
+            'id'=>$recruiter->id,
+            'title'=>'Someone just applied for your offer✨',
+            'body'=>"$user->name has applied for your offer '$job->title'"
+        ];
+        // $recruiter->notify(new Notifications($data));
 
         return response()->json([
             'success'=>'Application was added successfully',
@@ -55,10 +54,17 @@ dd(Job::find($jobId));
 
     public function cancelApplication(Request $request, $applicationId)
     {
-        $application = Auth::user()->applications()->findOrFail($applicationId);
+        $user=Auth::user();
+        $application = $user->applications()->findOrFail($applicationId);
         $application->delete();
-
-        // Notify user !! important
+        $job=$application->job;
+        $recruiter=$application->job->recruiter;
+        $data=[
+            'id'=>$recruiter->id,
+            'title'=>'Someone just cancelled for your offer',
+            'body'=>"$user->name has cancelled his application for your offer '$job->title'"
+        ];
+        // $recruiter->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"Application was deleted successfully",

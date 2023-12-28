@@ -25,7 +25,7 @@ class Job extends Model
 
     public function applications()
     {
-        return $this->hasMany(Application::class);
+        return $this->hasMany(Application::class,'applicant_id');
     }
 
     public function savedByUsers()
