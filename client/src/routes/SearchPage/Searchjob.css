@@ -97,7 +97,7 @@ body {
 
 .heroS-title {
   margin-bottom:0px;
-  font-weight: var(--fw-500);
+  font-weight: 500;
   font-size: 26px;
   color: black;
 }

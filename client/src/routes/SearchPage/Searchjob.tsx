@@ -112,10 +112,10 @@ export const Searchjob = () => {
                  Hero
       -----------------------------*/}
       <section className='heroS' id='heroS'>
-        <Container style={{ padding: '5px 20px 0px 100px' }}>
+        <Container style={{ padding: '5px 10px 0px 40px' }}>
           <Grid>
             <Grid.Col span={6}>
-              <div style={{ marginBottom: '25px', maxWidth: '800px' }}>
+              <div style={{ marginBottom: '36px', maxWidth: '800px' }}>
                 <Title className='heroS-title'>
                   Find a job that suits <br></br>your interest & skills.
                 </Title>
