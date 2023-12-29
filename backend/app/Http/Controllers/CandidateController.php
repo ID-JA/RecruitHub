@@ -56,6 +56,11 @@ class CandidateController extends Controller
     {
         $user=Auth::user();
         $application = $user->applications()->findOrFail($applicationId);
+        $resumePath = $application->resume;
+
+        if (file_exists(public_path('storage/' . $resumePath))) {
+            unlink(public_path('storage/' . $resumePath));
+        }
         $application->delete();
         $job=$application->job;
         $recruiter=$application->job->recruiter;

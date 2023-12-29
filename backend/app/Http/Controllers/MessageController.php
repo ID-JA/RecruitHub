@@ -31,11 +31,9 @@ class MessageController extends Controller
         return response()->json(['status' => 'Message sent successfully']);
     }
 
-    public function markMessageAsRead(Request $request)
+    public function markMessageAsRead(Request $request,$id)
     {
-        $otherUserId = $request->input('receiver_id');
-
-        Message::where('user_id',$otherUserId)
+        Message::where('user_id',$id)
         ->where('receiver_id',  auth()->user()->id)
         ->whereNull('read_at')    
         ->update(['read_at' => now()]);
