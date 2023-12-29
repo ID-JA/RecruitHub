@@ -20,7 +20,7 @@ export const Home = () => {
       //send get reqeust to /chats to get all chats of user , and the latest message for each chat, and the count of unread message
       //send post request to /chats/messages/send to send message {user_id,receiver_id,chat_id(nullable),message}
       //send post to /chats/messages/mark-as-read to marke unread message to read , {receiver_id}
-      //send delete to /chats/chat_id to delete a chat 
+      //send delete to /chats/chat_id to delete a chat
       //
       //
     });

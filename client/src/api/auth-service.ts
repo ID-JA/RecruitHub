@@ -31,7 +31,7 @@ export const useAuthenticate = () => {
     onSuccess(response) {
       localStorage.setItem('token', response.data.token);
       authStore.setIsLoggedIn(true);
-      router.history.replace('/portal/');
+      router.history.replace('/portal');
     },
     onError(error) {
       notifications.show({

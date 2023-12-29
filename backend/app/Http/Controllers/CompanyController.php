@@ -29,24 +29,9 @@ class CompanyController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function create(CompanyRequest $request)
     {
-        $validatedData = $request->validate([
-            'title' => ['required', 'string'],
-            'location' => ['required', 'string'],
-            'description' => ['nullable', 'string'],
-            'founded_at' => ['nullable'],
-            'type' => ['nullable', 'string'],
-            'website' => ['nullable', 'string'],
-            'contact_email' => ['nullable', 'email'],
-            'contact_phone' => ['nullable', 'string'],
-            'logo' => ['nullable', 'string'],
-            'revenue' => ['nullable'],
-            'facebook' => ['nullable', 'url'],
-            'instagram' => ['nullable', 'url'],
-            'linkedin' => ['nullable', 'url'],
-            'status' => ['nullable', Rule::in(['open', 'closed'])],
-        ]);
+        $validatedData = $request->validated();
         $user = auth()->user();
     
         if ($user->role !== 'recruiter') {

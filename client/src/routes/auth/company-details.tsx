@@ -1,13 +1,4 @@
-import {
-  Button,
-  Divider,
-  Group,
-  Select,
-  Stack,
-  TextInput,
-  Textarea,
-  Title
-} from '@mantine/core';
+import { Button, Divider, Group, Select, Stack, TextInput, Textarea, Title } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { registerUser } from '../../api/auth-service';
@@ -93,7 +84,7 @@ function CompanyDetails({ form }: { form: any }) {
           />
           <TextInput
             label='Website'
-            {...form.getInputProps('companyDetails.webstie')}
+            {...form.getInputProps('companyDetails.website')}
             variant='filled'
           />
           <TextInput

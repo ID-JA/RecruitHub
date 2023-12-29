@@ -1,12 +1,4 @@
-import {
-  TextInput,
-  PasswordInput,
-  Button,
-  Group,
-  Title,
-  Text,
-  Anchor
-} from '@mantine/core';
+import { TextInput, PasswordInput, Button, Group, Title, Text, Anchor } from '@mantine/core';
 import { useRouter } from '@tanstack/react-router';
 
 export function EmployerForm({ form }: { form: any }) {
@@ -28,7 +20,6 @@ export function EmployerForm({ form }: { form: any }) {
           </Anchor>
         </Text>
       </div>
-
 
       <form
         onSubmit={form.onSubmit(() => {

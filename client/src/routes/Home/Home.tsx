@@ -23,18 +23,18 @@ import {
   IconBrandInstagram,
   IconBrandLinkedin,
   IconBrandReactNative,
-  IconBuilding,
   IconCalculator,
   IconDatabase,
   IconDeviceLaptop,
   IconDeviceMobile,
+  IconFileReport,
   IconListSearch,
   IconMan,
-  IconMapSearch,
   IconReport,
   IconReportMoney,
+  IconReportSearch,
   IconSearch,
-  IconUserSearch
+  IconUserCheck
 } from '@tabler/icons-react';
 export const Home = () => {
   return (
@@ -112,14 +112,12 @@ export const Home = () => {
 
         <Container className='my-container'>
           {/* Card 1 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-                backgroundColor: '#F0F5FC',
-                borderRadius: '-60%',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -175,14 +173,12 @@ export const Home = () => {
           </Paper>
 
           {/* Card 2 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
-                backgroundColor: '#F9FBFF',
                 marginBottom: '10px',
-
                 borderRadius: '5%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -239,14 +235,12 @@ export const Home = () => {
           </Paper>
 
           {/* Card 3 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-
-                backgroundColor: '#F9FBFF',
                 borderRadius: '5%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -303,14 +297,12 @@ export const Home = () => {
           </Paper>
 
           {/* Card 4 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-
-                backgroundColor: '#F9FBFF',
                 borderRadius: '20%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -367,13 +359,12 @@ export const Home = () => {
           </Paper>
 
           {/* Card 5 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-                backgroundColor: '#F9FBFF',
                 borderRadius: '5%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -430,14 +421,12 @@ export const Home = () => {
           </Paper>
 
           {/* Card 6 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
-                backgroundColor: '#F9FBFF',
                 marginBottom: '10px',
-
                 borderRadius: '5%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -494,13 +483,12 @@ export const Home = () => {
           </Paper>
 
           {/* Card 7 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-                backgroundColor: '#F9FBFF',
                 borderRadius: '5%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -557,14 +545,12 @@ export const Home = () => {
           </Paper>
 
           {/* Card 8 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-
-                backgroundColor: '#F9FBFF',
                 borderRadius: '5%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -625,7 +611,7 @@ export const Home = () => {
                    CreateACCOUNT
       ----------------------------------*/}
       <section className='hero'>
-        <Container style={{ padding: '20px 0px 0px ' }}>
+        <Container style={{ padding: '100px 0px 0px ' }}>
           <Grid>
             <Grid.Col span={6}>
               <div style={{ marginBottom: '80px', maxWidth: '800px' }}>
@@ -645,8 +631,10 @@ export const Home = () => {
                   <br></br>Recruit the best employee for your company or business.
                 </Text>
                 <a href='/signup'>
-                  <Button size='sm'>Create Employee account</Button>
-                </a>{' '}
+                  <Button size='sm' radius='md'>
+                    Create Employee account
+                  </Button>
+                </a>
               </div>
             </Grid.Col>
             <Grid.Col span={6}>
@@ -662,25 +650,25 @@ export const Home = () => {
       {/*------------------------------
                    FindYourNeed
       ----------------------------------*/}
-      <section className='hero' id='hero' style={{ padding: '40px 0px  80px 0px' }}>
+      <section className='hero' id='hero' style={{ padding: '40px 0px  100px 0px' }}>
         <Container>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Text
               style={{
-                fontSize: 'var(--fs-2)',
+                fontSize: '38px',
                 fontWeight: 'var(--fw-500)',
                 lineHeight: '1.8',
                 marginTop: '5px'
               }}
             >
-              Find your need with RecruitHub
+              How it works?
             </Text>
           </div>
         </Container>
 
         <Container className='my-container-2'>
           {/* Card 1 */}
-          <Paper className='my-paper-2'>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -689,7 +677,11 @@ export const Home = () => {
                 alignItems: 'center'
               }}
             >
-              <IconUserSearch size={34} color='#76797C'></IconUserSearch>
+              <IconReportSearch
+                size={34}
+                color='#76797C'
+                style={{ marginBottom: '10px' }}
+              ></IconReportSearch>
             </div>
             <Box
               style={{
@@ -700,23 +692,14 @@ export const Home = () => {
                 textAlign: 'center'
               }}
             >
-              <Text
-                size='md'
-                style={{
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  marginBottom: '10px',
-                  color: '#76797C'
-                }}
-              >
-                100+
+              <Text style={{ color: '#76797C', marginBottom: '10px', fontWeight: 400 }}>
+                Discover Opportunities
               </Text>
-              <Text style={{ color: '#76797C' }}>Employers</Text>
             </Box>
           </Paper>
 
           {/* Card 2 */}
-          <Paper className='my-paper-2'>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -725,7 +708,11 @@ export const Home = () => {
                 alignItems: 'center'
               }}
             >
-              <IconBuilding size={34} color='#76797C'></IconBuilding>
+              <IconUserCheck
+                size={34}
+                color='#76797C'
+                style={{ marginBottom: '10px' }}
+              ></IconUserCheck>
             </div>
             <Box
               style={{
@@ -736,23 +723,14 @@ export const Home = () => {
                 textAlign: 'center'
               }}
             >
-              <Text
-                size='md'
-                style={{
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  marginBottom: '10px',
-                  color: '#76797C'
-                }}
-              >
-                50+
+              <Text style={{ color: '#76797C', marginBottom: '10px', fontWeight: 400 }}>
+                Showcase<br></br> Your Profile
               </Text>
-              <Text style={{ color: '#76797C' }}>Companies</Text>
             </Box>
           </Paper>
 
           {/* Card 3 */}
-          <Paper className='my-paper-2'>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -761,7 +739,11 @@ export const Home = () => {
                 alignItems: 'center'
               }}
             >
-              <IconListSearch size={34} color='#76797C'></IconListSearch>
+              <IconFileReport
+                size={34}
+                color='#76797C'
+                style={{ marginBottom: '10px' }}
+              ></IconFileReport>
             </div>
             <Box
               style={{
@@ -772,22 +754,13 @@ export const Home = () => {
                 textAlign: 'center'
               }}
             >
-              <Text
-                size='md'
-                style={{
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  marginBottom: '10px',
-                  color: '#76797C'
-                }}
-              >
-                100+
+              <Text style={{ color: '#76797C', marginBottom: '10px', fontWeight: 400 }}>
+                Effortless <br></br>Applications
               </Text>
-              <Text style={{ color: '#76797C' }}>Jobs Posted</Text>
             </Box>
           </Paper>
           {/* Card 4 */}
-          <Paper className='my-paper-2'>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -796,7 +769,11 @@ export const Home = () => {
                 alignItems: 'center'
               }}
             >
-              <IconMapSearch size={34} color='#76797C'></IconMapSearch>
+              <IconListSearch
+                size={34}
+                color='#76797C'
+                style={{ marginBottom: '10px' }}
+              ></IconListSearch>
             </div>
             <Box
               style={{
@@ -807,20 +784,18 @@ export const Home = () => {
                 textAlign: 'center'
               }}
             >
-              <Text
-                size='md'
-                style={{
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  marginBottom: '10px',
-                  color: '#76797C'
-                }}
-              >
-                20+
+              <Text style={{ color: '#76797C', marginBottom: '10px', fontWeight: 400 }}>
+                Refine<br></br> Your Search
               </Text>
-              <Text style={{ color: '#76797C' }}>Moroccan Cities</Text>
             </Box>
           </Paper>
+        </Container>
+        <Container>
+          <a className='btn' href='/signup'>
+            <Button size='sm' radius='md'>
+              Join as a Candidate
+            </Button>
+          </a>
         </Container>
       </section>
       {/*------------------------------
@@ -838,7 +813,7 @@ export const Home = () => {
                       fontWeight: '600',
 
                       marginBottom: '10px',
-                      color: '#76797c'
+                      color: 'black'
                     }}
                   >
                     {' '}
@@ -859,7 +834,7 @@ export const Home = () => {
                     style={{
                       fontWeight: '600',
                       marginBottom: '10px',
-                      color: '#76797c'
+                      color: 'black'
                     }}
                   >
                     Services
@@ -870,7 +845,7 @@ export const Home = () => {
               <ul>
                 <li>
                   <a href='/signup'>
-                    <p>Jobs</p>
+                    <p>-Jobs</p>
                   </a>
                 </li>
               </ul>
@@ -878,7 +853,7 @@ export const Home = () => {
               <ul>
                 <li>
                   <a href='/signup'>
-                    <p>Companies</p>
+                    <p>-Companies</p>
                   </a>
                 </li>
               </ul>
@@ -886,7 +861,7 @@ export const Home = () => {
               <ul>
                 <li>
                   <a href='/signup'>
-                    <p>About Us</p>
+                    <p>-About Us</p>
                   </a>
                 </li>
               </ul>

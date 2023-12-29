@@ -1,65 +1,36 @@
-import {
-  TextInput,
-  PasswordInput,
-  Textarea,
-  Button,
-  Group,
-  Title,
-  Text,
-  Anchor
-} from '@mantine/core';
-import { ChangeEvent, useState } from 'react';
-import { useForm } from '@mantine/form';
-import { z } from 'zod';
-import { zodResolver } from 'mantine-form-zod-resolver';
+import { TextInput, PasswordInput, Button, Group, Title, Text, Anchor } from '@mantine/core';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
+import { registerUser } from '../../api/auth-service';
+import { notifications } from '@mantine/notifications';
 
-const signUpSchemaRecruiter = z
-  .object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string().email({ message: 'Please enter a valid email address' }),
-    password: z.string().min(6, { message: 'Password should have at least 6 characters' }),
-    confirmPassword: z.string().min(6, { message: 'Password should have at least 6 characters' }),
-    companyName: z.string()
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'The passwords did not match'
+export function TalentForm({ form }: { form: any }) {
+  const router = useRouter();
+  const mutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: () => {
+      router.history.replace('/login');
+    },
+    onError: (error) => {
+      console.log('🚀 ~ file: TalentForm.tsx:15 ~ TalentForm ~ error:', error);
+      notifications.show({
+        color: 'red',
+        title: 'Something went wrong',
+        message: error.response.data.message
       });
     }
   });
 
-export function TalentForm() {
-  const form = useForm({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      companyName: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    },
-    validate: zodResolver(signUpSchemaRecruiter)
-  });
-  const [userData, setuserData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
-
-  //  handle input changes
-  const handleInputChanges = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setuserData({
-      ...userData,
-      [name]: value
+  const handleSubmit = (values: any) => {
+    const { fullName, ...rest } = values;
+    mutation.mutate({
+      name: fullName,
+      role: 'candidate',
+      ...rest
     });
   };
-
   return (
-    <div>
+    <>
       <div style={{ margin: '15px' }}>
         <Title ta='center' order={3}>
           We Bring Job Offers to You!
@@ -75,8 +46,7 @@ export function TalentForm() {
           </Anchor>
         </Text>
       </div>
-
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
           variant='filled'
           label='Full Name'
@@ -84,15 +54,15 @@ export function TalentForm() {
           mb='16px'
           mt='10px'
           placeholder='your full name'
-          {...form.getInputProps('fname')}
+          {...form.getInputProps('fullName')}
         />
-        <Textarea
+        <TextInput
           variant='filled'
           radius='md'
           mb='16px'
           label='where do you live'
           placeholder='your place'
-          {...form.getInputProps('live')}
+          {...form.getInputProps('location')}
         />
         <TextInput
           name='email'
@@ -102,8 +72,7 @@ export function TalentForm() {
           radius='md'
           mb='16px'
           placeholder='your@email.com'
-          onChange={handleInputChanges}
-          value={userData.email}
+          {...form.getInputProps('email')}
         />
 
         <PasswordInput
@@ -114,8 +83,7 @@ export function TalentForm() {
           radius='md'
           mb='16px'
           placeholder='Enter your password'
-          onChange={handleInputChanges}
-          value={userData.name}
+          {...form.getInputProps('password')}
         />
         <PasswordInput
           variant='filled'
@@ -123,13 +91,15 @@ export function TalentForm() {
           radius='md'
           mb='16px'
           placeholder='confirm your password'
-          {...form.getInputProps('password')}
+          {...form.getInputProps('confirmPassword')}
         />
 
         <Group justify='flex-end' mt='md'>
-          <Button type='submit'>Get Started</Button>
+          <Button type='submit' loading={mutation.isPending}>
+            Get Started
+          </Button>
         </Group>
       </form>
-    </div>
+    </>
   );
 }

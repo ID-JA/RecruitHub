@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class CompanyRequest extends FormRequest
@@ -18,7 +20,7 @@ class CompanyRequest extends FormRequest
             'title' => ['bail', 'required', 'string'],
             'location' => ['bail', 'required', 'string'],
             'description' => ['bail', 'nullable', 'string'],
-            'founded_at' => ['bail', 'nullable', 'date'],
+            'founded_at' => ['bail', 'nullable', 'numeric'],
             'type' => ['bail', 'nullable', 'string'],
             'website' => ['bail', 'nullable', 'url'],
             'contact_email' => ['bail', 'nullable', 'email'],
@@ -30,5 +32,15 @@ class CompanyRequest extends FormRequest
             'linkedin' => ['bail', 'nullable', 'url'],
             'status' => ['bail', 'nullable', Rule::in(['open', 'closed'])],
         ];
+    }
+
+    protected function failedValidation(Validator $validator){
+        throw new HttpResponseException(
+                response()->json([
+                    "success" => false,
+                    "message" => __("skill.validation_error"),
+                    "data" => $validator->errors(),
+                    ]),
+                422);
     }
 }
