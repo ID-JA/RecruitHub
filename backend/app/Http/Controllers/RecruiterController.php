@@ -15,6 +15,9 @@ class RecruiterController extends Controller
     {
         $job = Auth::user()->jobs()->findOrFail($jobId);
         $job->applications;
+        foreach($job->applications as $application){
+            $application->candidate->profile;
+        }
         return response()->json([
             "applications"=>$job,
         ]);
@@ -38,7 +41,7 @@ class RecruiterController extends Controller
     public function acceptApplication(Request $request, $applicationId)
     {
         $application = Application::findOrFail($applicationId);
-        $application->update(['status' => 'accepted']);
+        $application->update(['status' => $request->input('status')]);
         $job=$application->job;
         $candidate=$application->candidate;
         $data=[
