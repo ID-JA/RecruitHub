@@ -10,7 +10,9 @@ import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import StarterKit from '@tiptap/starter-kit';
 
-export function TextEditor({ content }: { content: string }) {
+import classes from './text-editor.module.css';
+
+export function TextEditor({ form }: { content: string; form: any }) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -21,11 +23,27 @@ export function TextEditor({ content }: { content: string }) {
       Highlight,
       TextAlign.configure({ types: ['heading', 'paragraph'] })
     ],
-    content
+    content: form.getInputProps('description').value,
+    onUpdate: ({ editor }) => {
+      const htmlObject = document.createElement('div');
+      htmlObject.innerHTML = editor.getHTML();
+      const anyText = Array.from(htmlObject.children).some(
+        (child) => child.textContent && child.textContent?.length > 0
+      );
+      form.getInputProps('description').onChange(editor.getHTML());
+      if (!anyText) {
+        form.setFieldError('description', 'Description is required');
+      }
+    }
   });
 
   return (
-    <RichTextEditor editor={editor}>
+    <RichTextEditor
+      editor={editor}
+      className={classes.editor}
+      data-invalid={Boolean(form.getInputProps('description').error)}
+      {...form.getInputProps('description')}
+    >
       <RichTextEditor.Toolbar sticky stickyOffset={60}>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
