@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -13,6 +14,7 @@ class ChatController extends Controller
         $chats->load('latestMessage');
         $chats->each(function ($chat) {
             $chat->unreadMessagesCount = $chat->unreadMessagesCount()->count();
+            $chat->load('users');
         });
         return response()->json([
             'chats'=>$chats
@@ -20,7 +22,8 @@ class ChatController extends Controller
     }
     public function show(Chat $chat)
     {
-        $messages = Message::where('chat_id', $chat->id)->paginate(10);
+        // $messages = Message::where('chat_id', $chat->id)->paginate(10);
+        $messages = Message::where('chat_id', $chat->id)->get();
         return response()->json(['messages' => $messages]);
     }
 

@@ -15,7 +15,7 @@ class Chat extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->where('users.id', '!=', auth()->user()->id);
     }
 
     public function messages()
