@@ -38,12 +38,14 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::delete('/logout', [AuthController::class, 'logout']);
+    
+  
 
     Route::prefix('notifications')->group(function () {
-        Route::post('/read/{notificationId}',[NotificationController::class,'read']);
-        Route::get('/',[NotificationController::class,'index']);
+            Route::post('/read/{notificationId}',[NotificationController::class,'read']);
+            Route::get('/',[NotificationController::class,'index']);
         Route::delete('/destroy',[NotificationController::class,'delete']);
-        Route::post('/read-all',[NotificationController::class,'readAll']);
+            Route::post('/read-all',[NotificationController::class,'readAll']);
     });
     
     Route::prefix('email')->group(function () {
@@ -60,19 +62,26 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [ChatController::class, 'index']);
     });
 
+
+
+
     
-    // --------note , make middleware for candid&recruir----------
-    ///////candidate and applications stuff
-    Route::get('/candidate/applied-jobs', [CandidateController::class, 'appliedJobs']);
-    Route::get('/candidate/application/{applicationId}', [CandidateController::class, 'applicationDetails']);
-    Route::post('/candidate/apply/{jobId}', [CandidateController::class, 'applyForJob']);
-    Route::delete('/candidate/cancel-application/{applicationId}', [CandidateController::class, 'cancelApplication']);
-    // --------note , make middleware for candid&recruir----------
-    ///////recruiter and applications stuff
-    Route::get('/recruiter/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
-    Route::get('/recruiter/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
-    Route::post('/recruiter/accept-application/{applicationId}', [RecruiterController::class, 'acceptApplication']);
-    Route::post('/recruiter/reject-application/{applicationId}', [RecruiterController::class, 'rejectApplication']);
+    // --------note , make middleware for candidate&recruiter----------
+    ///////candidate&recruiter and applications stuff
+    Route::prefix('candidate')->group(function () {
+        Route::get('/applied-jobs', [CandidateController::class, 'appliedJobs']);
+        Route::get('/application/{applicationId}', [CandidateController::class, 'applicationDetails']);
+        Route::post('/apply/{jobId}', [CandidateController::class, 'applyForJob']);
+        Route::delete('/cancel-application/{applicationId}', [CandidateController::class, 'cancelApplication']);
+    });
+    Route::prefix('recruiter')->group(function () {
+        Route::get('/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
+        Route::get('/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
+        Route::post('/accept-application/{applicationId}', [RecruiterController::class, 'acceptApplication']);
+        Route::post('/reject-application/{applicationId}', [RecruiterController::class, 'rejectApplication']);
+    });
+
+    
 ///////////saved jobs
     Route::post('/save-job/{jobId}', [SavedJobController::class, 'saveJob']);
     Route::post('/unsave-job/{jobId}', [SavedJobController::class, 'unsaveJob']);
@@ -87,6 +96,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/update/{id}', [CompanyController::class, 'updateStatus']);
         Route::delete('/delete/{id}', [CompanyController::class, 'destory']);
     });
+
+    Route::prefix('jobs')->group(function () {
+        Route::get('/', [JobController::class, 'index'])->withoutMiddleware('auth:sanctum');
+        Route::get('/{job}', [JobController::class, 'show'])->withoutMiddleware('auth:sanctum');
+        Route::get('/recruiter', [JobController::class, 'showRecruiterJobs']);
+        Route::post('/', [JobController::class, 'store']);
+        Route::put('/{job}', [JobController::class, 'update']);
+        Route::delete('/{job}', [JobController::class, 'destroy']);
+    });
+
+    
 });  
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -97,11 +117,10 @@ Route::prefix('password')->group(function () {
 });
 
 
+Route::get('/jobs/search', [JobController::class, 'searchJobs']);
+
+Route::get('/myJobs', [JobController::class, 'showRecruiterJobs']);
 Route::apiResources([
     'jobs' => JobController::class, 
-    //add here ur route like for example 
-    // 'companies' => CompanyController::class
  ]);
- 
 
-Route::get('/jobs', [JobController::class, 'showRecruiterJobs']);
