@@ -1,15 +1,18 @@
 import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
-import { Container, Grid, Title, Input, CloseButton, Button, Group } from '@mantine/core';
+import { Container, Grid, Title, Input, CloseButton, Button } from '@mantine/core';
 import { IconCurrentLocation, IconSearch } from '@tabler/icons-react';
 import './Searchjob.css';
 import image from './images/searchjob.jpg';
-import { useState } from 'react';
 import SearchedCard from './SearchedJobCard';
 import google from './images/google.png';
 import microsoft from './images/microsoft.png';
 import alten from './images/alten.png';
 import capgemini from './images/capgemini.webp';
+import { useState } from 'react';
+import { CheckIcon, Combobox, Group, InputBase, useCombobox } from '@mantine/core';
+
+const timeOptions = ['Date posted', 'Last day', 'Last week', 'Last month'];
 
 export const Searchjob = () => {
   const [value1, setValue1] = useState('');
@@ -82,7 +85,27 @@ export const Searchjob = () => {
   ];
 
   const [jobs] = useState(fakeJobs);
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownOpen: (eventSource) => {
+      if (eventSource === 'keyboard') {
+        combobox.selectActiveOption();
+      } else {
+        combobox.updateSelectedOptionIndex('active');
+      }
+    }
+  });
 
+  const [selectedTime, setSelectedTime] = useState<string>('Date posted');
+
+  const options = timeOptions.map((option) => (
+    <Combobox.Option value={option} key={option} active={option === selectedTime}>
+      <Group gap='xs'>
+        {option === selectedTime && <CheckIcon size={8} />}
+        <span>{option}</span>
+      </Group>
+    </Combobox.Option>
+  ));
   return (
     <Container fluid={true}>
       {/*-----------------------------
@@ -131,15 +154,43 @@ export const Searchjob = () => {
                     style={{ width: '360px' }}
                   />
                   <Button
-                    radius='md'
+                    radius='sm'
                     variant='gradient'
                     gradient={{ from: 'blue', to: '#8FBBE7', deg: 90 }}
                     type='submit'
                     size='sm'
-                    style={{ width: '90px', marginTop: '0px', height: '28px' }}
+                    style={{ width: '90px', marginTop: '0px' }}
                   >
                     Search
                   </Button>
+                  <Combobox
+                    size='xs'
+                    store={combobox}
+                    resetSelectionOnOptionHover
+                    withinPortal={false}
+                    onOptionSubmit={(val) => {
+                      setSelectedTime(val);
+                      combobox.updateSelectedOptionIndex('active');
+                    }}
+                  >
+                    <Combobox.Target targetType='button'>
+                      <InputBase
+                        component='button'
+                        type='button'
+                        pointer
+                        rightSection={<Combobox.Chevron />}
+                        rightSectionPointerEvents='none'
+                        onClick={() => combobox.toggleDropdown()}
+                        style={{ width: '130px' }}
+                      >
+                        {selectedTime || <span>Pick time</span>}
+                      </InputBase>
+                    </Combobox.Target>
+
+                    <Combobox.Dropdown>
+                      <Combobox.Options>{options}</Combobox.Options>
+                    </Combobox.Dropdown>
+                  </Combobox>
                 </Group>
               </div>
             </Grid.Col>
