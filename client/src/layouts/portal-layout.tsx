@@ -44,7 +44,8 @@ export function PortalLayout() {
           setUser(response.data);
           return response.data;
         },
-        staleTime: Infinity
+        staleTime: Infinity,
+        refetchOnWindowFocus: false
       },
       {
         queryKey: ['user-companies'],
@@ -65,7 +66,8 @@ export function PortalLayout() {
           }
           return response.data.length;
         },
-        staleTime: Infinity
+        staleTime: Infinity,
+        refetchOnWindowFocus: false
       }
     ]
   });
@@ -270,7 +272,7 @@ export const portalLayoutRoute = new Route({
     }
     try {
       const { data } = await axiosInstance.get('/user');
-      if (!data || !data.id) {
+      if (!data || !data.id || data.role !== 'recruiter') {
         localStorage.removeItem('token');
         throw redirect({
           to: '/'

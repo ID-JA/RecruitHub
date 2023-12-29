@@ -31,7 +31,12 @@ export const useAuthenticate = () => {
     onSuccess(response) {
       localStorage.setItem('token', response.data.token);
       authStore.setIsLoggedIn(true);
-      router.history.replace('/portal');
+      if (response.data['1'].role === 'recruiter') {
+        router.history.replace('/portal');
+      } else {
+        console.log('else');
+        router.history.replace('/jobs-board');
+      }
     },
     onError(error) {
       notifications.show({
