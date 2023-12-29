@@ -11,7 +11,7 @@ class Job extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'user_id', 'requirements', 'salary', 'status', 'form', 'location', 'company_id'];
+    protected $fillable = ['title', 'description', 'user_id', "employmentType", "showSalary", "salaryCurrency","salaryTime","category", 'salary', 'status', 'location', 'company_id',"motivation","aboutCompany","howToApply"];
 
     public function company()
     {

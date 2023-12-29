@@ -30,12 +30,12 @@ class jobRequest extends FormRequest
         return [
             'title' => ['bail', 'required','string'],
             'description' => ['bail', 'required'],
-            'requirements' => ['bail', 'required'],
+            // 'requirements' => ['bail', 'required'],
             'salary' => ['bail', 'required','numeric'],
             'status' => ['bail', 'required','string'],
-            'form' => ['bail', 'required','string'],
+            // 'form' => ['bail','string'],
             'location' => ['bail', 'required','string'],
-            'user_id' => ['bail', 'required', Rule::exists(User::class, 'id')],
+            // 'user_id' => ['bail', 'required', Rule::exists(User::class, 'id')],
             'company_id' => ['bail', 'required',Rule::exists(Company::class, 'id')],
         ];
     }
