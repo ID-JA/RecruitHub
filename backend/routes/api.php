@@ -119,7 +119,7 @@ Route::prefix('password')->group(function () {
 
 Route::get('/jobs/search', [JobController::class, 'searchJobs']);
 
-Route::get('/myJobs', [JobController::class, 'showRecruiterJobs']);
+Route::get('/my-jobs', [JobController::class, 'showRecruiterJobs']);
 Route::apiResources([
     'jobs' => JobController::class, 
  ]);

@@ -20,11 +20,25 @@ class JobController extends Controller
         $jobs = Job::all();
         return response()->json($jobs);
     }
-
-    public function showRecruiterJobs()
+    public function showRecruiterJobs(Request $request)
     {
         $user = Auth::user();
-        $jobs = $user->jobs;
+    
+        $jobs = $user->jobs()
+            ->when($request->filled('company'), function ($query) use ($request) {
+                $query->where('company_id', $request->query('company'));
+            })
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $query->where('status', $request->query('status'));
+            })
+            ->when($request->filled('title'), function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->query('title') . '%');
+            })
+            ->when($request->filled('order_by'), function ($query) use ($request) {
+                $query->orderBy($request->query('order_by'), $request->query('order') ?? 'asc');
+            })
+            ->paginate($request->query('per_page', 3)); // Default per page is 10, adjust as needed
+    
         return response()->json($jobs);
     }
 

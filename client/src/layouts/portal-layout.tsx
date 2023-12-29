@@ -1,4 +1,4 @@
-import { Link, Outlet, Route } from '@tanstack/react-router';
+import { Link, Outlet, Route, redirect, useRouter } from '@tanstack/react-router';
 import { PortalNavbar } from '../components/shared/Navbar/PortalNavbar';
 import { rootRoute } from '../routes/Router';
 
@@ -16,12 +16,12 @@ import {
 } from '@mantine/core';
 import { RecruitHubLogo } from '../components/shared/logo/logo';
 import { IconBellRinging2, IconCaretLeft, IconCaretRight, IconLogout } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { axiosInstance } from '../utils';
 import { IconSettings } from '@tabler/icons-react';
 import { IconUserCircle } from '@tabler/icons-react';
-import { useAuthStore } from '../store';
-import { Fragment, useEffect, useState } from 'react';
+import { ICompanyData, useAuthStore } from '../store';
+import { useEffect, useState } from 'react';
 import Pusher from 'pusher-js';
 import Echo from 'laravel-echo';
 import { notifications } from '@mantine/notifications';
@@ -32,42 +32,68 @@ export function PortalLayout() {
 
   const [unReadNotificationsCount, setUnReadNotificationsCount] = useState([]);
   const [opened, { toggle }] = useDisclosure();
-  window.Pusher = Pusher;
-  Echo.logToConsole = true;
-  window.Echo = new Echo({
-    broadcaster: import.meta.env.VITE_ECHO_BROADCASTER,
-    key: import.meta.env.VITE_ECHO_KEY,
-    cluster: import.meta.env.VITE_ECHO_CLUSTER,
-    encrypted: import.meta.env.VITE_ECHO_ENCRYPTED
+
+  const { setUser, setCompanies, logout, setSelectedCompany, isLoggedIn, user } = useAuthStore();
+  const router = useRouter();
+  useQueries({
+    queries: [
+      {
+        queryKey: ['current-user'],
+        queryFn: async () => {
+          const response = await axiosInstance.get('/user');
+          setUser(response.data);
+          return response.data;
+        },
+        staleTime: Infinity
+      },
+      {
+        queryKey: ['user-companies'],
+        queryFn: async () => {
+          const response = await axiosInstance.get('/company');
+          if (response.data.length) {
+            setCompanies(
+              response.data.length > 0 &&
+                response.data.map((item: ICompanyData) => ({
+                  value: item.id.toString(),
+                  label: item.title
+                }))
+            );
+            setSelectedCompany({
+              value: response.data[0].id.toString(),
+              label: response.data[0].title
+            });
+          }
+          return response.data.length;
+        },
+        staleTime: Infinity
+      }
+    ]
   });
 
-  const { setUser, isLoggedIn, user } = useAuthStore();
+  // useEffect(() => {
+  //   window.Pusher = Pusher;
+  //   Echo.logToConsole = true;
+  //   window.Echo = new Echo({
+  //     broadcaster: import.meta.env.VITE_ECHO_BROADCASTER,
+  //     key: import.meta.env.VITE_ECHO_KEY,
+  //     cluster: import.meta.env.VITE_ECHO_CLUSTER,
+  //     encrypted: import.meta.env.VITE_ECHO_ENCRYPTED
+  //   });
 
-  useQuery({
-    queryKey: ['current-user'],
-    queryFn: async () => {
-      const response = await axiosInstance.get('/user');
-      setUser(response.data);
-      return response.data;
-    }
-  });
-  useEffect(() => {
-    const channel = window.Echo.channel(`App.Models.User.${user && user.id}`);
-    channel.listen('.Notifications', function (data: object) {
-      notifications.show({
-        color: 'green',
-        title: data.title,
-        message: data.body
-      });
-      axiosInstance.post(`/notifications/read/${data.id}`);
-    });
-    return () => {
-      window.Echo.leave(`App.Models.User.${user && user.id}`);
-    };
-  }, [isLoggedIn, user]);
-  if (!isLoggedIn) {
-    return null;
-  }
+  //   const channel = window.Echo.channel(`App.Models.User.${user && user.id}`);
+  //   channel.listen('.Notifications', function (data: object) {
+  //     notifications.show({
+  //       color: 'green',
+  //       title: data.title,
+  //       message: data.body
+  //     });
+  //     axiosInstance.post(`/notifications/read/${data.id}`);
+  //   });
+  //   return () => {
+  //     window.Echo.leave(`App.Models.User.${user && user.id}`);
+  //   };
+  // }, [isLoggedIn, user]);
+
   const getNotifications = async () => {
     const response = await axiosInstance.get('/notifications');
     setMyNotifications(response.data.notifications);
@@ -86,6 +112,7 @@ export function PortalLayout() {
       });
     }
   };
+
   return (
     <AppShell
       header={{ height: 60 }}
@@ -114,14 +141,20 @@ export function PortalLayout() {
                 <Menu.Item
                   leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
                 >
-                  Profile hello
+                  Profile
                 </Menu.Item>
                 <Menu.Item
                   leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
                 >
                   Settings
                 </Menu.Item>
-                <Menu.Item leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}>
+                <Menu.Item
+                  onClick={() => {
+                    logout();
+                    router.history.replace('/');
+                  }}
+                  leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                >
                   Log out
                 </Menu.Item>
               </Menu.Dropdown>
@@ -137,7 +170,9 @@ export function PortalLayout() {
               width={300}
             >
               <Menu.Target>
-                <IconBellRinging2 size={28} />
+                <ActionIcon variant='subtle' color='gray' size='lg' aria-label='Exit full screen'>
+                  <IconBellRinging2 style={{ width: '70%', height: '70%' }} />
+                </ActionIcon>
               </Menu.Target>
 
               <Menu.Dropdown style={{ maxHeight: '400px', overflow: 'auto' }}>
@@ -157,27 +192,25 @@ export function PortalLayout() {
 
                 {notificationLoading ? (
                   <Group h='100%' px='md' mx='xl' justify='center'>
-                    <Loader color='cyan' size='lg' type='dots' />
+                    <Loader type='dots' />
                   </Group>
                 ) : myNotifications.length > 0 ? (
                   myNotifications.map((e, i) => (
-                    <Fragment key={i}>
-                      <Menu.Item>
-                        <div
-                          style={{
-                            fontSize: 'smaller',
-                            color: `${e.read_at ? '#00000099' : 'black'}`
-                          }}
-                        >
-                          <b>{e.data.title}</b>
-                          <div>{e.data.body}</div>
-                        </div>
-                      </Menu.Item>
-                    </Fragment>
+                    <Menu.Item key={i}>
+                      <div
+                        style={{
+                          fontSize: 'smaller',
+                          color: `${e.read_at ? '#00000099' : 'black'}`
+                        }}
+                      >
+                        <b>{e.data.title}</b>
+                        <div>{e.data.body}</div>
+                      </div>
+                    </Menu.Item>
                   ))
                 ) : (
-                  <Menu.Item>
-                    <b>You havn't received any notifications!</b>
+                  <Menu.Item ta='center' fw='bold'>
+                    You haven't received any notifications!
                   </Menu.Item>
                 )}
               </Menu.Dropdown>
@@ -227,5 +260,27 @@ export function PortalLayout() {
 export const portalLayoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'portal',
-  component: PortalLayout
+  component: PortalLayout,
+  beforeLoad: async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw redirect({
+        to: '/'
+      });
+    }
+    try {
+      const { data } = await axiosInstance.get('/user');
+      if (!data || !data.id) {
+        localStorage.removeItem('token');
+        throw redirect({
+          to: '/'
+        });
+      }
+    } catch (error) {
+      localStorage.removeItem('token');
+      throw redirect({
+        to: '/'
+      });
+    }
+  }
 });
