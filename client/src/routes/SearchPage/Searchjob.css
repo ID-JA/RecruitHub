@@ -87,25 +87,31 @@ body {
   margin-inline: auto;
 }
 
-
-
 /*-----------------------------------*\
       #1
     \*-----------------------------------*/
 
 .heroS {
-  background: white;
+  background: #fbfdff;
 }
 
 .heroS-title {
-  margin-bottom: 30px;
-  font-weight: var(--fw-500);
-  font-size: 36px;
-  color: #0a66c2;
+  margin-bottom:0px;
+  font-weight: 500;
+  font-size: 26px;
+  color: black;
 }
 
 .img img {
-  width: 100%;
-  max-width: 390px;
+  width: 80%;
+  max-width: 400px;
   margin-inline: auto;
 }
+
+.results {
+  background: #fbfdff;
+}
+.myCard:hover {
+  background-color: #E8F1FA;
+}
+
