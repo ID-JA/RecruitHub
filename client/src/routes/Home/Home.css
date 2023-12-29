@@ -153,11 +153,10 @@ body {
   flex-direction: column;
   justify-content: center;
   background-color: #ffffff;
-
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 .my-paper:hover {
-  background-color: #e6f0fa;
+  background-color: #D2E4F6;
 }
 
 @media (min-width: 600px) {

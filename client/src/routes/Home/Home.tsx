@@ -112,13 +112,12 @@ export const Home = () => {
 
         <Container className='my-container'>
           {/* Card 1 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
                 height: '20%',
                 marginBottom: '10px',
-                borderRadius: '-60%',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -174,7 +173,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 2 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
@@ -236,7 +235,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 3 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
@@ -298,7 +297,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 4 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
@@ -360,7 +359,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 5 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
@@ -422,7 +421,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 6 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
@@ -484,7 +483,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 7 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
@@ -546,7 +545,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 8 */}
-          <Paper className='my-paper' p='lg' shadow='md'>
+          <Paper className='my-paper' p='lg' shadow='md' radius='lg'>
             <div
               style={{
                 width: '20%',
@@ -632,7 +631,9 @@ export const Home = () => {
                   <br></br>Recruit the best employee for your company or business.
                 </Text>
                 <a href='/signup'>
-                  <Button size='sm'>Create Employee account</Button>
+                  <Button size='sm' radius='md'>
+                    Create Employee account
+                  </Button>
                 </a>
               </div>
             </Grid.Col>
@@ -667,7 +668,7 @@ export const Home = () => {
 
         <Container className='my-container-2'>
           {/* Card 1 */}
-          <Paper className='my-paper-2' shadow='xs' radius='sm' withBorder>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -698,7 +699,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 2 */}
-          <Paper className='my-paper-2' shadow='xs' radius='sm' withBorder>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -729,7 +730,7 @@ export const Home = () => {
           </Paper>
 
           {/* Card 3 */}
-          <Paper className='my-paper-2' shadow='xs' radius='sm' withBorder>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -759,7 +760,7 @@ export const Home = () => {
             </Box>
           </Paper>
           {/* Card 4 */}
-          <Paper className='my-paper-2' shadow='xs' radius='sm' withBorder>
+          <Paper className='my-paper-2' shadow='xs' radius='lg' withBorder>
             <div
               style={{
                 borderRadius: '2%',
@@ -791,7 +792,9 @@ export const Home = () => {
         </Container>
         <Container>
           <a className='btn' href='/signup'>
-            <Button size='sm'>Join as a Candidate</Button>
+            <Button size='sm' radius='md'>
+              Join as a Candidate
+            </Button>
           </a>
         </Container>
       </section>
