@@ -214,15 +214,7 @@ function Messages() {
                             {formatDate(e.created_at)}
                           </Text>
                           <Group c={e.read_at ? 'blue' : 'gray'}>
-                            {e.user_id !== user.id ? (
-                              e.read_at ? (
-                                <IconChecks />
-                              ) : (
-                                <IconCheck />
-                              )
-                            ) : (
-                              ''
-                            )}
+                            {e.user_id == user.id ? e.read_at ? <IconChecks /> : <IconCheck /> : ''}
                           </Group>
                         </Paper>
                       ))
