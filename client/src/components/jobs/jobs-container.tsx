@@ -1,23 +1,11 @@
-import { Box, Group, Select, Stack } from '@mantine/core';
+import { Group, Pagination, Select, Stack } from '@mantine/core';
 import JobCard from './job-card';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import JobCardPlaceholder from './job-card-placeholder';
 import NoJobsPlaceholder from './no-job-palceholder';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
 import { useAuthStore } from '../../store';
-
-const jobs = [
-  {
-    id: 1,
-    title: 'Senior Frontend Engineer',
-    company: 'Google',
-    location: 'Remote',
-    status: 'Open',
-    applicants: 0,
-    created: '2021-05-01'
-  }
-];
 
 export interface JobData {
   id: number;
@@ -34,27 +22,56 @@ export interface JobData {
   user_id: number;
 }
 
+export interface JobDataWithPagination {
+  data: JobData[];
+  current_page: number;
+  last_page: number;
+  total: number;
+  from: number;
+  to: number;
+}
+
 function JobsContainer() {
-  const { selectedCompany, companies, setSelectedCompany } = useAuthStore();
+  const { selectedCompany, companies } = useAuthStore();
+  const queryClient = useQueryClient();
   const [filterOptions, setFilterOptions] = useState<{
     company: string | null;
     status: string | null;
     order: 'desc' | 'asc';
+    page: number;
   }>({
     company: selectedCompany?.value || null,
     status: null,
-    order: 'desc'
+    order: 'desc',
+    page: 1
   });
-  const { data, isLoading } = useQuery<JobData[]>({
+  const { data, isFetching, isPlaceholderData } = useQuery<JobDataWithPagination>({
     queryKey: ['my-jobs', filterOptions],
-    queryFn: async () => {
-      const response = await axiosInstance.get('/jobs', {
-        params: filterOptions
-      });
-      return response.data;
-    },
-    staleTime: Infinity
+    queryFn: () => fetchJobs(filterOptions),
+    placeholderData: keepPreviousData,
+    staleTime: 5000
   });
+
+  // Prefetch the next page!
+  useEffect(() => {
+    const hasMore = data?.to != data?.total;
+    if (!isPlaceholderData && hasMore) {
+      queryClient.prefetchQuery({
+        queryKey: [
+          'my-jobs',
+          {
+            ...filterOptions,
+            page: filterOptions.page + 1
+          }
+        ],
+        queryFn: () =>
+          fetchJobs({
+            ...filterOptions,
+            page: filterOptions.page + 1
+          })
+      });
+    }
+  }, [data, isPlaceholderData, filterOptions, queryClient]);
 
   const handleChangeCompany = (value: string | null) => {
     setFilterOptions({
@@ -67,6 +84,13 @@ function JobsContainer() {
     setFilterOptions({
       ...filterOptions,
       status: value
+    });
+  };
+
+  const handlePageChange = (value: number) => {
+    setFilterOptions({
+      ...filterOptions,
+      page: value
     });
   };
 
@@ -91,19 +115,26 @@ function JobsContainer() {
         />
       </Group>
       {/* Search */}
-      <Stack component='ul' gap='md' p='0px' mt='xl'>
-        {!isLoading && data ? (
-          data.length > 0 ? (
-            data.map((props) => (
-              <Suspense key={props.id} fallback={<JobCardPlaceholder />}>
-                <JobCard props={props} />
-              </Suspense>
-            ))
+      <Stack component='ul' gap='md' p='0px' mt='xl' pos='relative'>
+        {!isFetching && data?.data ? (
+          data.data.length > 0 ? (
+            <>
+              {data.data.map((props) => (
+                <Suspense key={props.id} fallback={<JobCardPlaceholder />}>
+                  <JobCard props={props} />
+                </Suspense>
+              ))}
+              <Pagination
+                total={data.last_page}
+                value={data.current_page}
+                onChange={handlePageChange}
+              />
+            </>
           ) : (
             <NoJobsPlaceholder />
           )
         ) : (
-          Array.from({ length: 10 }).map((_, i) => <JobCardPlaceholder key={i} />)
+          Array.from({ length: 5 }).map((_, i) => <JobCardPlaceholder key={i} />)
         )}
       </Stack>
     </>
@@ -111,3 +142,14 @@ function JobsContainer() {
 }
 
 export default JobsContainer;
+async function fetchJobs(filterOptions: {
+  company: string | null;
+  status: string | null;
+  order: 'desc' | 'asc';
+  page: number;
+}) {
+  const response = await axiosInstance.get('/my-jobs', {
+    params: filterOptions
+  });
+  return response.data;
+}

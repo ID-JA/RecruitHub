@@ -34,8 +34,10 @@ class JobController extends Controller
             ->when($request->filled('title'), function ($query) use ($request) {
                 $query->where('title', 'like', '%' . $request->query('title') . '%');
             })
-            ->orderBy('created_at', 'asc') // Uncomment if needed
-            ->get();
+            ->when($request->filled('order_by'), function ($query) use ($request) {
+                $query->orderBy($request->query('order_by'), $request->query('order') ?? 'asc');
+            })
+            ->paginate($request->query('per_page', 3)); // Default per page is 10, adjust as needed
     
         return response()->json($jobs);
     }
