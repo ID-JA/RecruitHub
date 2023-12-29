@@ -1,11 +1,12 @@
-import { Group, Pagination, Select, Stack } from '@mantine/core';
+import { Box, Group, Pagination, Select, Skeleton, Stack } from '@mantine/core';
 import JobCard from './job-card';
 import { Suspense, useEffect, useState } from 'react';
 import JobCardPlaceholder from './job-card-placeholder';
 import NoJobsPlaceholder from './no-job-palceholder';
-import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
-import { useAuthStore } from '../../store';
+import { ICompanyData, useAuthStore } from '../../store';
+import { NoCompanyPlaceHolder } from '../companies/no-company-placeholder';
 
 export interface JobData {
   id: number;
@@ -32,7 +33,7 @@ export interface JobDataWithPagination {
 }
 
 function JobsContainer() {
-  const { selectedCompany, companies } = useAuthStore();
+  const { selectedCompany, companies, setCompanies, setSelectedCompany } = useAuthStore();
   const queryClient = useQueryClient();
   const [filterOptions, setFilterOptions] = useState<{
     company: string | null;
@@ -45,17 +46,43 @@ function JobsContainer() {
     order: 'desc',
     page: 1
   });
-  const { data, isFetching, isPlaceholderData } = useQuery<JobDataWithPagination>({
-    queryKey: ['my-jobs', filterOptions],
-    queryFn: () => fetchJobs(filterOptions),
-    placeholderData: keepPreviousData,
-    staleTime: 5000
-  });
 
+  const [queryCompanies, queryJobs] = useQueries({
+    queries: [
+      {
+        queryKey: ['user-companies'],
+        queryFn: async () => {
+          const response = await axiosInstance.get('/company');
+          if (response.data.length) {
+            setCompanies(
+              response.data.length > 0 &&
+                response.data.map((item: ICompanyData) => ({
+                  value: item.id.toString(),
+                  label: item.title
+                }))
+            );
+            setSelectedCompany({
+              value: response.data[0].id.toString(),
+              label: response.data[0].title
+            });
+          }
+          return response.data.length;
+        },
+        staleTime: Infinity,
+        refetchOnWindowFocus: false
+      },
+      {
+        queryKey: ['my-jobs', filterOptions],
+        queryFn: () => fetchJobs(filterOptions),
+        placeholderData: keepPreviousData,
+        staleTime: 5000
+      }
+    ]
+  });
   // Prefetch the next page!
   useEffect(() => {
-    const hasMore = data?.to != data?.total;
-    if (!isPlaceholderData && hasMore) {
+    const hasMore = queryJobs.data?.to != queryJobs.data?.total;
+    if (!queryJobs.isPlaceholderData && hasMore) {
       queryClient.prefetchQuery({
         queryKey: [
           'my-jobs',
@@ -71,7 +98,7 @@ function JobsContainer() {
           })
       });
     }
-  }, [data, isPlaceholderData, filterOptions, queryClient]);
+  }, [queryJobs.data, queryJobs.isPlaceholderData, filterOptions, queryClient]);
 
   const handleChangeCompany = (value: string | null) => {
     setFilterOptions({
@@ -96,47 +123,55 @@ function JobsContainer() {
 
   return (
     <>
-      <Group mt='xl'>
-        <Select
-          placeholder='company'
-          title='filter by company'
-          data={companies}
-          value={filterOptions.company}
-          onChange={handleChangeCompany}
-          clearable
-        />
-        <Select
-          placeholder='status'
-          title='filter by status'
-          value={filterOptions.status}
-          onChange={handleStatusChange}
-          clearable
-          data={['Active', 'Closed', 'Pending', 'Achieve']}
-        />
-      </Group>
-      {/* Search */}
-      <Stack component='ul' gap='md' p='0px' mt='xl' pos='relative'>
-        {!isFetching && data?.data ? (
-          data.data.length > 0 ? (
-            <>
-              {data.data.map((props) => (
-                <Suspense key={props.id} fallback={<JobCardPlaceholder />}>
-                  <JobCard props={props} />
-                </Suspense>
-              ))}
-              <Pagination
-                total={data.last_page}
-                value={data.current_page}
-                onChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <NoJobsPlaceholder />
-          )
-        ) : (
-          Array.from({ length: 5 }).map((_, i) => <JobCardPlaceholder key={i} />)
-        )}
-      </Stack>
+      {queryCompanies.isFetching || queryJobs.isFetching ? (
+        <Box mt='xl'>
+          <Group mb='lg'>
+            <Skeleton height={28} width='20%' />
+            <Skeleton height={28} width='20%' />
+            <Skeleton height={28} width='20%' />
+          </Group>
+          <Stack>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <JobCardPlaceholder key={i} />
+            ))}
+          </Stack>
+        </Box>
+      ) : queryCompanies.data.length === 0 ? (
+        <NoCompanyPlaceHolder />
+      ) : queryJobs.data.data.length === 0 ? (
+        <NoJobsPlaceholder />
+      ) : (
+        <>
+          <Group mt='xl'>
+            <Select
+              placeholder='company'
+              title='filter by company'
+              data={companies}
+              value={filterOptions.company}
+              onChange={handleChangeCompany}
+              clearable
+            />
+            <Select
+              placeholder='status'
+              title='filter by status'
+              value={filterOptions.status}
+              onChange={handleStatusChange}
+              clearable
+              data={['Active', 'Closed', 'Pending', 'Achieve']}
+            />
+          </Group>
+          {queryJobs.data.data.map((props) => (
+            <Suspense key={props.id} fallback={<JobCardPlaceholder />}>
+              <JobCard props={props} />
+            </Suspense>
+          ))}
+          <Pagination
+            total={queryJobs.data.last_page}
+            value={queryJobs.data.current_page}
+            onChange={handlePageChange}
+          />
+        </>
+      )}
     </>
   );
 }

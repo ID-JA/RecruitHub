@@ -61,7 +61,6 @@ export default function CreateJobModal() {
   const { onInputChange, suggestions } = useGeoLocation();
   const mutation = useMutation({
     mutationFn: async (data: any) => {
-      console.log('🚀 ~ file: create-job-modal.tsx:71 ~ mutationFn: ~ data:', data);
       const formData = new FormData();
 
       Object.keys(data).forEach((key) => {
@@ -107,157 +106,164 @@ export default function CreateJobModal() {
     </Flex>
   );
   return (
-    <BaseModal open={open} close={close} opened={opened} title='Create Job' actions={Actions}>
-      <form>
-        <Text c='gray' size='sm' px='md'>
-          Required fields are marked with an asterisk{' '}
-          <span style={{ color: 'var(--mantine-color-red-6)' }}>*</span>
-        </Text>
-        <Stack mt='lg' px='xl'>
-          <Select data={companies} label='select a company' {...form.getInputProps('company_id')} />
-          <TextInput
-            label='Job Title'
-            placeholder='e.g., Product Manager'
-            withAsterisk
-            {...form.getInputProps('title')}
-          />
-          <Select
-            searchable
-            label='Job Location'
-            placeholder='e.g., San Francisco, CA'
-            onSearchChange={onInputChange}
-            data={suggestions.map((suggestion) => ({
-              value: suggestion.displayName,
-              label: suggestion.displayName
-            }))}
-            {...form.getInputProps('location')}
-            withAsterisk
-          />
+    <>
+      <Button onClick={open}>Create Job</Button>
+      <BaseModal open={open} close={close} opened={opened} title='Create Job' actions={Actions}>
+        <form>
+          <Text c='gray' size='sm' px='md'>
+            Required fields are marked with an asterisk{' '}
+            <span style={{ color: 'var(--mantine-color-red-6)' }}>*</span>
+          </Text>
+          <Stack mt='lg' px='xl'>
+            <Select
+              data={companies}
+              label='select a company'
+              {...form.getInputProps('company_id')}
+            />
+            <TextInput
+              label='Job Title'
+              placeholder='e.g., Product Manager'
+              withAsterisk
+              {...form.getInputProps('title')}
+            />
+            <Select
+              searchable
+              label='Job Location'
+              placeholder='e.g., San Francisco, CA'
+              onSearchChange={onInputChange}
+              data={suggestions.map((suggestion) => ({
+                value: suggestion.displayName,
+                label: suggestion.displayName
+              }))}
+              {...form.getInputProps('location')}
+              withAsterisk
+            />
 
-          <Radio.Group
-            name='employmentType'
-            label='Job type'
-            withAsterisk
-            {...form.getInputProps('employmentType')}
-          >
-            <Group mt='xs'>
-              <Radio value='fullTime' label='Full Time' />
-              <Radio value='partTime' label='Part Time' />
-              <Radio value='contractor' label='Contractor' />
-              <Radio value='temporary' label='Temporary' />
-            </Group>
-          </Radio.Group>
-          <MultiSelect
-            label='Job Category'
-            placeholder='Pick value'
-            data={industries}
-            withAsterisk
-            {...form.getInputProps('category')}
-          />
-          <Box>
-            <TextEditor content='' form={form} />
-            <Text size='sm' c='red'>
-              {form.errors.description}
-            </Text>
-          </Box>
-          <div>
-            <Group align='end' grow>
-              <NumberInput
-                {...form.getInputProps('salary')}
-                label='Salary'
-                placeholder='Enter Amount'
-                withAsterisk
-                min={0}
-              />
-              <div>
-                <Button
-                  styles={{
-                    root: {
-                      display: !withRange ? 'inline-block' : 'none',
-                      visibility: !withRange ? 'visible' : 'hidden'
-                    }
-                  }}
-                  onClick={() => {
-                    form.setFieldValue('withMaxSalary', true);
-                    setWithRange(true);
-                  }}
-                  variant='transparent'
-                  leftSection={<IconPlus />}
-                >
-                  Add Range
-                </Button>
-                <div
-                  style={{
-                    display: form.values.withMaxSalary ? 'flex' : 'none',
-                    visibility: form.values.withMaxSalary ? 'visible' : 'hidden',
-                    alignItems: 'center',
-                    gap: '10px'
-                  }}
-                >
-                  <NumberInput
-                    w='100%'
-                    aria-label='Enter Max Amount'
-                    placeholder='Enter Max Amount'
-                    withAsterisk
-                    min={form.values.salary}
-                    {...form.getInputProps('salaryMax')}
-                  />
-                  <ActionIcon
-                    variant='subtle'
-                    color='blue.7'
-                    aria-label='without range'
+            <Radio.Group
+              name='employmentType'
+              label='Job type'
+              withAsterisk
+              {...form.getInputProps('employmentType')}
+            >
+              <Group mt='xs'>
+                <Radio value='fullTime' label='Full Time' />
+                <Radio value='partTime' label='Part Time' />
+                <Radio value='contractor' label='Contractor' />
+                <Radio value='temporary' label='Temporary' />
+              </Group>
+            </Radio.Group>
+            <MultiSelect
+              label='Job Category'
+              placeholder='Pick value'
+              data={industries}
+              withAsterisk
+              {...form.getInputProps('category')}
+            />
+            <Box>
+              <TextEditor content='' form={form} />
+              <Text size='sm' c='red'>
+                {form.errors.description}
+              </Text>
+            </Box>
+            <div>
+              <Group align='end' grow>
+                <NumberInput
+                  {...form.getInputProps('salary')}
+                  label='Salary'
+                  placeholder='Enter Amount'
+                  withAsterisk
+                  min={0}
+                />
+                <div>
+                  <Button
+                    styles={{
+                      root: {
+                        display: !withRange ? 'inline-block' : 'none',
+                        visibility: !withRange ? 'visible' : 'hidden'
+                      }
+                    }}
                     onClick={() => {
-                      form.setFieldValue('withMaxSalary', false);
-                      setWithRange(false);
+                      form.setFieldValue('withMaxSalary', true);
+                      setWithRange(true);
+                    }}
+                    variant='transparent'
+                    leftSection={<IconPlus />}
+                  >
+                    Add Range
+                  </Button>
+                  <div
+                    style={{
+                      display: form.values.withMaxSalary ? 'flex' : 'none',
+                      visibility: form.values.withMaxSalary ? 'visible' : 'hidden',
+                      alignItems: 'center',
+                      gap: '10px'
                     }}
                   >
-                    <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                  </ActionIcon>
+                    <NumberInput
+                      w='100%'
+                      aria-label='Enter Max Amount'
+                      placeholder='Enter Max Amount'
+                      withAsterisk
+                      min={form.values.salary}
+                      {...form.getInputProps('salaryMax')}
+                    />
+                    <ActionIcon
+                      variant='subtle'
+                      color='blue.7'
+                      aria-label='without range'
+                      onClick={() => {
+                        form.setFieldValue('withMaxSalary', false);
+                        setWithRange(false);
+                      }}
+                    >
+                      <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                    </ActionIcon>
+                  </div>
                 </div>
-              </div>
-            </Group>
-            <Group align='end' grow mt='lg'>
-              <Select
-                aria-label='currency'
-                data={currencies}
-                defaultChecked
-                {...form.getInputProps('salaryCurrency')}
+              </Group>
+              <Group align='end' grow mt='lg'>
+                <Select
+                  aria-label='currency'
+                  data={currencies}
+                  defaultChecked
+                  {...form.getInputProps('salaryCurrency')}
+                />
+                <Select
+                  aria-label='salary time frame'
+                  data={salaryTimeFrame}
+                  defaultChecked
+                  {...form.getInputProps('salaryTime')}
+                />
+              </Group>
+              <Checkbox
+                mt='md'
+                label='Show salary to job seekers Recommended!'
+                {...form.getInputProps('showSalary')}
               />
-              <Select
-                aria-label='salary time frame'
-                data={salaryTimeFrame}
-                defaultChecked
-                {...form.getInputProps('salaryTime')}
-              />
-            </Group>
-            <Checkbox
-              mt='md'
-              label='Show salary to job seekers Recommended!'
-              {...form.getInputProps('showSalary')}
+            </div>
+            <Textarea
+              label='Additional Application Instructions'
+              autosize
+              minRows={2}
+              {...form.getInputProps('howToApply')}
             />
-          </div>
-          <Textarea
-            label='Additional Application Instructions'
-            autosize
-            minRows={2}
-            {...form.getInputProps('howToApply')}
-          />
-          <Textarea
-            label='Why Work at This Company?'
-            maxLength={140}
-            minRows={5}
-            description='Give a one-line sales pitch for working at this company (140 characters max.). Note: editing this field will affect all jobs at this hiring company.'
-            {...form.getInputProps('motivation')}
-          />
-          <Textarea
-            label='Hiring Company Description'
-            maxLength={140}
-            minRows={5}
-            description='Note: editing this description will affect all jobs at this hiring company.'
-            {...form.getInputProps('aboutCompany')}
-          />
-        </Stack>
-      </form>
-    </BaseModal>
+            <Textarea
+              label='Why Work at This Company?'
+              maxLength={140}
+              minRows={5}
+              description='Give a one-line sales pitch for working at this company (140 characters max.). Note: editing this field will affect all jobs at this hiring company.'
+              {...form.getInputProps('motivation')}
+            />
+            <Textarea
+              label='Hiring Company Description'
+              maxLength={140}
+              minRows={5}
+              description='Note: editing this description will affect all jobs at this hiring company.'
+              {...form.getInputProps('aboutCompany')}
+            />
+          </Stack>
+        </form>
+      </BaseModal>
+    </>
   );
 }
