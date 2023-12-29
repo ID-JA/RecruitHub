@@ -50,7 +50,7 @@
   box-sizing: border-box;
 }
 
-li {
+/* li {
   list-style: none;
 }
 
@@ -75,7 +75,7 @@ html {
 
 body {
   background: var(--ghost-white-1);
-}
+} */
 
 /*-----------------------------------*\
       #REUSED STYLE

@@ -59,7 +59,7 @@ a {
   text-decoration: none;
 }
 
-a,
+/* a,
 img,
 span,
 input,
@@ -68,15 +68,15 @@ button,
 ion-icon,
 textarea {
   display: block;
-}
+} */
 
-html {
+/* html {
   scroll-behavior: smooth;
 }
 
 body {
   background: var(--ghost-white-1);
-}
+} */
 
 /*-----------------------------------*\
     #REUSED STYLE
@@ -211,12 +211,14 @@ body {
   gap: 30px;
 }
 
+
 .footer-column p {
   font-weight: 600;
   text-decoration: none;
   margin-bottom: 10px;
   color: grey;
 }
+
 
 .btn {
   display: flex;

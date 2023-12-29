@@ -4,8 +4,6 @@ import { AppRouter } from './routes/Router';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
-import './global.css';
-
 const theme = createTheme({});
 
 const queryClient = new QueryClient({
@@ -22,7 +20,6 @@ function App() {
       <MantineProvider theme={theme}>
         <Notifications position='top-right' />
         <AppRouter />
-
         <ReactQueryDevtools initialIsOpen={false} />
       </MantineProvider>
     </QueryClientProvider>
