@@ -15,7 +15,7 @@ function Candidates() {
   // const {applicationId}=useParams()
 
   useEffect(() => {
-    ///replace that number 2 with applicationId
+    //replace that number 2 with applicationId
     axiosInstance.get(`/recruiter/received-applications/${2}`).then((response) => {
       console.log(response.data.applications.applications);
       setApplications(response.data.applications.applications);
