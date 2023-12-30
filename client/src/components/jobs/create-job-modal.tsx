@@ -33,22 +33,22 @@ import BaseModal from '../shared/modal/base-modal';
 import { notifications } from '@mantine/notifications';
 
 const schema = z.object({
-  title: z.string(),
-  company_id: z.string(),
-  location: z.string(),
-  employmentType: z.string(),
-  category: z.array(z.string()),
-  description: z.string(),
+  title: z.string().min(1),
+  company_id: z.string().min(1),
+  location: z.string().min(1),
+  employmentType: z.string().min(1),
+  category: z.array(z.string().min(1)),
+  description: z.string().min(1),
   salary: z.number(),
   withMaxSalary: z.boolean().default(false).optional(),
   salaryMax: z.number().optional(),
-  salaryCurrency: z.string(),
-  salaryTime: z.string(),
+  salaryCurrency: z.string().min(1),
+  salaryTime: z.string().min(1),
   showSalary: z.boolean().optional(),
-  howToApply: z.string(),
-  motivation: z.string(),
-  aboutCompany: z.string(),
-  requirements: z.array(z.string())
+  howToApply: z.string().min(1),
+  motivation: z.string().min(1),
+  aboutCompany: z.string().min(1),
+  requirements: z.array(z.string().min(1))
 });
 
 type TJobData = z.infer<typeof schema> & { status: string };
@@ -110,6 +110,17 @@ export default function CreateJobModal() {
     }
   });
 
+  const handleSubmit =
+    (status: 'pending' | 'active') => (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      form.onSubmit((values) => {
+        mutation.mutate({
+          ...values,
+          status
+        });
+      })();
+    };
+
   const Actions = (
     <Flex justify='space-between' align='center' direction='row' px='md' py='lg'>
       <Checkbox
@@ -123,32 +134,13 @@ export default function CreateJobModal() {
         </Button>
         <Button
           variant='outline'
-          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-            event.preventDefault();
-            form.onSubmit((values) => {
-              mutation.mutate({
-                ...values,
-                status: 'pending'
-              });
-            })();
-          }}
+          type='submit'
+          onClick={handleSubmit('pending')}
           loading={mutation.isPending}
         >
           Draft
         </Button>
-        <Button
-          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-            event.preventDefault();
-            form.onSubmit((values) => {
-              mutation.mutate({
-                ...values,
-                status: 'active'
-              });
-            })();
-          }}
-          loading={mutation.isPending}
-          type='submit'
-        >
+        <Button onClick={handleSubmit('active')} loading={mutation.isPending} type='submit'>
           Publish
         </Button>
       </Flex>
