@@ -1,4 +1,4 @@
-import { Route } from '@tanstack/react-router';
+import { Link, Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import './Home.css';
 
@@ -12,7 +12,8 @@ import {
   ActionIcon,
   rem,
   Paper,
-  Box
+  Box,
+  Flex
 } from '@mantine/core';
 
 import heroBannerImage from './assets/images/banner.png';
@@ -790,13 +791,13 @@ export const Home = () => {
             </Box>
           </Paper>
         </Container>
-        <Container>
-          <a className='btn' href='/signup'>
+        <Flex justify='center'>
+          <Link to='/signup' hash='candidate-credentials'>
             <Button size='sm' radius='md'>
               Join as a Candidate
             </Button>
-          </a>
-        </Container>
+          </Link>
+        </Flex>
       </section>
       {/*------------------------------
                    Footer

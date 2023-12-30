@@ -1,8 +1,8 @@
-export const formatDate = (created_at) => {
+export const formatDate = (created_at: string): string => {
   const timestamp = new Date(created_at);
   const now = new Date();
 
-  const secondsAgo = Math.floor((now - timestamp) / 1000);
+  const secondsAgo = Math.floor((now.getTime() - timestamp.getTime()) / 1000);
   const minutesAgo = Math.floor(secondsAgo / 60);
   const hoursAgo = Math.floor(minutesAgo / 60);
   const daysAgo = Math.floor(hoursAgo / 24);
@@ -19,7 +19,7 @@ export const formatDate = (created_at) => {
   } else if (monthsAgo < 12) {
     return `${monthsAgo} ${monthsAgo === 1 ? 'month' : 'months'} ago`;
   } else {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return timestamp.toLocaleDateString(undefined, options);
   }
 };

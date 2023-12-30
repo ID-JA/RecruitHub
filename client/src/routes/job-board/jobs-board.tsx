@@ -1,67 +1,45 @@
 import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
-import { Box, Button, CloseButton, Container, Input, Tabs } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
-
-import ForYou from './components/ForYou';
-import AppliedJobs from './components/AppliedJobs';
-import SavedJobs from './components/SavedJobs';
-import { useState } from 'react';
-import { IconCurrentLocation } from '@tabler/icons-react';
+import { Box, Container, Grid, Stack, Tabs } from '@mantine/core';
+import { TextInput, ActionIcon, rem } from '@mantine/core';
+import { IconSearch, IconArrowRight } from '@tabler/icons-react';
+import { jobData } from './components/jobData';
+import { JobOfferPreviewCard } from './components/preview-card';
+import { JobOfferCard } from './components/offer-card';
+import { useAuthStore } from '../../store';
 
 const stickHederHeight = 64;
 
 export function JobBoard() {
-  const [value1, setValue1] = useState('');
-  const [value2, setValue2] = useState('');
+  const handleJobCardClick = () => {
+    console.log('preview');
+  };
+  const jobList = jobData.map((job) => (
+    <JobOfferCard key={job.id} offer={job} onClick={handleJobCardClick} />
+  ));
+
+  const { isLoggedIn, isFetchingUser } = useAuthStore();
 
   return (
     <Container fluid={true}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Input
-          leftSection={<IconSearch size={16} />}
-          placeholder='Job title, keyword...'
-          value={value1}
-          onChange={(event) => setValue1(event.currentTarget.value)}
-          rightSectionPointerEvents='all'
-          mt='md'
+      <Box>
+        {isFetchingUser ? 'Fetching' : 'Fetched'}
+        {isLoggedIn ? 'YES' : 'NO'}
+        <TextInput
+          radius='xl'
+          size='lg'
+          placeholder='Find your perfect job'
+          rightSectionWidth={90}
+          m='auto'
+          w='50%'
+          leftSection={<IconSearch style={{ width: rem(22), height: rem(22) }} stroke={1.5} />}
           rightSection={
-            <CloseButton
-              aria-label='Clear input'
-              onClick={() => setValue1('')}
-              style={{ display: value1 ? undefined : 'none' }}
-            />
+            <ActionIcon size={28} radius='xl' variant='filled'>
+              <IconArrowRight style={{ width: rem(26), height: rem(26) }} stroke={1.5} />
+            </ActionIcon>
           }
-          style={{ width: '300px', marginRight: '5px' }}
         />
-        <Input
-          leftSection={<IconCurrentLocation size={16} />}
-          placeholder='Your Location'
-          value={value2}
-          onChange={(event) => setValue2(event.currentTarget.value)}
-          rightSectionPointerEvents='all'
-          mt='md'
-          rightSection={
-            <CloseButton
-              aria-label='Clear input'
-              onClick={() => setValue2('')}
-              style={{ display: value2 ? undefined : 'none' }}
-            />
-          }
-          style={{ width: '300px', marginRight: '5px' }}
-        />
-        <Button
-          radius='sm'
-          variant='gradient'
-          gradient={{ from: 'blue', to: '#8FBBE7', deg: 90 }}
-          type='submit'
-          size='sm'
-          style={{ width: '90px', marginTop: '15px' }}
-        >
-          Search
-        </Button>
-      </div>
-
+      </Box>
       <Box
         style={{
           position: 'sticky',
@@ -73,24 +51,42 @@ export function JobBoard() {
         bg='#F8F9FA'
         p='md'
       >
-        <Tabs defaultValue='forYou'>
+        <Tabs defaultValue='first'>
           <Tabs.List justify='center'>
-            <Tabs.Tab value='forYou'>For You</Tabs.Tab>
-            <Tabs.Tab value='appliedJobs'>Applied Jobs</Tabs.Tab>
-            <Tabs.Tab value='savedJobs'>Saved Jobs</Tabs.Tab>
+            <Tabs.Tab value='first'>Latest</Tabs.Tab>
+            <Tabs.Tab value='second' disabled>
+              For you
+            </Tabs.Tab>
+            <Tabs.Tab value='third' disabled>
+              Applied
+            </Tabs.Tab>
+            <Tabs.Tab value='third' disabled>
+              Saved
+            </Tabs.Tab>
           </Tabs.List>
-          {/* Content for each tab */}
-          <Tabs.Panel value='forYou'>
-            <ForYou />
-          </Tabs.Panel>
-          <Tabs.Panel value='appliedJobs'>
-            <AppliedJobs />
-          </Tabs.Panel>
-          <Tabs.Panel value='savedJobs'>
-            <SavedJobs />
-          </Tabs.Panel>
         </Tabs>
       </Box>
+      <Grid>
+        <Grid.Col
+          span={{
+            md: 6,
+            xs: 12
+          }}
+        >
+          <Stack gap='md'>{jobList}</Stack>
+        </Grid.Col>
+        <Grid.Col span={6} visibleFrom='md'>
+          <div
+            style={{
+              position: 'sticky',
+              top: `${stickHederHeight + 30}px`
+            }}
+          >
+            {/* TODO: if offer is selected render the JobOfferPreviewCard otherwise render the JobOfferPreviewPlaceHolder */}
+            <JobOfferPreviewCard />
+          </div>
+        </Grid.Col>
+      </Grid>
     </Container>
   );
 }

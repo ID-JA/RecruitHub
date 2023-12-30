@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { registerUser } from '../../api/auth-service';
 import { notifications } from '@mantine/notifications';
+import { TRegisterError } from '../../types';
 
 export function TalentForm({ form }: { form: any }) {
   const router = useRouter();
@@ -11,7 +12,7 @@ export function TalentForm({ form }: { form: any }) {
     onSuccess: () => {
       router.history.replace('/login');
     },
-    onError: (error) => {
+    onError: (error: TRegisterError) => {
       console.log('🚀 ~ file: TalentForm.tsx:15 ~ TalentForm ~ error:', error);
       notifications.show({
         color: 'red',

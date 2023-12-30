@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 
-export type User = {
+export type TUser = {
   name: string;
   emailConfirmed: boolean;
   email: string;
   imageUrl: string;
   id: string;
+  role: string;
 };
 
 export interface ICompanyData {
@@ -30,14 +31,16 @@ export interface ICompanyData {
 
 type TCompany = { value: string; label: string };
 export type Store = {
-  user: User | null;
+  user: TUser | null;
   isLoggedIn: boolean;
-  setUser: (user: User) => void;
+  isFetchingUser: boolean;
+  setUser: (user: TUser) => void;
   companies: TCompany[];
   selectedCompany: { value: string; label: string } | null;
   setSelectedCompany: (company: TCompany) => void;
   setCompanies: (companies: TCompany[]) => void;
   logout: () => void;
+  toggleUserFetching: () => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
 };
 
@@ -46,6 +49,8 @@ export const useAuthStore = create<Store>((set) => ({
   isLoggedIn: false,
   selectedCompany: null,
   companies: [],
+  isFetchingUser: true,
+  toggleUserFetching: () => set((state) => ({ isFetchingUser: !state.isFetchingUser })),
   setSelectedCompany: (company) => set({ selectedCompany: company }),
   setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
   setUser: (user) => set({ user, isLoggedIn: true }),

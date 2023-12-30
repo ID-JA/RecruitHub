@@ -9,15 +9,13 @@ function BaseModal({
   title,
   opened = false,
   actions,
-  close,
-  open
+  close
 }: {
   children: ReactNode;
   actions: ReactNode;
   title: string;
   opened: boolean;
   close: () => void;
-  open: () => void;
 }) {
   const [scrollPosition, setScrollPosition] = useState({ top: 0, bottom: 0 });
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
