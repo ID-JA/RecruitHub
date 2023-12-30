@@ -10,15 +10,57 @@ import {
   Title,
   rem
 } from '@mantine/core';
-import { timeAgo } from '../../utils';
+import { axiosInstance, timeAgo } from '../../utils';
 import { IconArchive, IconDots, IconTrash, IconUpload } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit } from '@tabler/icons-react';
 import { TJobData, useAddEditJobOffer } from './create-job-modal';
+import { modals } from '@mantine/modals';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { showNotification } from '@mantine/notifications';
+
+const deleteJobOfferRequest = async (id: number) => {
+  const response = await axiosInstance.delete(`/jobs/${id}`);
+  return response.data;
+};
 
 function JobCard({ props }: { props: TJobData }) {
   const [opened, { open, close }] = useDisclosure();
   const { AddEditJobOfferModal, openAddEditJobOfferModal } = useAddEditJobOffer(props);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: deleteJobOfferRequest,
+    mutationKey: ['delete-job-offer'],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['my-jobs']
+      });
+      modals.close('delete-job-offer');
+      showNotification({
+        title: 'Job offer deleted',
+        message: 'Job offer was successfully deleted',
+        color: 'green'
+      });
+    },
+    onError: (error) => {
+      modals.close('delete-job-offer');
+      showNotification({
+        title: 'Job offer deletion failed',
+        message: error.message,
+        color: 'red'
+      });
+    }
+  });
+  const openDeleteModal = () =>
+    modals.openConfirmModal({
+      id: 'delete-job-offer',
+      title: `Delete ${props.title} offer`,
+      centered: true,
+      children: <Text size='sm'>Are you sure you want to delete this job?</Text>,
+      labels: { confirm: 'Delete job', cancel: "No don't delete it" },
+      confirmProps: { color: 'red' },
+      onConfirm: () => mutation.mutate(props.id!)
+    });
 
   return (
     <Paper radius='md' withBorder p='md' component='li'>
@@ -122,6 +164,7 @@ function JobCard({ props }: { props: TJobData }) {
               )}
 
               <Menu.Item
+                onClick={openDeleteModal}
                 color='red'
                 leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
               >
