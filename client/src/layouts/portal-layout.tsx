@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react';
 import Pusher from 'pusher-js';
 import Echo from 'laravel-echo';
 import { notifications } from '@mantine/notifications';
+import { ColorSchemaToggle } from '../components/shared/theme-toggler/color-schema-toggle';
 
 export function PortalLayout() {
   const [myNotifications, setMyNotifications] = useState([]);
@@ -43,28 +44,6 @@ export function PortalLayout() {
           const response = await axiosInstance.get('/user');
           setUser(response.data);
           return response.data;
-        },
-        staleTime: Infinity,
-        refetchOnWindowFocus: false
-      },
-      {
-        queryKey: ['user-companies'],
-        queryFn: async () => {
-          const response = await axiosInstance.get('/company');
-          if (response.data.length) {
-            setCompanies(
-              response.data.length > 0 &&
-                response.data.map((item: ICompanyData) => ({
-                  value: item.id.toString(),
-                  label: item.title
-                }))
-            );
-            setSelectedCompany({
-              value: response.data[0].id.toString(),
-              label: response.data[0].title
-            });
-          }
-          return response.data.length;
         },
         staleTime: Infinity,
         refetchOnWindowFocus: false
@@ -133,34 +112,7 @@ export function PortalLayout() {
             <RecruitHubLogo />
           </Link>
           <Group>
-            <Menu shadow='md' width={200}>
-              <Menu.Target>
-                <Avatar src='' />
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                <Menu.Label>Application</Menu.Label>
-                <Menu.Item
-                  leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
-                >
-                  Profile
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
-                >
-                  Settings
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    logout();
-                    router.history.replace('/');
-                  }}
-                  leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-                >
-                  Log out
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+            <ColorSchemaToggle />
             <Menu
               onClose={() => {
                 setTimeout(() => {
@@ -215,6 +167,34 @@ export function PortalLayout() {
                     You haven't received any notifications!
                   </Menu.Item>
                 )}
+              </Menu.Dropdown>
+            </Menu>
+            <Menu shadow='md' width={200}>
+              <Menu.Target>
+                <Avatar src='' />
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <Menu.Label>Application</Menu.Label>
+                <Menu.Item
+                  leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
+                >
+                  Profile
+                </Menu.Item>
+                <Menu.Item
+                  leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
+                >
+                  Settings
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    logout();
+                    router.history.replace('/');
+                  }}
+                  leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                >
+                  Log out
+                </Menu.Item>
               </Menu.Dropdown>
             </Menu>
           </Group>

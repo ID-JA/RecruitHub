@@ -28,17 +28,32 @@ class jobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['bail', 'required','string'],
+            'requirements' => ['bail', 'array'],
+            'requirements.*' => ['bail', 'string'], // Each element in the array should be a string
+
+            'company_id' => ['bail', 'required', Rule::exists(Company::class, 'id')],
+
+            'title' => ['bail', 'required', 'string'],
+            'location' => ['bail', 'required', 'string'],
+
+            'employmentType' => ['bail', 'string'], // Assuming it's optional, adjust as needed
+            'category' => ['bail', 'array'],
+            'category.*' => ['bail', 'string'], // Each element in the array should be a string
+
             'description' => ['bail', 'required'],
-            'requirements' => ['bail', 'required'],
-            'salary' => ['bail', 'required','numeric'],
-            'status' => ['bail', 'required','string'],
-            'form' => ['bail', 'required','string'],
-            'location' => ['bail', 'required','string'],
-            'user_id' => ['bail', 'required', Rule::exists(User::class, 'id')],
-            'company_id' => ['bail', 'required',Rule::exists(Company::class, 'id')],
+
+            'salary' => ['bail', 'required', 'numeric'],
+            'salaryCurrency' => ['bail', 'string'], // Assuming it's optional, adjust as needed
+            'salaryTime' => ['bail', 'string'], // Assuming it's optional, adjust as needed
+
+            'howToApply' => ['bail', 'string'], // Assuming it's optional, adjust as needed
+            'motivation' => ['bail', 'string'], // Assuming it's optional, adjust as needed
+            'aboutCompany' => ['bail', 'string'], // Assuming it's optional, adjust as needed
+
+            'status' => ['bail', 'required', 'string'],
         ];
     }
+
          /**
     * Handle a failed validation attempt.
     *

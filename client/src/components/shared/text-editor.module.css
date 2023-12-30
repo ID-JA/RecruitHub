@@ -1,0 +1,5 @@
+.editor {
+  &[data-invalid='true'] {
+    border: red 1px solid;
+  }
+}

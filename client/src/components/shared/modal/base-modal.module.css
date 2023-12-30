@@ -1,0 +1,154 @@
+:root {
+  --modal-dialog-width: rem(800px);
+  --modal-overaly-shdow: var(--mantine-color-body);
+}
+
+.presentation {
+  position: fixed;
+  z-index: 101;
+  inset: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  backdrop-filter: blur(calc(0.9375rem * var(--mantine-scale)));
+  pointer-events: initial;
+}
+
+.paper {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 510;
+  top: 0px;
+  left: 0px;
+  flex-direction: column;
+  transition-duration: 350ms;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.15, 1, 0.3, 1);
+  transform: none;
+  @media (min-width: 30rem) {
+    max-width: calc(100vw - 120px);
+    max-height: calc(100vh - 119px);
+    margin-right: auto;
+    margin-left: auto;
+    position: absolute;
+    top: 60px;
+    right: 0px;
+    left: 0px;
+    pointer-events: none;
+  }
+}
+
+.dialog {
+  display: flex;
+  width: 100%;
+  max-width: 100vw;
+  height: 100%;
+  min-height: 0px;
+  max-height: 100vh;
+  flex: 0 1 auto;
+  flex-direction: column;
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  pointer-events: auto;
+  @media (min-width: 30rem) {
+    width: var(--modal-dialog-width);
+    max-width: inherit;
+    border-radius: 3px;
+    box-shadow: var(
+      --modal-overaly-shdow,
+      0 0 0 1px var(--mantine-color-body),
+      0 2px 1px var(--mantine-color-body),
+      0 0 20px -6px var(--mantine-color-body)
+    );
+    margin-inline: inherit;
+  }
+}
+
+.dialogHeader {
+  display: flex;
+  padding: 24px 24px 22px;
+  position: relative;
+  align-items: center;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+}
+
+.contentWrapper {
+  display: inherit;
+  margin: 0;
+  flex-shrink: inherit;
+  flex-basis: inherit;
+  flex-direction: inherit;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  /* overflow: hidden auto; */
+}
+
+.actionButton {
+  --cb-size-xs: rem(18px);
+  --cb-size-sm: rem(22px);
+  --cb-size-md: rem(28px);
+  --cb-size-lg: rem(34px);
+  --cb-size-xl: rem(44px);
+
+  --cb-size: var(--cb-size-md);
+  --cb-icon-size: 70%;
+
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+
+  width: var(--cb-size);
+  height: var(--cb-size);
+  min-width: var(--cb-size);
+  min-height: var(--cb-size);
+  border-radius: var(--cb-radius, var(--mantine-radius-default));
+  color: var(--_cb-color);
+
+  @mixin light {
+    --_cb-color: var(--mantine-color-gray-7);
+  }
+
+  @mixin dark {
+    --_cb-color: var(--mantine-color-dark-1);
+  }
+}
+
+.actionButton--subtle {
+  background-color: var(--_cb-bg);
+
+  @mixin hover {
+    @mixin light {
+      --_cb-bg: var(--mantine-color-gray-0);
+    }
+
+    @mixin dark {
+      --_cb-bg: var(--mantine-color-dark-6);
+    }
+  }
+}
+
+.scrollAreaRoot {
+  border-top: solid 1px transparent;
+  border-bottom: solid 1px transparent;
+  &[data-scroll='top'] {
+    border-top-color: var(--mantine-color-gray-6);
+  }
+
+  &[data-scroll='bottom'] {
+    border-bottom-color: var(--mantine-color-gray-6);
+  }
+  &[data-scroll='both'] {
+    border-top-color: var(--mantine-color-gray-6);
+    border-bottom-color: var(--mantine-color-gray-6);
+  }
+}
+
+.scrollAreaViewport {
+  padding: 0px 0px 30px 0px;
+}
