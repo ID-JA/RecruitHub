@@ -16,7 +16,7 @@ export interface JobData {
   location: string;
   salary: string; // Assuming salary is stored as a string in the JSON data
   form: string;
-  status: number;
+  status: string;
   created_at: string; // Assuming the date is stored as a string in the JSON data
   updated_at: string; // Assuming the date is stored as a string in the JSON data
   company_id: number;
@@ -123,13 +123,26 @@ function JobsContainer() {
 
   return (
     <>
+      <Group mt='xl'>
+        <Select
+          placeholder='company'
+          title='filter by company'
+          data={companies}
+          value={filterOptions.company}
+          onChange={handleChangeCompany}
+          clearable
+        />
+        <Select
+          placeholder='status'
+          title='filter by status'
+          value={filterOptions.status}
+          onChange={handleStatusChange}
+          clearable
+          data={['Active', 'Closed', 'Pending', 'Achieve']}
+        />
+      </Group>
       {queryCompanies.isFetching || queryJobs.isFetching ? (
         <Box mt='xl'>
-          <Group mb='lg'>
-            <Skeleton height={28} width='20%' />
-            <Skeleton height={28} width='20%' />
-            <Skeleton height={28} width='20%' />
-          </Group>
           <Stack>
             {Array.from({ length: 5 }).map((_, i) => (
               <JobCardPlaceholder key={i} />
@@ -142,29 +155,13 @@ function JobsContainer() {
         <NoJobsPlaceholder />
       ) : (
         <>
-          <Group mt='xl'>
-            <Select
-              placeholder='company'
-              title='filter by company'
-              data={companies}
-              value={filterOptions.company}
-              onChange={handleChangeCompany}
-              clearable
-            />
-            <Select
-              placeholder='status'
-              title='filter by status'
-              value={filterOptions.status}
-              onChange={handleStatusChange}
-              clearable
-              data={['Active', 'Closed', 'Pending', 'Achieve']}
-            />
-          </Group>
-          {queryJobs.data.data.map((props) => (
-            <Suspense key={props.id} fallback={<JobCardPlaceholder />}>
-              <JobCard props={props} />
-            </Suspense>
-          ))}
+          <Stack my='xl'>
+            {queryJobs.data.data.map((props) => (
+              <Suspense key={props.id} fallback={<JobCardPlaceholder />}>
+                <JobCard props={props} />
+              </Suspense>
+            ))}
+          </Stack>
           <Pagination
             total={queryJobs.data.last_page}
             value={queryJobs.data.current_page}

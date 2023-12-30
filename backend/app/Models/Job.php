@@ -7,11 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Application;
 use App\Models\user;
 use App\Models\Company;
+
 class Job extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'user_id', "employmentType", "showSalary", "salaryCurrency","salaryTime","category", 'salary', 'status', 'location', 'company_id',"motivation","aboutCompany","howToApply"];
+    protected $fillable = ['title', 'description', 'user_id', 'employmentType', 'showSalary', 'salaryCurrency', 'salaryTime', 'category', 'salary', 'status', 'location', 'company_id', 'motivation', 'aboutCompany', 'howToApply', 'requirements'];
+
+    protected $casts = [
+        'requirements' => 'array',
+        'category' => 'array'
+    ];
 
     public function company()
     {
@@ -24,7 +30,7 @@ class Job extends Model
 
     public function applications()
     {
-        return $this->hasMany(Application::class,'applicant_id');
+        return $this->hasMany(Application::class, 'applicant_id');
     }
 
     public function savedByUsers()

@@ -13,7 +13,8 @@ import {
   NumberInput,
   Select,
   Textarea,
-  MultiSelect
+  MultiSelect,
+  TagsInput
 } from '@mantine/core';
 
 import { useDisclosure } from '@mantine/hooks';
@@ -26,58 +27,62 @@ import { currencies, industries, salaryTimeFrame } from '../../data';
 import { useAuthStore } from '../../store';
 import { z } from 'zod';
 import { useForm, zodResolver } from '@mantine/form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
 import BaseModal from '../shared/modal/base-modal';
+import { notifications } from '@mantine/notifications';
 
-const schema = z
-  .object({
-    title: z.string(),
-    company_id: z.string(),
-    location: z.string(),
-    employmentType: z.string(),
-    category: z.array(z.string()),
-    description: z.string(),
-    salary: z.number(),
-    withMaxSalary: z.boolean().default(false).optional(),
-    salaryMax: z.number().optional(),
-    salaryCurrency: z.string(),
-    salaryTime: z.string(),
-    showSalary: z.boolean().optional(),
-    howToApply: z.string(),
-    motivation: z.string(),
-    aboutCompany: z.string()
-  })
-  .refine((data) => data.withMaxSalary === true, {
-    message: 'Max salary is required',
-    path: ['salaryMax']
-  });
+const schema = z.object({
+  title: z.string(),
+  company_id: z.string(),
+  location: z.string(),
+  employmentType: z.string(),
+  category: z.array(z.string()),
+  description: z.string(),
+  salary: z.number(),
+  withMaxSalary: z.boolean().default(false).optional(),
+  salaryMax: z.number().optional(),
+  salaryCurrency: z.string(),
+  salaryTime: z.string(),
+  showSalary: z.boolean().optional(),
+  howToApply: z.string(),
+  motivation: z.string(),
+  aboutCompany: z.string(),
+  requirements: z.array(z.string())
+});
+
+type TJobData = z.infer<typeof schema> & { status: string };
 
 export default function CreateJobModal() {
   const [withRange, setWithRange] = useState(false);
+  const queryClient = useQueryClient();
 
   const { companies } = useAuthStore();
   const [opened, { open, close }] = useDisclosure();
   const { onInputChange, suggestions } = useGeoLocation();
   const mutation = useMutation({
-    mutationFn: async (data: any) => {
-      const formData = new FormData();
-
-      Object.keys(data).forEach((key) => {
-        formData.append(key, data[key]);
-      });
-
-      const response = await axiosInstance.post('/jobs', formData);
+    mutationFn: async (data: TJobData) => {
+      const response = await axiosInstance.post('/jobs', data);
       return response.data;
     },
     onSuccess: (data) => {
+      notifications.show({
+        title: 'Success',
+        message: 'Job created successfully',
+        color: 'green'
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['my-jobs']
+      });
+      close();
+
       console.log('🚀 ~ file: create-job-modal.tsx:88 ~ CreateJobModal ~ data:', data);
     },
     onError: (error) => {
       console.log('🚀 ~ file: create-job-modal.tsx:85 ~ CreateJobModal ~ error:', error);
     }
   });
-  const form = useForm({
+  const form = useForm<TJobData>({
     validate: zodResolver(schema),
     initialErrors: {
       salary: null
@@ -88,16 +93,29 @@ export default function CreateJobModal() {
     <Flex justify='space-between' align='center' direction='row' px='md' py='lg'>
       <Checkbox label='Create another job' />
       <Flex justify='flex-end' gap='md'>
-        <Button onClick={close} variant='transparent'>
+        <Button onClick={close} variant='transparent' loading={mutation.isPending}>
           Cancel
         </Button>
-        <Button onClick={close} variant='outline'>
+        <Button
+          variant='outline'
+          onClick={form.onSubmit((values) => {
+            mutation.mutate({
+              ...values,
+              status: 'pending'
+            });
+          })}
+          loading={mutation.isPending}
+        >
           Draft
         </Button>
         <Button
           onClick={form.onSubmit((values) => {
-            mutation.mutate(values);
+            mutation.mutate({
+              ...values,
+              status: 'active'
+            });
           })}
+          loading={mutation.isPending}
           type='submit'
         >
           Publish
@@ -110,6 +128,7 @@ export default function CreateJobModal() {
       <Button onClick={open}>Create Job</Button>
       <BaseModal open={open} close={close} opened={opened} title='Create Job' actions={Actions}>
         <form>
+          <pre>{JSON.stringify(form.errors, null, 2)}</pre>
           <Text c='gray' size='sm' px='md'>
             Required fields are marked with an asterisk{' '}
             <span style={{ color: 'var(--mantine-color-red-6)' }}>*</span>
@@ -152,6 +171,7 @@ export default function CreateJobModal() {
                 <Radio value='temporary' label='Temporary' />
               </Group>
             </Radio.Group>
+            <TagsInput label='Requirements' {...form.getInputProps('requirements')} />
             <MultiSelect
               label='Job Category'
               placeholder='Pick value'

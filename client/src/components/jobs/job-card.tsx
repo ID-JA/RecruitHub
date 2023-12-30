@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Group, Paper, Popover, Text, Title } from '@mantine/core';
+import { ActionIcon, Avatar, Badge, Group, Paper, Popover, Text, Title } from '@mantine/core';
 import { type JobProps } from '../../types';
 import { timeAgo } from '../../utils';
 import { IconDots } from '@tabler/icons-react';
@@ -73,6 +73,7 @@ function JobCard({ props }: { props: JobData }) {
           </Group>
         </div>
         <Group>
+          <Badge color={props.status === 'active' ? 'green' : 'orange'}>{props.status}</Badge>
           <ActionIcon variant='subtle' color='gray.7' aria-label='Exit full screen'>
             <IconDots style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>

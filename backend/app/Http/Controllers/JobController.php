@@ -42,11 +42,16 @@ class JobController extends Controller
         return response()->json($jobs);
     }
 
-    public function store(jobRequest $request)
+    public function store(JobRequest $request)
     {
         $data = $request->validated();
-        $job = Job::create($data);
-        return response()->json($job);
+        $user = auth()->user();
+
+        $job = new Job($data);
+
+        $user->jobs()->save($job);
+
+        return response()->json(['message' => 'Job has been created successfully', 'job' => $job]);
     }
 
     public function show(Job $job)
