@@ -69,7 +69,7 @@ const SearchedCard: React.FC<CardProps> = ({ job }) => {
             transform: 'translateX(-50%)'
           }}
         >
-          <a href='/signup'>
+          <a href='/apply-job'>
             <Button
               className='applyButton'
               color='blue'
