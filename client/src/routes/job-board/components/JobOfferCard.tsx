@@ -3,38 +3,43 @@ import { IconBookmark, IconDeviceLaptop } from '@tabler/icons-react';
 
 export interface JobCardProps {
   id: number;
+  title: string;
   companyName: string;
-  jobTitle: string;
   location: string;
   onClick: (id: number) => void;
   companyLogo: string;
   jobType: string;
+  isSelected: boolean;
 }
 
 export function JobOfferCard({
   id,
+  title,
   companyName,
-  jobTitle,
   location,
   onClick,
   companyLogo,
-  jobType
+  jobType,
+  isSelected
 }: JobCardProps): JSX.Element {
   //  const isSelected: boolean = id === 0;
 
   return (
     <Paper
-      withBorder
       p='md'
+      radius='md'
       style={{
-        cursor: 'pointer'
+        cursor: 'pointer',
+        backgroundColor: isSelected ? '#F8F9FA' : 'initial',
+        borderBottom: '0.5px solid #B6BBC4',
+        borderLeft: isSelected ? '3px solid #B6BBC4' : '3px solid white'
       }}
       onClick={() => onClick(id)}
     >
       <Grid>
         {/* Left Column: Image */}
         <Grid.Col
-          span={3}
+          span={2}
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -59,7 +64,7 @@ export function JobOfferCard({
           )}
         </Grid.Col>
         {/* Right Column: Text */}
-        <Grid.Col span={9}>
+        <Grid.Col span={10}>
           <Box>
             <div style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}>
               <div style={{ flex: 9 }}>
@@ -80,7 +85,7 @@ export function JobOfferCard({
                     e.currentTarget.style.textDecoration = 'none';
                   }}
                 >
-                  {jobTitle}
+                  {title}
                 </Text>
               </div>
               <div
