@@ -66,7 +66,7 @@ function JobsContainer() {
               label: response.data[0].title
             });
           }
-          return response.data.length;
+          return response.data;
         },
         staleTime: Infinity,
         refetchOnWindowFocus: false
