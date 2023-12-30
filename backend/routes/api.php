@@ -105,6 +105,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/', [JobController::class, 'store']);
         Route::put('/{job}', [JobController::class, 'update']);
         Route::delete('/{job}', [JobController::class, 'destroy']);
+        Route::get('/{jobId}/count-applicants', [JobController::class, 'getTotalApplicants']);
+        Route::patch('/{job}/change-status', [JobController::class, 'updateJobStatus']);
     });
 
     

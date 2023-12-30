@@ -3,6 +3,7 @@ import {
   Avatar,
   Badge,
   Group,
+  Loader,
   Menu,
   Paper,
   Popover,
@@ -16,8 +17,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconEdit } from '@tabler/icons-react';
 import { TJobData, useAddEditJobOffer } from './create-job-modal';
 import { modals } from '@mantine/modals';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { showNotification } from '@mantine/notifications';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { notifications, showNotification } from '@mantine/notifications';
 
 const deleteJobOfferRequest = async (id: number) => {
   const response = await axiosInstance.delete(`/jobs/${id}`);
@@ -51,6 +52,34 @@ function JobCard({ props }: { props: TJobData }) {
       });
     }
   });
+  const query = useQuery({
+    queryKey: ['total-candidate', props.id],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`/jobs/${props.id}/count-applicants`);
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    enabled: props.status.toUpperCase() === 'ACTIVE'
+  });
+
+  const updateJobStatusMutation = useMutation({
+    mutationKey: ['update-job-status'],
+    mutationFn: async (data: string) => {
+      const response = await axiosInstance.patch(`/jobs/${props.id}/change-status`, {
+        status: data
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['my-jobs']
+      });
+      notifications.show({
+        message: "Job's status updated with success",
+        title: 'Success'
+      });
+    }
+  });
   const openDeleteModal = () =>
     modals.openConfirmModal({
       id: 'delete-job-offer',
@@ -61,6 +90,10 @@ function JobCard({ props }: { props: TJobData }) {
       confirmProps: { color: 'red' },
       onConfirm: async () => mutation.mutateAsync(props.id!)
     });
+
+  const handleUpdateOfferStatus = (status: string) => {
+    updateJobStatusMutation.mutate(status);
+  };
 
   return (
     <Paper radius='md' withBorder p='md' component='li'>
@@ -129,12 +162,23 @@ function JobCard({ props }: { props: TJobData }) {
           </Group>
         </div>
         <Group>
-          <Badge variant='light' color={props.status === 'active' ? 'green' : 'orange'}>
+          <Badge
+            variant='light'
+            color={
+              props.status === 'active' ? 'green' : props.status === 'closed' ? 'red' : 'orange'
+            }
+          >
             {props.status}
           </Badge>
           <Badge variant='light' color='gray'>
-            1000
-            <span style={{ marginLeft: '5px' }}>Candidates</span>
+            {query.isFetching ? (
+              <Loader type='dots' size='xs' />
+            ) : (
+              <>
+                {query.data ? query.data.total_applicants : 0}
+                <span style={{ marginLeft: '5px' }}>Candidates</span>
+              </>
+            )}
           </Badge>
           <Menu shadow='md' width={200}>
             <Menu.Target>
@@ -149,6 +193,7 @@ function JobCard({ props }: { props: TJobData }) {
                   key='post-new-job'
                   fw='bold'
                   color='green'
+                  onClick={() => handleUpdateOfferStatus('active')}
                   leftSection={<IconUpload style={{ width: rem(14), height: rem(14) }} />}
                 >
                   Post
@@ -158,7 +203,11 @@ function JobCard({ props }: { props: TJobData }) {
                 Edit
               </Menu.Item>
               {props.status === 'active' && (
-                <Menu.Item key='close-offer' leftSection={<IconArchive size={18} />}>
+                <Menu.Item
+                  key='close-offer'
+                  onClick={() => handleUpdateOfferStatus('closed')}
+                  leftSection={<IconArchive size={18} />}
+                >
                   Close
                 </Menu.Item>
               )}
