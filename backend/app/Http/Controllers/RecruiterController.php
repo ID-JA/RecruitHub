@@ -38,42 +38,51 @@ class RecruiterController extends Controller
         
     }
 
-    public function acceptApplication(Request $request, $applicationId)
+    public function updateStatusApplication(Request $request, $applicationId)
     {
+        $status=$request->input('status');
         $application = Application::findOrFail($applicationId);
-        $application->update(['status' => $request->input('status')]);
         $job=$application->job;
         $candidate=$application->candidate;
         $data=[
             'id'=>$candidate->id,
             'title'=>'congratulations 🎉',
-            'body'=>"Your application for offer '$job->title' was accepted!😁"
         ];
-        $candidate->notify(new Notifications($data));
+        if($status=='accepted'){
+            $application->update(['status' => $status]);
+            $data['body']="Your application for offer '$job->title' was accepted!😁";
+        }else if($status=='pending'){
+            $application->update(['status' => $status]);
+            $data['body']="Your application for offer '$job->title' still pending!";
+        }else if($status=='rejected'){
+            $application->update(['status' => $status]);
+            $data['body']="Your application for offer '$job->title' was rejected 😐!";
+        }
+        // $candidate->notify(new Notifications($data));
 
         return response()->json([
-            'success'=>"applications was accepted successfully",
+            'success'=>"applications was updated successfully",
             'application'=>$application
         ]);
     }
 
-    public function rejectApplication(Request $request, $applicationId)
-    {
-        $application = Application::findOrFail($applicationId);
-        $application->update(['status' => 'rejected']);
+    // public function rejectApplication(Request $request, $applicationId)
+    // {
+    //     $application = Application::findOrFail($applicationId);
+    //     $application->update(['status' => 'rejected']);
 
-        $job=$application->job;
-        $candidate=$application->candidate;
-        $data=[
-            'id'=>$candidate->id,
-            'title'=>'Update!',
-            'body'=>"Your application for offer '$job->title' was rejected 😐!"
-        ];
-        $candidate->notify(new Notifications($data));
+    //     $job=$application->job;
+    //     $candidate=$application->candidate;
+    //     $data=[
+    //         'id'=>$candidate->id,
+    //         'title'=>'Update!',
+    //         'body'=>"Your application for offer '$job->title' was rejected 😐!"
+    //     ];
+    //     $candidate->notify(new Notifications($data));
 
-        return response()->json([
-            'success'=>"applications was rejected successfully",
-            'application'=>$application
-        ]);
-    }
+    //     return response()->json([
+    //         'success'=>"applications was rejected successfully",
+    //         'application'=>$application
+    //     ]);
+    // }
 }

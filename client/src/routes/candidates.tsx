@@ -1,6 +1,6 @@
 import { Route } from '@tanstack/react-router';
 import { portalLayoutRoute } from '../layouts/portal-layout';
-import { Anchor, Select, Table } from '@mantine/core';
+import { Anchor, Group, Loader, Select, Table } from '@mantine/core';
 import { axiosInstance } from '../utils';
 import { Fragment, useEffect, useState } from 'react';
 import { formatDate } from '../utils/formatDate';
@@ -10,6 +10,7 @@ import { notifications } from '@mantine/notifications';
 
 function Candidates() {
   const [applications, setApplications] = useState([]);
+  const [applicationsLoading, setApplicationsLoading] = useState(true);
   // const [hoveredUserId, setHoveredUserId] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
   // const {applicationId}=useParams()
@@ -17,13 +18,19 @@ function Candidates() {
   useEffect(() => {
     //replace that number 2 with applicationId
     axiosInstance.get(`/recruiter/received-applications/${2}`).then((response) => {
-      console.log(response.data.applications.applications);
-      setApplications(response.data.applications.applications);
+      if(response.data.applications){
+        setApplications(response.data.applications.applications);
+        setApplicationsLoading(false)
+      }
+    }).catch((e)=>{
+      alert('something went wrong')
+      setApplicationsLoading(false)
     });
   }, []);
   const handleStatus = async (e, id, name) => {
     setStatusLoading(id);
-    await axiosInstance.post(`/recruiter/accept-application/${id}`, { status: e });
+    
+    await axiosInstance.post(`/recruiter/update-application/${id}`, { status: e });
     setStatusLoading(null);
     notifications.show({
       color: 'green',
@@ -58,74 +65,55 @@ function Candidates() {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {applications.length > 0 &&
-              applications.map((application, i) => (
-                <Table.Tr key={i}>
-                  <Table.Td>{application.candidate.name}</Table.Td>
-                  <Table.Td>
-                    <Anchor
-                      href={import.meta.env.VITE_BASE_URL + '/storage/' + application.resume}
-                      download='downloaded_resume.pdf'
-                    >
-                      Resume
-                    </Anchor>
-                  </Table.Td>
-                  <Table.Td>
-                    <Anchor
-                      onClick={() => {
-                        handleDownload(application.cover_letter);
-                      }}
-                    >
-                      Cover-Letter
-                    </Anchor>
-                  </Table.Td>
-                  <Table.Td>
-                    <Select
-                      data={['pending', 'accepted', 'rejected']}
-                      defaultValue={application.status}
-                      w={140}
-                      onChange={(e) => {
-                        handleStatus(e, application.id, application.candidate.name);
-                      }}
-                      disabled={statusLoading == application.id}
-                    />
-                  </Table.Td>
-                  <Table.Td>{formatDate(application.created_at)}</Table.Td>
-                  {/* <Table.Td 
-        // style={{ position:'relative' }}
-        >
-          <div className='user-row'
-          onMouseEnter={() => setHoveredUserId(application.id)}
-          onMouseLeave={() => setHoveredUserId(null)}
-          
-          >hover me please</div>
-
-            {hoveredUserId !== application.id && (
-          <Paper
-          style={{ position:'absolute' }}
-           radius="md" withBorder p="lg" w={'100%'} bg="var(--mantine-color-body)">
-            <Avatar
-              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
-              size={120}
-              radius={120}
-              mx="auto"
-            />
-            <Text ta="center" fz="lg" fw={500} mt="md">
-              Jane Fingerlicker
-            </Text>
-            <Text ta="center" c="dimmed" fz="sm">
-              jfingerlicker@me.io • Art director
-            </Text>
-
-            <Button variant="default" fullWidth mt="md">
-              Send message
-            </Button>
-          </Paper>
-         )}
-        
-        </Table.Td> */}
-                </Table.Tr>
-              ))}
+            {applicationsLoading?
+            <Table.Tr>
+            <Table.Td colSpan={5} rowSpan={3}>
+                <Group justify='center'><Loader color="blue" size="lg" type="dots" /></Group>
+            </Table.Td>
+            </Table.Tr>
+            :applications.length>0?
+            applications.map((application, i) => (
+              <Table.Tr key={i}>
+                <Table.Td>{application.candidate.name}</Table.Td>
+                <Table.Td>
+                  <Anchor
+                    href={import.meta.env.VITE_BASE_URL + '/storage/' + application.resume}
+                    download='downloaded_resume.pdf'
+                  >
+                    Resume
+                  </Anchor>
+                </Table.Td>
+                <Table.Td>
+                  <Anchor
+                    onClick={() => {
+                      handleDownload(application.cover_letter);
+                    }}
+                  >
+                    Cover-Letter
+                  </Anchor>
+                </Table.Td>
+                <Table.Td>
+                  <Select
+                    data={['pending', 'accepted', 'rejected']}
+                    defaultValue={application.status}
+                    w={140}
+                    onChange={(e) => {
+                      handleStatus(e, application.id, application.candidate.name);
+                    }}
+                    disabled={statusLoading == application.id}
+                  />
+                </Table.Td>
+                <Table.Td>{formatDate(application.created_at)}</Table.Td>
+              </Table.Tr>
+            )):
+            <Table.Tr>
+              <Table.Td colSpan={5} rowSpan={2}>
+                <Group justify='center' fw={'bold'}>You havn't received any applications for this job.</Group>
+              </Table.Td>
+            </Table.Tr>
+            
+            }
+         
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
