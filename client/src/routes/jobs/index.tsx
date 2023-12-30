@@ -4,6 +4,7 @@ import { Button, Group } from '@mantine/core';
 import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { useAddEditJobOffer } from '../../components/jobs/create-job-modal';
 import JobsContainer from '../../components/jobs/jobs-container';
+import { z } from 'zod';
 
 export function Jobs() {
   const { AddEditJobOfferModal, openAddEditJobOfferModal } = useAddEditJobOffer();
@@ -21,8 +22,17 @@ export function Jobs() {
   );
 }
 
+const jobSearchParamsSchema = z.object({
+  page: z.number().catch(1),
+  company: z.number().optional(),
+  status: z.string().optional()
+});
+
+type JobParams = z.infer<typeof jobSearchParamsSchema>;
+
 export const jobsRoute = new Route({
   path: 'jobs',
   component: Jobs,
-  getParentRoute: () => portalLayoutRoute
+  getParentRoute: () => portalLayoutRoute,
+  validateSearch: jobSearchParamsSchema
 });

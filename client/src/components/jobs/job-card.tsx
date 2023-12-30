@@ -31,8 +31,8 @@ function JobCard({ props }: { props: TJobData }) {
   const mutation = useMutation({
     mutationFn: deleteJobOfferRequest,
     mutationKey: ['delete-job-offer'],
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
         queryKey: ['my-jobs']
       });
       modals.close('delete-job-offer');
@@ -59,7 +59,7 @@ function JobCard({ props }: { props: TJobData }) {
       children: <Text size='sm'>Are you sure you want to delete this job?</Text>,
       labels: { confirm: 'Delete job', cancel: "No don't delete it" },
       confirmProps: { color: 'red' },
-      onConfirm: () => mutation.mutate(props.id!)
+      onConfirm: async () => mutation.mutateAsync(props.id!)
     });
 
   return (
