@@ -51,29 +51,29 @@ export function PortalLayout() {
     ]
   });
 
-  // useEffect(() => {
-  //   window.Pusher = Pusher;
-  //   Echo.logToConsole = true;
-  //   window.Echo = new Echo({
-  //     broadcaster: import.meta.env.VITE_ECHO_BROADCASTER,
-  //     key: import.meta.env.VITE_ECHO_KEY,
-  //     cluster: import.meta.env.VITE_ECHO_CLUSTER,
-  //     encrypted: import.meta.env.VITE_ECHO_ENCRYPTED
-  //   });
+  useEffect(() => {
+    window.Pusher = Pusher;
+    Echo.logToConsole = true;
+    window.Echo = new Echo({
+      broadcaster: import.meta.env.VITE_ECHO_BROADCASTER,
+      key: import.meta.env.VITE_ECHO_KEY,
+      cluster: import.meta.env.VITE_ECHO_CLUSTER,
+      encrypted: import.meta.env.VITE_ECHO_ENCRYPTED
+    });
 
-  //   const channel = window.Echo.channel(`App.Models.User.${user && user.id}`);
-  //   channel.listen('.Notifications', function (data: object) {
-  //     notifications.show({
-  //       color: 'green',
-  //       title: data.title,
-  //       message: data.body
-  //     });
-  //     axiosInstance.post(`/notifications/read/${data.id}`);
-  //   });
-  //   return () => {
-  //     window.Echo.leave(`App.Models.User.${user && user.id}`);
-  //   };
-  // }, [isLoggedIn, user]);
+    const channel = window.Echo.channel(`App.Models.User.${user && user.id}`);
+    channel.listen('.Notifications', function (data: object) {
+      notifications.show({
+        color: 'green',
+        title: data.title,
+        message: data.body
+      });
+      axiosInstance.post(`/notifications/read/${data.id}`);
+    });
+    return () => {
+      window.Echo.leave(`App.Models.User.${user && user.id}`);
+    };
+  }, [isLoggedIn, user]);
 
   const getNotifications = async () => {
     const response = await axiosInstance.get('/notifications');
