@@ -13,13 +13,16 @@ import {
 import { timeAgo } from '../../utils';
 import { IconArchive, IconDots, IconTrash, IconUpload } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { JobData } from './jobs-container';
 import { IconEdit } from '@tabler/icons-react';
+import { TJobData, useAddEditJobOffer } from './create-job-modal';
 
-function JobCard({ props }: { props: JobData }) {
+function JobCard({ props }: { props: TJobData }) {
   const [opened, { open, close }] = useDisclosure();
+  const { AddEditJobOfferModal, openAddEditJobOfferModal } = useAddEditJobOffer(props);
+
   return (
     <Paper radius='md' withBorder p='md' component='li'>
+      <AddEditJobOfferModal />
       <Group justify='space-between' align='center'>
         <div>
           <Title
@@ -65,7 +68,7 @@ function JobCard({ props }: { props: JobData }) {
                 </Text>
                 <Text size='xs' c='gray'>
                   Created{' '}
-                  {new Date(props.created_at).toLocaleDateString('en-us', {
+                  {new Date(props.created_at!).toLocaleDateString('en-us', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric'
@@ -79,7 +82,7 @@ function JobCard({ props }: { props: JobData }) {
             </Text>
             <p style={{ margin: 0 }}>•</p>
             <Text size='sm' fw={400} c='gray'>
-              {timeAgo(new Date(props.created_at), { withAgo: true })}
+              {timeAgo(new Date(props.created_at!), { withAgo: true })}
             </Text>
           </Group>
         </div>
@@ -109,7 +112,9 @@ function JobCard({ props }: { props: JobData }) {
                   Post
                 </Menu.Item>
               )}
-              <Menu.Item leftSection={<IconEdit size={18} />}>Edit</Menu.Item>
+              <Menu.Item leftSection={<IconEdit size={18} />} onClick={openAddEditJobOfferModal}>
+                Edit
+              </Menu.Item>
               {props.status === 'active' && (
                 <Menu.Item key='close-offer' leftSection={<IconArchive size={18} />}>
                   Close

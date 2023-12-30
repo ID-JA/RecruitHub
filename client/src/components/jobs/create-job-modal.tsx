@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   Flex,
   Button,
@@ -51,15 +51,43 @@ const schema = z.object({
   requirements: z.array(z.string().min(1))
 });
 
-type TJobData = z.infer<typeof schema> & { status: string };
+export type TJobData = z.infer<typeof schema> & { status: string; created_at?: Date };
 
-export default function CreateJobModal() {
+const formDefaultValues = {
+  title: '',
+  company_id: '',
+  location: '',
+  employmentType: '',
+  category: [],
+  description: '',
+  salary: 0,
+  withMaxSalary: false,
+  salaryMax: undefined,
+  salaryCurrency: '',
+  salaryTime: '',
+  showSalary: undefined,
+  howToApply: '',
+  motivation: '',
+  aboutCompany: '',
+  requirements: [],
+  status: 'pending'
+};
+
+export default function AddEditJobOffer({
+  jobOffer,
+  close,
+  opened
+}: {
+  jobOffer?: TJobData;
+  close: () => void;
+  opened: boolean;
+}) {
   const [withRange, setWithRange] = useState(false);
   const [createOtherJob, setCreateOtherJob] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   const { companies } = useAuthStore();
-  const [opened, { open, close }] = useDisclosure();
+
   const { onInputChange, suggestions } = useGeoLocation();
   const mutation = useMutation({
     mutationFn: async (data: TJobData) => {
@@ -86,25 +114,7 @@ export default function CreateJobModal() {
   });
   const form = useForm<TJobData>({
     validate: zodResolver(schema),
-    initialValues: {
-      title: '',
-      company_id: '',
-      location: '',
-      employmentType: '',
-      category: [],
-      description: '',
-      salary: 0,
-      withMaxSalary: false,
-      salaryMax: undefined,
-      salaryCurrency: '',
-      salaryTime: '',
-      showSalary: undefined,
-      howToApply: '',
-      motivation: '',
-      aboutCompany: '',
-      requirements: [],
-      status: 'pending'
-    },
+    initialValues: jobOffer || formDefaultValues,
     initialErrors: {
       salary: null
     }
@@ -148,7 +158,6 @@ export default function CreateJobModal() {
   );
   return (
     <>
-      <Button onClick={open}>Create Job</Button>
       <BaseModal open={open} close={close} opened={opened} title='Create Job' actions={Actions}>
         <form>
           <Text c='gray' size='sm' px='md'>
@@ -309,3 +318,20 @@ export default function CreateJobModal() {
     </>
   );
 }
+
+export const useAddEditJobOffer = (jobOffer?: TJobData) => {
+  const [opened, { close, open }] = useDisclosure(false);
+
+  const AddEditJobOfferModalCallback = useCallback(() => {
+    return opened ? <AddEditJobOffer opened={opened} close={close} jobOffer={jobOffer} /> : null;
+  }, [jobOffer, open, close, opened]);
+
+  return useMemo(
+    () => ({
+      openAddEditJobOfferModal: open,
+      closeAddEditJobOfferModal: close,
+      AddEditJobOfferModal: AddEditJobOfferModalCallback
+    }),
+    [close, AddEditJobOfferModalCallback, open]
+  );
+};
