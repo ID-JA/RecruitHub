@@ -55,6 +55,7 @@ type TJobData = z.infer<typeof schema> & { status: string };
 
 export default function CreateJobModal() {
   const [withRange, setWithRange] = useState(false);
+  const [createOtherJob, setCreateOtherJob] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   const { companies } = useAuthStore();
@@ -74,9 +75,10 @@ export default function CreateJobModal() {
       queryClient.invalidateQueries({
         queryKey: ['my-jobs']
       });
-      close();
-
-      console.log('🚀 ~ file: create-job-modal.tsx:88 ~ CreateJobModal ~ data:', data);
+      if (!createOtherJob) {
+        close();
+      }
+      form.reset();
     },
     onError: (error) => {
       console.log('🚀 ~ file: create-job-modal.tsx:85 ~ CreateJobModal ~ error:', error);
@@ -84,6 +86,24 @@ export default function CreateJobModal() {
   });
   const form = useForm<TJobData>({
     validate: zodResolver(schema),
+    initialValues: {
+      title: '',
+      company_id: '',
+      location: '',
+      employmentType: '',
+      category: [],
+      description: '',
+      salary: 0,
+      withMaxSalary: false,
+      salaryMax: undefined,
+      salaryCurrency: '',
+      salaryTime: '',
+      showSalary: undefined,
+      howToApply: '',
+      motivation: '',
+      aboutCompany: '',
+      requirements: []
+    },
     initialErrors: {
       salary: null
     }
@@ -91,7 +111,11 @@ export default function CreateJobModal() {
 
   const Actions = (
     <Flex justify='space-between' align='center' direction='row' px='md' py='lg'>
-      <Checkbox label='Create another job' />
+      <Checkbox
+        label='Create another job'
+        value={createOtherJob}
+        onChange={(event) => setCreateOtherJob(event.currentTarget.checked)}
+      />
       <Flex justify='flex-end' gap='md'>
         <Button onClick={close} variant='transparent' loading={mutation.isPending}>
           Cancel
@@ -128,7 +152,6 @@ export default function CreateJobModal() {
       <Button onClick={open}>Create Job</Button>
       <BaseModal open={open} close={close} opened={opened} title='Create Job' actions={Actions}>
         <form>
-          <pre>{JSON.stringify(form.errors, null, 2)}</pre>
           <Text c='gray' size='sm' px='md'>
             Required fields are marked with an asterisk{' '}
             <span style={{ color: 'var(--mantine-color-red-6)' }}>*</span>

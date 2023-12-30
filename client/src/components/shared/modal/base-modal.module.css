@@ -1,13 +1,13 @@
 :root {
   --modal-dialog-width: rem(800px);
-  --modal-overaly-shdow: #282e33;
+  --modal-overaly-shdow: var(--mantine-color-body);
 }
 
 .presentation {
   position: fixed;
   z-index: 101;
   inset: 0px;
-  background-color: rgba(9, 30, 66, 0.54);
+  background-color: rgba(0, 0, 0, 0.5);
   overflow-y: auto;
   backdrop-filter: blur(calc(0.9375rem * var(--mantine-scale)));
   pointer-events: initial;
@@ -49,9 +49,8 @@
   max-height: 100vh;
   flex: 0 1 auto;
   flex-direction: column;
-  background-color: var(--mantine-color-white);
-  color: var(--ds-text, #091e42);
-  --ds-elevation-surface-current: var(--mantine-color-white);
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
   pointer-events: auto;
   @media (min-width: 30rem) {
     width: var(--modal-dialog-width);
@@ -59,9 +58,9 @@
     border-radius: 3px;
     box-shadow: var(
       --modal-overaly-shdow,
-      0 0 0 1px rgba(9, 30, 66, 0.08),
-      0 2px 1px rgba(9, 30, 66, 0.08),
-      0 0 20px -6px rgba(9, 30, 66, 0.31)
+      0 0 0 1px var(--mantine-color-body),
+      0 2px 1px var(--mantine-color-body),
+      0 0 20px -6px var(--mantine-color-body)
     );
     margin-inline: inherit;
   }
@@ -138,15 +137,15 @@
   border-top: solid 1px transparent;
   border-bottom: solid 1px transparent;
   &[data-scroll='top'] {
-    border-top-color: #ccc;
+    border-top-color: var(--mantine-color-gray-6);
   }
 
   &[data-scroll='bottom'] {
-    border-bottom-color: #ccc;
+    border-bottom-color: var(--mantine-color-gray-6);
   }
   &[data-scroll='both'] {
-    border-top-color: #ccc;
-    border-bottom-color: #ccc;
+    border-top-color: var(--mantine-color-gray-6);
+    border-bottom-color: var(--mantine-color-gray-6);
   }
 }
 
