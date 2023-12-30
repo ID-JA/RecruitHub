@@ -66,7 +66,7 @@ export default function CreateJobModal() {
       const response = await axiosInstance.post('/jobs', data);
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       notifications.show({
         title: 'Success',
         message: 'Job created successfully',
@@ -102,7 +102,8 @@ export default function CreateJobModal() {
       howToApply: '',
       motivation: '',
       aboutCompany: '',
-      requirements: []
+      requirements: [],
+      status: 'pending'
     },
     initialErrors: {
       salary: null
@@ -113,7 +114,7 @@ export default function CreateJobModal() {
     <Flex justify='space-between' align='center' direction='row' px='md' py='lg'>
       <Checkbox
         label='Create another job'
-        value={createOtherJob}
+        checked={createOtherJob}
         onChange={(event) => setCreateOtherJob(event.currentTarget.checked)}
       />
       <Flex justify='flex-end' gap='md'>
@@ -122,23 +123,29 @@ export default function CreateJobModal() {
         </Button>
         <Button
           variant='outline'
-          onClick={form.onSubmit((values) => {
-            mutation.mutate({
-              ...values,
-              status: 'pending'
-            });
-          })}
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+            form.onSubmit((values) => {
+              mutation.mutate({
+                ...values,
+                status: 'pending'
+              });
+            })();
+          }}
           loading={mutation.isPending}
         >
           Draft
         </Button>
         <Button
-          onClick={form.onSubmit((values) => {
-            mutation.mutate({
-              ...values,
-              status: 'active'
-            });
-          })}
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+            form.onSubmit((values) => {
+              mutation.mutate({
+                ...values,
+                status: 'active'
+              });
+            })();
+          }}
           loading={mutation.isPending}
           type='submit'
         >
