@@ -67,31 +67,25 @@ function CreateEditCompanyModel() {
       });
     }
   });
+  const handleSubmit = () => (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    form.onSubmit((values) => {
+      mutation.mutate(values);
+    })();
+  };
   const Actions = (
     <Flex justify='space-between' align='center' direction='row' px='md' py='lg'>
       <Button variant='outline' onClick={close}>
         Cancel
       </Button>
-      <Button
-        type='submit'
-        onClick={form.onSubmit((values) => {
-          mutation.mutate(values);
-        })}
-        loading={mutation.isPending}
-      >
+      <Button type='submit' onClick={handleSubmit} loading={mutation.isPending}>
         Create
       </Button>
     </Flex>
   );
   return (
     <>
-      <BaseModal
-        opened={opened}
-        actions={Actions}
-        open={open}
-        close={close}
-        title='Create a company'
-      >
+      <BaseModal opened={opened} actions={Actions} close={close} title='Create a company'>
         <form>
           <pre>{JSON.stringify(form.errors, null, 2)}</pre>
           <Stack mt='lg' px='xl'>

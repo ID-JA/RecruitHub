@@ -1,8 +1,10 @@
-import { Container, Group, Burger, Button } from '@mantine/core';
+import { Container, Group, Burger, Button, Skeleton, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './MainHeader.module.css';
 import { Link } from '@tanstack/react-router';
 import { RecruitHubLogo } from '../logo/logo';
+import { useAuthStore } from '../../../store';
+import UserToolbar from '../user-toolbar';
 
 export function MainHeader() {
   const [opened, { toggle }] = useDisclosure(false);
@@ -31,6 +33,8 @@ export function MainHeader() {
     );
   });
 
+  const { isLoggedIn, user, isFetchingUser } = useAuthStore();
+
   return (
     <header className={classes.header}>
       <Container size='xl' className={classes.inner}>
@@ -39,16 +43,28 @@ export function MainHeader() {
           {items}
         </Group>
         <Group>
-          {/* TODO: if user is logged in we render profile component instead of auth buttons */}
-          <Link to='/login'>
-            <Button variant='outline'>Sign in</Button>
-          </Link>
-          <Link to='/signup' hash='employer-details'>
-            <Button>Sign up</Button>
-          </Link>
-          <Link to='/portal'>
-            <Button>Go to dashboard</Button>
-          </Link>
+          {isFetchingUser ? (
+            <Flex gap='md'>
+              <Skeleton height={38} width={38} />
+              <Skeleton height={38} width={38} />
+              <Skeleton height={38} width={38} />
+            </Flex>
+          ) : !isLoggedIn ? (
+            <>
+              <Link to='/login'>
+                <Button variant='outline'>Sign in</Button>
+              </Link>
+              <Link to='/signup' hash='employer-details'>
+                <Button>Sign up</Button>
+              </Link>
+            </>
+          ) : user?.role === 'recruiter' ? (
+            <Link to='/portal'>
+              <Button>Go to portal</Button>
+            </Link>
+          ) : (
+            <UserToolbar />
+          )}
         </Group>
         <Burger opened={opened} onClick={toggle} hiddenFrom='xs' size='sm' />
       </Container>

@@ -182,7 +182,7 @@ export default function AddEditJobOffer({
     </Flex>
   );
   return (
-    <BaseModal open={open} close={close} opened={opened} title='Create Job' actions={Actions}>
+    <BaseModal close={close} opened={opened} title='Create Job' actions={Actions}>
       <form>
         <Text c='gray' size='sm' px='md'>
           Required fields are marked with an asterisk{' '}

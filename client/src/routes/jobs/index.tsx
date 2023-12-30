@@ -28,8 +28,6 @@ const jobSearchParamsSchema = z.object({
   status: z.string().optional()
 });
 
-type JobParams = z.infer<typeof jobSearchParamsSchema>;
-
 export const jobsRoute = new Route({
   path: 'jobs',
   component: Jobs,

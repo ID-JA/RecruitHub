@@ -8,8 +8,22 @@ import { formatDate } from '../utils/formatDate';
 import './candidate.css';
 import { notifications } from '@mantine/notifications';
 
+interface Candidate {
+  name: string;
+  // Add other candidate properties as needed
+}
+
+interface Application {
+  id: string;
+  candidate: Candidate;
+  resume: string;
+  cover_letter: string;
+  status: string; // 'pending', 'accepted', 'rejected'
+  created_at: string; // ISO date string
+}
+
 function Candidates() {
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [applicationsLoading, setApplicationsLoading] = useState(true);
   // const [hoveredUserId, setHoveredUserId] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
@@ -17,19 +31,22 @@ function Candidates() {
 
   useEffect(() => {
     //replace that number 2 with applicationId
-    axiosInstance.get(`/recruiter/received-applications/${2}`).then((response) => {
-      if(response.data.applications){
-        setApplications(response.data.applications.applications);
-        setApplicationsLoading(false)
-      }
-    }).catch((e)=>{
-      alert('something went wrong')
-      setApplicationsLoading(false)
-    });
+    axiosInstance
+      .get(`/recruiter/received-applications/${2}`)
+      .then((response) => {
+        if (response.data.applications) {
+          setApplications(response.data.applications.applications);
+          setApplicationsLoading(false);
+        }
+      })
+      .catch(() => {
+        alert('something went wrong');
+        setApplicationsLoading(false);
+      });
   }, []);
-  const handleStatus = async (e, id, name) => {
+  const handleStatus = async (e: any, id: any, name: any) => {
     setStatusLoading(id);
-    
+
     await axiosInstance.post(`/recruiter/update-application/${id}`, { status: e });
     setStatusLoading(null);
     notifications.show({
@@ -39,7 +56,7 @@ function Candidates() {
     });
   };
 
-  const handleDownload = (textContent) => {
+  const handleDownload = (textContent: string) => {
     const blob = new Blob([textContent], { type: 'text/plain' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(blob);
@@ -65,55 +82,58 @@ function Candidates() {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {applicationsLoading?
-            <Table.Tr>
-            <Table.Td colSpan={5} rowSpan={3}>
-                <Group justify='center'><Loader color="blue" size="lg" type="dots" /></Group>
-            </Table.Td>
-            </Table.Tr>
-            :applications.length>0?
-            applications.map((application, i) => (
-              <Table.Tr key={i}>
-                <Table.Td>{application.candidate.name}</Table.Td>
-                <Table.Td>
-                  <Anchor
-                    href={import.meta.env.VITE_BASE_URL + '/storage/' + application.resume}
-                    download='downloaded_resume.pdf'
-                  >
-                    Resume
-                  </Anchor>
+            {applicationsLoading ? (
+              <Table.Tr>
+                <Table.Td colSpan={5} rowSpan={3}>
+                  <Group justify='center'>
+                    <Loader color='blue' size='lg' type='dots' />
+                  </Group>
                 </Table.Td>
-                <Table.Td>
-                  <Anchor
-                    onClick={() => {
-                      handleDownload(application.cover_letter);
-                    }}
-                  >
-                    Cover-Letter
-                  </Anchor>
-                </Table.Td>
-                <Table.Td>
-                  <Select
-                    data={['pending', 'accepted', 'rejected']}
-                    defaultValue={application.status}
-                    w={140}
-                    onChange={(e) => {
-                      handleStatus(e, application.id, application.candidate.name);
-                    }}
-                    disabled={statusLoading == application.id}
-                  />
-                </Table.Td>
-                <Table.Td>{formatDate(application.created_at)}</Table.Td>
               </Table.Tr>
-            )):
-            <Table.Tr>
-              <Table.Td colSpan={5} rowSpan={2}>
-                <Group justify='center' fw={'bold'}>You havn't received any applications for this job.</Group>
-              </Table.Td>
-            </Table.Tr>
-            
-            }
-         
+            ) : applications.length > 0 ? (
+              applications.map((application, i) => (
+                <Table.Tr key={i}>
+                  <Table.Td>{application.candidate.name}</Table.Td>
+                  <Table.Td>
+                    <Anchor
+                      href={import.meta.env.VITE_BASE_URL + '/storage/' + application.resume}
+                      download='downloaded_resume.pdf'
+                    >
+                      Resume
+                    </Anchor>
+                  </Table.Td>
+                  <Table.Td>
+                    <Anchor
+                      onClick={() => {
+                        handleDownload(application.cover_letter);
+                      }}
+                    >
+                      Cover-Letter
+                    </Anchor>
+                  </Table.Td>
+                  <Table.Td>
+                    <Select
+                      data={['pending', 'accepted', 'rejected']}
+                      defaultValue={application.status}
+                      w={140}
+                      onChange={(e) => {
+                        handleStatus(e, application.id, application.candidate.name);
+                      }}
+                      disabled={statusLoading == application.id}
+                    />
+                  </Table.Td>
+                  <Table.Td>{formatDate(application.created_at)}</Table.Td>
+                </Table.Tr>
+              ))
+            ) : (
+              <Table.Tr>
+                <Table.Td colSpan={5} rowSpan={2}>
+                  <Group justify='center' fw={'bold'}>
+                    You havn't received any applications for this job.
+                  </Group>
+                </Table.Td>
+              </Table.Tr>
+            )}
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>

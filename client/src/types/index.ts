@@ -19,3 +19,26 @@ export type JobProps = {
   applicants: number;
   created: string;
 };
+
+export interface NotificationData {
+  id: string;
+  title: string;
+  body: string;
+  color: string; // 'red', 'green', 'blue', etc.
+  timestamp: Date;
+}
+
+export interface TRegisterError {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+}
+
+declare global {
+  interface Window {
+    Pusher: any;
+    Echo: any;
+  }
+}

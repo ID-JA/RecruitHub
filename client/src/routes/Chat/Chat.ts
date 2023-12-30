@@ -4,7 +4,7 @@ import Echo from 'laravel-echo';
 
 export const Home = () => {
   window.Pusher = Pusher;
-  Echo.logToConsole = true;
+  // Echo.logToConsole = true;
   window.Echo = new Echo({
     broadcaster: '///',
     key: '///',
