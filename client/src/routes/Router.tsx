@@ -17,6 +17,7 @@ import { resetPasswordRoute } from './auth/reset-password';
 import { profileRoute } from './profile/profile';
 import { SearchjobRoute } from './SearchPage/Searchjob';
 import { jobsBoardRoute } from './job-board/jobs-board';
+import { ApplyJobRoute } from './Apply-job/ApplyJob';
 
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
@@ -38,7 +39,8 @@ const routeTree = rootRoute.addChildren([
     resetPasswordRoute,
     profileRoute,
     SearchjobRoute,
-    jobsBoardRoute
+    jobsBoardRoute,
+    ApplyJobRoute
   ])
 ]);
 
