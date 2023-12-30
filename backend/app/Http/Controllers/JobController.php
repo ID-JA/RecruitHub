@@ -88,4 +88,38 @@ class JobController extends Controller
        
     }
 
+    public function getTotalApplicants(Request $request, $jobId)
+    {
+        $user = auth()->user();
+        $job = $user->jobs()->find($jobId);
+
+        if (!$job) {
+            return response()->json(['message' => 'Job not found'], 404);
+        }
+
+        $totalApplicants = $job->applications()->count();
+
+        return response()->json(['total_applicants' => $totalApplicants]);
+    }   
+
+    public function updateJobStatus(Request $request, $jobId)
+    {
+        $user = Auth::user();
+
+        $job = $user->jobs()->find($jobId);
+
+        if (!$job) {
+            return response()->json(['message' => 'Job not found or you do not have permission to update this job'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'status' => 'required|in:active,pending,closed,draft,archive',
+        ]);
+
+        $job->status = $validatedData['status'];
+        $job->save();
+
+        return response()->json(['message' => 'Job status updated successfully']);
+    }
+
 }
