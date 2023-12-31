@@ -13,13 +13,14 @@ import {
   TextInput,
   Stack
 } from '@mantine/core';
-import { Link, Route, useParams } from '@tanstack/react-router';
+import { Link, Route, useNavigate, useParams } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import { IconFileCv } from '@tabler/icons-react';
 import { DateTimePicker } from '@mantine/dates';
 import { useMutation } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 const initialValues = {
   firstName: '',
@@ -45,6 +46,7 @@ export function ApplyJob() {
   // const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
   const icon = <IconFileCv style={{ width: rem(18), height: rem(18) }} stroke={1.5} />;
   const { jobId } = useParams({ strict: false });
+  const navigate = useNavigate();
   const mutation = useMutation({
     mutationKey: ['apply-for-job'],
     mutationFn: async (data: TApplicantData) => {
@@ -71,10 +73,23 @@ export function ApplyJob() {
       return response.data;
     },
     onSuccess(result) {
-      console.log('🚀 ~ file: ApplyJob.tsx:34 ~ onSuccess ~ result:', result);
+      navigate({
+        to: '/jobs-board',
+        hash: 'applied',
+        replace: true
+      });
+      notifications.show({
+        title: 'Success',
+        message: 'Your application registered with success',
+        color: 'green'
+      });
     },
     onError(error) {
-      console.log('🚀 ~ file: ApplyJob.tsx:38 ~ onError ~ error:', error);
+      notifications.show({
+        title: 'Error',
+        message: 'Something went wrong',
+        color: 'red'
+      });
     }
   });
 
@@ -93,7 +108,6 @@ export function ApplyJob() {
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
   const handleSubmit = () => {
-    console.log('🚀 ~ file: ApplyJob.tsx:47 ~ handleSubmit ~ values:', form.values);
     mutation.mutate(form.values);
   };
   return (
