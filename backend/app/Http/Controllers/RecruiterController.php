@@ -12,12 +12,29 @@ use Illuminate\Support\Facades\Hash;
 
 class RecruiterController extends Controller
 {
+    public function index(){
+        $jobs=auth()->user()->jobs;
+        foreach($jobs as $job){
+            foreach($job->applications as $application){
+                $application->candidate->profile;
+                $application->meeting;
+            }
+        }
+        return response()->json([
+            "statistique"=>$jobs,
+        ]);
+    }
     public function receivedApplications($jobId)
     {
         $job = Auth::user()->jobs()->findOrFail($jobId);
         $job->applications;
         foreach($job->applications as $application){
-            $application->candidate->profile;
+            $application->candidate->profile; 
+            $application->candidate->chats;
+            // foreach($chats as $chat){
+            //     $chat->pivot;
+            // }
+            
         }
         return response()->json([
             "applications"=>$job,
@@ -59,7 +76,7 @@ class RecruiterController extends Controller
             $application->update(['status' => $status]);
             $data['body']="Your application for offer '$job->title' was rejected 😐!";
         }
-        // $candidate->notify(new Notifications($data));
+        $candidate->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"applications was updated successfully",
