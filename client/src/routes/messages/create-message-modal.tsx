@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import {
   Flex,
   Button,
@@ -15,51 +15,22 @@ import { useMutation } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
 import BaseModal from '../../components/shared/modal/base-modal';
 import { notifications } from '@mantine/notifications';
+import { TMessageData } from '../../types';
 
 const schema = z.object({ 
-  password: z.string(),
-  application_id: z.string(),
-  date: z.date(),
-  duration: z.number()
+  message: z.string(),
+  receiver_id: z.number(),
+
 });
 
-export default function CreateMessageModal({id,chat}) {
-  console.log(id)
-  console.log(chat)
-  const [createotherinterview, setCreateOtherInterview] = useState<boolean>(false);
+export default function CreateMessageModal({receiverId}) {
+
+  const [sendothermessage, setSendOtherMessage] = useState<boolean>(false);
   const [opened, { open, close }] = useDisclosure();
-  const [applications, setApplications] = useState([]);
-  const [dataApp, setDataApp] = useState([]);
-  console.log(dataApp)
-  useEffect(() => {
-    axiosInstance
-      .get(`/recruiter/accepted-applications`)
-      .then((response) => {
-        console.log(response.data.applications);
-        if (response.data.applications) {
-          setApplications(response.data.applications);
-        }
-      })
-      .catch(() => {
-        alert('Something went wrong');
-      });
-  }, []);
-
-  useEffect(() => {
-    if (applications.length > 0) {
-      const newdata = applications.map((application) => ({
-        value: application.id.toString(),
-        label: application.candidate.name
-      }));
-      setDataApp(newdata);
-    }
-  }, [applications]);
-
+  
   const mutation = useMutation({
-    mutationFn: async (data: TInterviewData) => {
-      console.log(data);
+    mutationFn: async (data: TMessageData) => {
       const response = await axiosInstance.post('/chats/messages/send', data);
-    
       return response.data;
     },
     onSuccess: () => {
@@ -68,33 +39,34 @@ export default function CreateMessageModal({id,chat}) {
         message: 'Message was sent successfully',
         color: 'green'
       });
-      if (!createotherinterview) {
+      if (!sendothermessage) {
         close();
       }
-      form.reset();
+      form.setFieldValue('message','');
     },
     onError: (error) => {
       console.log(
-        '🚀 ~ file: create-interview-modal.tsx:81 ~ CreateInterviewModal ~ error:',
+        '🚀 ~ file: create-message-modal.tsx:62 ~ CreateMessageModal ~ error:',
         error
       );
     }
   });
-  const form = useForm<TInterviewData>({
+  
+  const form = useForm<TMessageData>({
     validate: zodResolver(schema),
     initialValues: {
       message: '',
-      receiver_id: null,
-      chat_id: null,
+      receiver_id: receiverId,
     }
   });
+
 
   const Actions = (
     <Flex justify='space-between' align='center' direction='row' px='md' py='lg'>
       <Checkbox
         label='Send another message'
-        value={createotherinterview}
-        onChange={(event) => setCreateOtherInterview(event.currentTarget.checked)}
+        value={sendothermessage}
+        onChange={(event) => setSendOtherMessage(event.currentTarget.checked)}
       />
       <Flex justify='flex-end' gap='md'>
         <Button onClick={close} variant='transparent' loading={mutation.isPending}>
@@ -132,20 +104,15 @@ export default function CreateMessageModal({id,chat}) {
           </Text>
           <Stack mt='lg' px='xl'>
             <Textarea
+              h={'100%'}
               label='Message'
               placeholder='Enter Message'
               withAsterisk
               {...form.getInputProps('message')}
               autosize
-              minRows={5}
-              // maxRows={}
+              minRows={10}
             />
-            {/* <TextInput
-                  label='Message'
-                  placeholder='Enter Message'
-                  withAsterisk
-                  {...form.getInputProps('message')}
-                /> */}
+           
           </Stack>
         </form>
       </BaseModal>

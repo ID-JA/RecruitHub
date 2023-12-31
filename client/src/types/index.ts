@@ -46,6 +46,10 @@ export interface TSettingData {
   location: string,
   zip: string,
 }
+export interface TMessageData {
+  message: string,
+  receiver_id: number,
+}
 
 declare global {
   interface Window {

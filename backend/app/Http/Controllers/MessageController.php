@@ -12,7 +12,13 @@ class MessageController extends Controller
     public function send(Request $request)
     {
         
-        $chat = Chat::find($request->chat_id);
+        // $chat = Chat::find($request->chat_id);
+        $participantIds=[auth()->user()->id,$request->receiver_id];
+        $chat = Chat::where(function ($query) use ($participantIds) {
+            foreach ($participantIds as $participantId) {
+                $query->whereJsonContains('participants', $participantId);
+            }
+        })->first();
 
         if (!$chat) {
             $chat = Chat::create([
@@ -27,9 +33,11 @@ class MessageController extends Controller
             'message' => $request->message
         ]);
 
-        // broadcast(new MessageSent($message));
+        broadcast(new MessageSent($message));
 
-        return response()->json(['status' => 'Message sent successfully']);
+        return response()->json([
+            'status' => 'Message sent successfully',
+        ]);
     }
 
     public function markMessageAsRead(Request $request,$id)
