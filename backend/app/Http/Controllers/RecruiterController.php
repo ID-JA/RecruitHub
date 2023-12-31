@@ -12,16 +12,35 @@ use Illuminate\Support\Facades\Hash;
 
 class RecruiterController extends Controller
 {
-    public function index(){
-        $jobs=auth()->user()->jobs;
-        foreach($jobs as $job){
-            foreach($job->applications as $application){
-                $application->candidate->profile;
-                $application->meeting;
+    public function index()
+    {
+        $jobs = auth()->user()->jobs;
+
+        $totalPendingJobs = 0;
+        $totalActiveJobs = 0;
+        $totalApplicationsJobs = 0;
+        $totalInterviews = 0;
+
+        foreach ($jobs as $job) {
+            if ($job->status == 'pending') {
+                $totalPendingJobs++;
+            } elseif ($job->status == 'active') {
+                $totalActiveJobs++;
+            }
+            $totalApplicationsJobs += count($job->applications);
+
+            foreach ($job->applications as $application) {
+                if ($application->meeting) {
+                    $totalInterviews++;
+                }
             }
         }
+
         return response()->json([
-            "statistique"=>$jobs,
+            "total_pending_jobs" => $totalPendingJobs,
+            "total_active_jobs" => $totalActiveJobs,
+            "total_applications_jobs" => $totalApplicationsJobs,
+            "total_interviews" => $totalInterviews,
         ]);
     }
     public function receivedApplications($jobId)
