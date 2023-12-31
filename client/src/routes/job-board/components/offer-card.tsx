@@ -1,66 +1,61 @@
-import { Grid, ActionIcon, Text, Paper, Box } from '@mantine/core';
+import { Grid, ActionIcon, Text, Paper, Box, Skeleton, Group, Stack } from '@mantine/core';
 import { IconBookmark, IconDeviceLaptop } from '@tabler/icons-react';
 
 export interface JobCardProps {
   offer: JobData;
-  onClick: (id: number) => void;
+  onSelect: (item: JobData) => void;
 }
 
 export interface JobData {
   id: number;
   title: string;
-  jobDescription: string;
-  postedDate: string;
-  jobType: string;
-  companyName: string;
-  aboutCompany: string;
-  companyLogo: string;
+  description: string;
+  company_name: string;
+  requirements: string[];
   location: string;
-  category: string;
-  salaryCurrency: string;
   salary: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  company_id: number;
+  user_id: number;
+  employmentType: string;
+  showSalary: number;
+  salaryCurrency: string;
+  salaryTime: string;
+  category: string[];
+  motivation: string;
+  aboutCompany: string;
+  howToApply: string;
 }
 
-export function JobOfferCard({ onClick, offer }: JobCardProps): JSX.Element {
+export function JobOfferCard({ onSelect, offer }: JobCardProps): JSX.Element {
   //  const isSelected: boolean = id === 0;
-  const { id, companyLogo, companyName, title, location, jobType } = offer;
+  const { id, company_name, title, location, employmentType } = offer;
   return (
     <Paper
       withBorder
       p='md'
       style={{
-        cursor: 'pointer'
+        cursor: 'pointer',
+        position: 'relative'
       }}
-      onClick={() => onClick(id)}
+      onClick={() => onSelect(offer)}
     >
+      <ActionIcon
+        variant='transparent'
+        aria-label='Save'
+        color='#53A8E6'
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px'
+        }}
+      >
+        <IconBookmark style={{ width: '80%', height: '80%' }} stroke={2} />
+      </ActionIcon>
+
       <Grid>
-        {/* Left Column: Image */}
-        <Grid.Col
-          span={3}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          {companyLogo ? (
-            <img
-              src={companyLogo}
-              alt={`${companyName} logo`}
-              style={{ width: '42px', height: '42px', borderRadius: '50%' }}
-            />
-          ) : (
-            <div
-              style={{
-                width: '50%',
-                height: '50%',
-                backgroundColor: '#ddd',
-                borderRadius: '50%'
-              }}
-            />
-          )}
-        </Grid.Col>
-        {/* Right Column: Text */}
         <Grid.Col span={9}>
           <Box>
             <div style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}>
@@ -85,21 +80,9 @@ export function JobOfferCard({ onClick, offer }: JobCardProps): JSX.Element {
                   {title}
                 </Text>
               </div>
-              <div
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center'
-                }}
-              >
-                <ActionIcon variant='transparent' aria-label='Save' color='#53A8E6'>
-                  <IconBookmark style={{ width: '80%', height: '80%' }} stroke={2} />
-                </ActionIcon>{' '}
-              </div>
             </div>
             <Text style={{ color: '#47494B', marginBottom: '2px', marginLeft: '14px' }}>
-              {companyName}
+              {company_name}
             </Text>
             <Text size='sm' style={{ color: '#47494B', marginBottom: '2px', marginLeft: '14px' }}>
               {location}
@@ -111,7 +94,7 @@ export function JobOfferCard({ onClick, offer }: JobCardProps): JSX.Element {
               }}
             >
               <IconDeviceLaptop size={20} style={{ color: '#76797C', marginLeft: '18px' }} />
-              <Text style={{ color: '#76797C', marginLeft: '6px' }}>{jobType}</Text>
+              <Text style={{ color: '#76797C', marginLeft: '6px' }}>{employmentType}</Text>
             </div>
           </Box>
         </Grid.Col>
@@ -119,3 +102,18 @@ export function JobOfferCard({ onClick, offer }: JobCardProps): JSX.Element {
     </Paper>
   );
 }
+
+export const OfferCardPlaceholder = () => {
+  return (
+    <Paper withBorder p='md'>
+      <Group grow>
+        <Skeleton height={64} maw={64} width={64} />
+        <Stack>
+          <Skeleton height={10} width='60%' />
+          <Skeleton height={10} />
+          <Skeleton height={10} />
+        </Stack>
+      </Group>
+    </Paper>
+  );
+};
