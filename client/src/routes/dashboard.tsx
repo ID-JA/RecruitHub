@@ -6,7 +6,6 @@ import { axiosInstance } from '../utils';
 import { Grid, Paper, Text, Title } from '@mantine/core';
 import { Container } from '@mantine/core';
 
-
 function Dashboard() {
   const { user } = useAuthStore();
   const query = useQuery({
