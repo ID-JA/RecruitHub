@@ -7,6 +7,7 @@ import {
 } from '@tabler/icons-react';
 import { JobData } from './offer-card';
 import { IconCurrencyDollar } from '@tabler/icons-react';
+import { Link } from '@tanstack/react-router';
 
 export function JobOfferPreviewCard({ selectedOffer }: { selectedOffer: JobData | undefined }) {
   return selectedOffer ? (
@@ -70,16 +71,23 @@ export function JobOfferPreviewCard({ selectedOffer }: { selectedOffer: JobData 
               <Text c='gray'>{selectedOffer.company_name}</Text>
             </div>
           </Stack>
-          <Button
-            my='md'
-            radius='sm'
-            variant='gradient'
-            gradient={{ from: 'blue', to: '#8FBBE7', deg: 90 }}
-            type='submit'
-            size='sm'
+          <Link
+            to='/apply-job/$jobId'
+            params={{
+              jobId: selectedOffer.id.toString()
+            }}
           >
-            Apply now
-          </Button>
+            <Button
+              my='md'
+              radius='sm'
+              variant='gradient'
+              gradient={{ from: 'blue', to: '#8FBBE7', deg: 90 }}
+              type='submit'
+              size='sm'
+            >
+              Apply now
+            </Button>
+          </Link>
 
           {selectedOffer?.motivation && <Alert title='Why us'>{selectedOffer?.motivation}</Alert>}
           <div

@@ -1,31 +1,36 @@
-import { Route } from '@tanstack/react-router';
+import { Route, useNavigate, useRouter, useRouterState } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
+  Badge,
   Box,
   Button,
   CloseButton,
-  Combobox,
   Container,
+  Flex,
   Grid,
   Group,
   Input,
-  InputBase,
+  Paper,
+  Skeleton,
   Stack,
-  Tabs
+  Tabs,
+  Text,
+  Title
 } from '@mantine/core';
-import { TextInput, ActionIcon, rem } from '@mantine/core';
-import { IconSearch, IconArrowRight, IconCurrentLocation } from '@tabler/icons-react';
-import { jobData } from './components/jobData';
+import { IconSearch, IconCurrentLocation } from '@tabler/icons-react';
 import { JobOfferPreviewCard } from './components/preview-card';
 import { JobData, JobOfferCard, OfferCardPlaceholder } from './components/offer-card';
 import { useAuthStore } from '../../store';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
 import { useState } from 'react';
+import { notifications } from '@mantine/notifications';
+import { IconArchiveOff } from '@tabler/icons-react';
 
 const stickHederHeight = 64;
 
 export function JobBoard() {
+  const routerState = useRouterState();
   const [selectedItem, setSelectedItem] = useState<JobData | undefined>();
   const [filterOptions, setFilterOptions] = useState({
     location: '',
@@ -34,6 +39,7 @@ export function JobBoard() {
   const handleJobCardClick = (item: JobData) => {
     setSelectedItem(item);
   };
+  const navigate = useNavigate();
 
   const queryJobs = useQuery({
     queryKey: ['jobs-ads', filterOptions],
@@ -50,7 +56,7 @@ export function JobBoard() {
   ));
 
   const jobCardSkelton = Array.from({ length: 5 }).map((_, i) => <OfferCardPlaceholder key={i} />);
-  const { isLoggedIn, isFetchingUser } = useAuthStore();
+  const { isLoggedIn } = useAuthStore();
 
   // dynamic handleChange
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +96,7 @@ export function JobBoard() {
           Search
         </Button>
       </Group>
+
       <Box
         style={{
           position: 'sticky',
@@ -101,12 +108,20 @@ export function JobBoard() {
         bg='#F8F9FA'
         p='md'
       >
-        <Tabs defaultValue='latest'>
+        <Tabs
+          defaultValue='latest'
+          value={routerState.location.hash}
+          onChange={(value) => {
+            navigate({
+              to: '/jobs-board',
+              hash: value!
+            });
+          }}
+        >
           <Tabs.List justify='center'>
             <Tabs.Tab value='latest'>Latest</Tabs.Tab>
             {isLoggedIn && (
               <>
-                <Tabs.Tab value='for-you'>For you</Tabs.Tab>
                 <Tabs.Tab value='applied'>Applied</Tabs.Tab>
                 <Tabs.Tab value='saved'>Saved</Tabs.Tab>
               </>
@@ -115,34 +130,37 @@ export function JobBoard() {
         </Tabs>
       </Box>
       <Container size='xl'>
-        <Grid>
-          <Grid.Col
-            span={{
-              md: 4,
-              xs: 12
-            }}
-          >
-            <Stack gap='md'>
-              {queryJobs.isFetching ? (
-                jobCardSkelton
-              ) : queryJobs.data.length === 0 ? (
-                <div>No offers</div>
-              ) : (
-                jobList
-              )}
-            </Stack>
-          </Grid.Col>
-          <Grid.Col span={8} visibleFrom='md'>
-            <div
-              style={{
-                position: 'sticky',
-                top: `${stickHederHeight + 30}px`
+        {routerState.location.hash === 'latest' && (
+          <Grid>
+            <Grid.Col
+              span={{
+                md: 4,
+                xs: 12
               }}
             >
-              <JobOfferPreviewCard selectedOffer={selectedItem} />
-            </div>
-          </Grid.Col>
-        </Grid>
+              <Stack gap='md'>
+                {queryJobs.isFetching ? (
+                  jobCardSkelton
+                ) : queryJobs.data.length === 0 ? (
+                  <div>No offers</div>
+                ) : (
+                  jobList
+                )}
+              </Stack>
+            </Grid.Col>
+            <Grid.Col span={8} visibleFrom='md'>
+              <div
+                style={{
+                  position: 'sticky',
+                  top: `${stickHederHeight + 30}px`
+                }}
+              >
+                <JobOfferPreviewCard selectedOffer={selectedItem} />
+              </div>
+            </Grid.Col>
+          </Grid>
+        )}
+        {routerState.location.hash === 'applied' && <AppliedJobs />}
       </Container>
     </Container>
   );
@@ -153,3 +171,78 @@ export const jobsBoardRoute = new Route({
   component: JobBoard,
   getParentRoute: () => defaultLayoutRoute
 });
+
+const AppliedJobs = () => {
+  const queryAppliedJob = useQuery({
+    queryKey: ['applied-jobs'],
+    queryFn: async () => {
+      const response = await axiosInstance.get('/candidate/applied-jobs');
+      return response.data;
+    }
+  });
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: ['cancel-application'],
+    mutationFn: async (id) => {
+      await axiosInstance.delete(`/candidate/cancel-application/${id}`);
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ['applied-jobs']
+      });
+
+      notifications.show({
+        title: 'Success',
+        message: 'You canceled your application'
+      });
+    }
+  });
+
+  const applications = queryAppliedJob.data?.applications.map((item) => {
+    return (
+      <Paper withBorder p='lg' key={item.id}>
+        <Group align='center' justify='space-between'>
+          <Title size='h4'>{item.job_title}</Title>
+          <Badge variant='outline'>{item.status}</Badge>
+          <Text>{new Date(item.created_at).toLocaleDateString()}</Text>
+          <Button
+            disabled={item.status !== 'pending'}
+            color='red'
+            onClick={() => mutation.mutate(item.id)}
+            loading={mutation.isPending}
+          >
+            Cancel
+          </Button>
+        </Group>
+      </Paper>
+    );
+  });
+  return (
+    <Container>
+      <Stack>
+        {queryAppliedJob.isFetching ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Paper withBorder key={i} p='lg'>
+              <Group align='center' justify='space-between'>
+                <Skeleton height={10} width='20%' />
+                <Skeleton height={10} width='20%' />
+                <Skeleton height={10} width='20%' />
+                <Skeleton height={10} width='20%' />
+              </Group>
+            </Paper>
+          ))
+        ) : queryAppliedJob.data?.applications.length ? (
+          applications
+        ) : (
+          <Flex align='center' justify='center' h='200'>
+            <Stack align='center'>
+              <IconArchiveOff style={{ margin: 'auto' }} />
+              <Title size='h3'>You didn't applied for job</Title>
+            </Stack>
+          </Flex>
+        )}
+      </Stack>
+    </Container>
+  );
+};

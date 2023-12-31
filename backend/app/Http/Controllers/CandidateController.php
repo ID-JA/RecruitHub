@@ -12,9 +12,15 @@ class CandidateController extends Controller
 {
     public function appliedJobs()
     {
-        $applications = Auth::user()->applications;
+        $joinedDetails = Application::join('jobs', 'applications.job_id', '=', 'jobs.id')
+        ->where('applications.applicant_id', '=', Auth::user()->id)
+        ->select('applications.*', 'jobs.id as job_id', 'jobs.title as job_title')
+        ->get();
+    
+        
+    
         return response()->json([
-            'applications'=>$applications,
+            'applications' => $joinedDetails,
         ]);
     }
     public function applicationDetails($applicationId)
@@ -45,7 +51,7 @@ class CandidateController extends Controller
             'title'=>'Someone just applied for your offer ✨',
             'body'=>"$user->name has applied for your offer '$job->title' 😎"
         ];
-        $recruiter->notify(new Notifications($data));
+        // $recruiter->notify(new Notifications($data));
 
         return response()->json([
             'success'=>'Application was added successfully',
@@ -54,22 +60,28 @@ class CandidateController extends Controller
 
     public function cancelApplication(Request $request, $applicationId)
     {
-        $user=Auth::user();
-        $application = $user->applications()->findOrFail($applicationId);
-        $resumePath = $application->resume;
+        $user = Auth::user();
+        $application = $user->applications()->find($applicationId);
+    
+        if (!$application) {
+            return response()->json([
+                'error' => "Application with ID $applicationId not found",
+            ], 404);
+        }
+            $resumePath = $application->resume;
 
         if (file_exists(public_path('storage/' . $resumePath))) {
             unlink(public_path('storage/' . $resumePath));
         }
         $application->delete();
         $job=$application->job;
-        $recruiter=$application->job->recruiter;
-        $data=[
-            'id'=>$recruiter->id,
-            'title'=>'Someone just cancelled for your offer',
-            'body'=>"$user->name has cancelled his application for your offer '$job->title' 😐"
-        ];
-        $recruiter->notify(new Notifications($data));
+        // $recruiter=$application->job->recruiter;
+        // $data=[
+        //     'id'=>$recruiter->id,
+        //     'title'=>'Someone just cancelled for your offer',
+        //     'body'=>"$user->name has cancelled his application for your offer '$job->title' 😐"
+        // ];
+        // $recruiter->notify(new Notifications($data));
 
         return response()->json([
             'success'=>"Application was deleted successfully",
