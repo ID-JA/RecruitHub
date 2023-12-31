@@ -88,8 +88,8 @@ function Candidates() {
           <Table.Tbody>
             {applicationsLoading ? (
               <Table.Tr>
-                <Table.Td colSpan={5} rowSpan={3}>
-                  <Group justify='center'>
+                <Table.Td colSpan={6} rowSpan={3}>
+                  <Group justify='center' my={'lg'}>
                     <Loader color='blue' size='lg' type='dots' />
                   </Group>
                 </Table.Td>
@@ -128,16 +128,15 @@ function Candidates() {
                   </Table.Td>
                   <Table.Td>{formatDate(application.created_at)}</Table.Td>
                   <Table.Td>
-                    {console.log(application)}
-                    <CreateMessageModal id={application.candidate.id} chat={application.candidate.chats}/>
+                    <CreateMessageModal receiverId={application.candidate.id} />
                   </Table.Td>
 
                 </Table.Tr>
               ))
             ) : (
               <Table.Tr>
-                <Table.Td colSpan={5} rowSpan={2}>
-                  <Group justify='center' fw={'bold'}>
+                <Table.Td colSpan={6} rowSpan={2}>
+                  <Group justify='center' my={'lg'} fw={'bold'}>
                     You havn't received any applications for this job.
                   </Group>
                 </Table.Td>
