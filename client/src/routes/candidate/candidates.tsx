@@ -1,4 +1,4 @@
-import { Route } from '@tanstack/react-router';
+import { Route, useParams } from '@tanstack/react-router';
 import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { Anchor, Group, Loader, Select, Table } from '@mantine/core';
 import { axiosInstance } from '../../utils';
@@ -26,12 +26,12 @@ function Candidates() {
   const [applicationsLoading, setApplicationsLoading] = useState(true);
   // const [hoveredUserId, setHoveredUserId] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
-  // const {applicationId}=useParams()
+  const { jobId } = useParams({ strict: false });
 
   useEffect(() => {
     //replace that number 2 with applicationId
     axiosInstance
-      .get(`/recruiter/received-applications/${2}`)
+      .get(`/recruiter/received-applications/${jobId}`)
       .then((response) => {
         if (response.data.applications) {
           setApplications(response.data.applications.applications);
@@ -142,6 +142,6 @@ function Candidates() {
 
 export const candidatesRoute = new Route({
   component: Candidates,
-  path: 'candidates',
+  path: 'candidates/$jobId',
   getParentRoute: () => portalLayoutRoute
 });

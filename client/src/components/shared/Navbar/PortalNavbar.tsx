@@ -3,8 +3,7 @@ import {
   IconFileDescription,
   IconLayoutDashboard,
   IconMessage,
-  IconSettings,
-  IconUsers
+  IconSettings
 } from '@tabler/icons-react';
 import classes from './PortalNavbar.module.css';
 import { Link } from '@tanstack/react-router';
@@ -12,7 +11,6 @@ import { Link } from '@tanstack/react-router';
 const menuItems = [
   { path: '/portal', label: 'Dashboard', icon: IconLayoutDashboard },
   { path: '/portal/jobs', label: 'Jobs', icon: IconFileDescription },
-  { path: '/portal/candidates', label: 'Candidates', icon: IconUsers },
   { path: '/portal/interviews', label: 'Interviews', icon: IconBrandZoom },
   { path: '/portal/messages', label: 'Messages', icon: IconMessage },
   { path: '/portal/settings', label: 'Settings', icon: IconSettings }
