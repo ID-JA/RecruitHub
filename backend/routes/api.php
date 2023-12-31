@@ -79,6 +79,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('recruiter')->group(function () {
             Route::get('/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
         Route::get('/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
+        Route::get('/', [RecruiterController::class, 'index']);
         Route::post('/update-application/{applicationId}', [RecruiterController::class, 'updateStatusApplication']);
         Route::get('/accepted-applications', [RecruiterController::class, 'acceptedApplications']);
         Route::post('/update-profile', [RecruiterController::class, 'updateProfile']);

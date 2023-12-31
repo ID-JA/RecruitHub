@@ -11,7 +11,10 @@ class Chat extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name']; 
+    protected $fillable = ['participants']; 
+    protected $casts = [
+        'participants' => 'json',
+    ];
 
     public function users()
     {

@@ -1,11 +1,12 @@
 import { Route, useParams } from '@tanstack/react-router';
 import { portalLayoutRoute } from '../../layouts/portal-layout';
-import { Anchor, Group, Loader, Select, Table } from '@mantine/core';
+import { Anchor,  Group, Loader, Select, Table } from '@mantine/core';
 import { axiosInstance } from '../../utils';
 import { Fragment, useEffect, useState } from 'react';
 import { formatDate } from '../../utils/formatDate';
 // import { Avatar, Text, Button, Paper } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import CreateMessageModal from '../messages/create-message-modal';
 
 interface Candidate {
   name: string;
@@ -29,17 +30,21 @@ function Candidates() {
   const { jobId } = useParams({ strict: false });
 
   useEffect(() => {
-    //replace that number 2 with applicationId
     axiosInstance
       .get(`/recruiter/received-applications/${jobId}`)
+
       .then((response) => {
         if (response.data.applications) {
           setApplications(response.data.applications.applications);
           setApplicationsLoading(false);
         }
       })
-      .catch(() => {
-        alert('something went wrong');
+      .catch((error) => {
+        console.log(error)
+        notifications.show({
+          message:"Something went wrong coulnd't find the candidate, try later!",
+          color: 'red'
+        });
         setApplicationsLoading(false);
       });
   }, []);
@@ -77,7 +82,7 @@ function Candidates() {
               <Table.Th>Cover-Letter</Table.Th>
               <Table.Th>Status</Table.Th>
               <Table.Th>Applied-At</Table.Th>
-              {/* <Table.Th>Profile</Table.Th> */}
+              <Table.Th>Send message</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -122,6 +127,11 @@ function Candidates() {
                     />
                   </Table.Td>
                   <Table.Td>{formatDate(application.created_at)}</Table.Td>
+                  <Table.Td>
+                    {console.log(application)}
+                    <CreateMessageModal id={application.candidate.id} chat={application.candidate.chats}/>
+                  </Table.Td>
+
                 </Table.Tr>
               ))
             ) : (

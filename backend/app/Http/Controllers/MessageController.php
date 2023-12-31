@@ -11,11 +11,12 @@ class MessageController extends Controller
 {
     public function send(Request $request)
     {
+        
         $chat = Chat::find($request->chat_id);
 
         if (!$chat) {
             $chat = Chat::create([
-                'name' => "chat_{$request->receiver_id}_" . auth()->user()->id,
+                'participants' => [$request->receiver_id, auth()->user()->id]
             ]);
             $chat->users()->attach([auth()->user()->id, $request->receiver_id]);
         }
@@ -26,7 +27,7 @@ class MessageController extends Controller
             'message' => $request->message
         ]);
 
-        broadcast(new MessageSent($message));
+        // broadcast(new MessageSent($message));
 
         return response()->json(['status' => 'Message sent successfully']);
     }
