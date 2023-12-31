@@ -6,7 +6,7 @@ import { portalLayoutRoute } from '../layouts/portal-layout';
 import { dashboardRoute } from './dashboard';
 import { messagesRoute } from './messages/messages';
 import { candidatesRoute } from './candidate/candidates';
-import { settingsRoute } from './settings';
+import { settingsRoute } from './settings/settings';
 import { interviewsRoute } from './interview/interviews';
 import { loginRoute } from './auth/login';
 import { signUpRoute } from './auth/singup';

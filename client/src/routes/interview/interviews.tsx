@@ -63,7 +63,7 @@ function Interviews() {
     <Fragment>
       <Group justify='space-between' my={'md'}>
         <h1>Interviews</h1>
-        <CreateInterviewModal setInterviews={setInterviews} />
+        <CreateInterviewModal />
       </Group>
       <Table.ScrollContainer minWidth={500}>
         <Table withTableBorder withColumnBorders style={{ textAlign: 'center' }}>

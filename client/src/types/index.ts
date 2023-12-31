@@ -35,6 +35,17 @@ export interface TRegisterError {
     };
   };
 }
+export interface TSettingData {
+  password: string,
+  name: string,
+  email: string,
+  // experience: Array,
+  website: string,
+  industry: string,
+  about: string,
+  location: string,
+  zip: string,
+}
 
 declare global {
   interface Window {

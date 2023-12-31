@@ -11,11 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable; use SoftDeletes;
+
 
     public function companies()
     {
@@ -33,6 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
     ];
 
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The methods of the user model

@@ -19,7 +19,7 @@ import BaseModal from '../../components/shared/modal/base-modal';
 import { notifications } from '@mantine/notifications';
 import { DateInput } from '@mantine/dates';
 
-const schema = z.object({
+const schema = z.object({ 
   password: z.string(),
   application_id: z.string(),
   date: z.date(),
@@ -78,7 +78,7 @@ export default function CreateInterviewModal() {
     },
     onError: (error) => {
       console.log(
-        '🚀 ~ file: create-interview-modal.tsx:85 ~ CreateInterviewModal ~ error:',
+        '🚀 ~ file: create-interview-modal.tsx:81 ~ CreateInterviewModal ~ error:',
         error
       );
     }
