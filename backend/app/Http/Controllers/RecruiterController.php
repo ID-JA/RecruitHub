@@ -18,6 +18,7 @@ class RecruiterController extends Controller
 
         $totalPendingJobs = 0;
         $totalActiveJobs = 0;
+        $totalClosedJobs = 0;
         $totalApplicationsJobs = 0;
         $totalInterviews = 0;
 
@@ -26,6 +27,8 @@ class RecruiterController extends Controller
                 $totalPendingJobs++;
             } elseif ($job->status == 'active') {
                 $totalActiveJobs++;
+            } elseif ($job->status == 'closed') {
+                $totalClosedJobs++;
             }
             $totalApplicationsJobs += count($job->applications);
 
@@ -38,6 +41,7 @@ class RecruiterController extends Controller
 
         return response()->json([
             "total_pending_jobs" => $totalPendingJobs,
+            "total_closed_jobs" => $totalClosedJobs,
             "total_active_jobs" => $totalActiveJobs,
             "total_candidate_jobs" => $totalApplicationsJobs,
             "total_interviews" => $totalInterviews,

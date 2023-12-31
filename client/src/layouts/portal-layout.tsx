@@ -1,4 +1,4 @@
-import { Link, Outlet, Route, redirect } from '@tanstack/react-router';
+import { Link, Outlet, Route, redirect, useNavigate } from '@tanstack/react-router';
 import { PortalNavbar } from '../components/shared/Navbar/PortalNavbar';
 import { rootRoute } from '../routes/Router';
 
@@ -6,11 +6,12 @@ import { useDisclosure } from '@mantine/hooks';
 import { ActionIcon, AppShell, Box, Container, Group } from '@mantine/core';
 import { RecruitHubLogo } from '../components/shared/logo/logo';
 import { IconCaretLeft, IconCaretRight } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { axiosInstance } from '../utils';
 import { useAuthStore } from '../store';
 import { useEffect } from 'react';
 import UserToolbar from '../components/shared/user-toolbar';
+import { queryClient } from '../App';
 
 export const useCurrentUser = () => {
   const { setUser, logout, isLoggedIn, user, toggleUserFetching } = useAuthStore();
@@ -39,9 +40,38 @@ export const useCurrentUser = () => {
   };
 };
 
+const fetchUser = async () => {
+  const response = await axiosInstance.get('/user');
+  return response.data;
+};
+
+export const currentUserQueryOptions = queryOptions({
+  queryKey: ['authenticated-user'],
+  queryFn: fetchUser
+});
+
 export function PortalLayout() {
   const [opened, { toggle }] = useDisclosure();
+  const user = useSuspenseQuery(currentUserQueryOptions);
+  const { setUser, toggleUserFetching } = useAuthStore();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    toggleUserFetching();
+    if (user.data.role !== 'recruiter') {
+      navigate({
+        replace: true,
+        to: '/'
+      });
+    }
+    if (user.data) {
+      setUser(user.data);
+    }
+  }, [user.isFetching]);
+
+  if (!user.data) {
+    return null;
+  }
   return (
     <AppShell
       header={{ height: 60 }}
@@ -107,26 +137,28 @@ export const portalLayoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'portal',
   component: PortalLayout,
-  beforeLoad: async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw redirect({
-        to: '/'
-      });
-    }
-    try {
-      const { data } = await axiosInstance.get('/user');
-      if (!data || !data.id || data.role !== 'recruiter') {
-        localStorage.removeItem('token');
-        throw redirect({
-          to: '/'
-        });
-      }
-    } catch (error) {
-      localStorage.removeItem('token');
-      throw redirect({
-        to: '/'
-      });
-    }
-  }
+  loader: () => queryClient.ensureQueryData(currentUserQueryOptions)
+
+  // beforeLoad: async () => {
+  //   const token = localStorage.getItem('token');
+  //   if (!token) {
+  //     throw redirect({
+  //       to: '/'
+  //     });
+  //   }
+  //   try {
+  //     const { data } = await axiosInstance.get('/user');
+  //     if (!data || !data.id || data.role !== 'recruiter') {
+  //       localStorage.removeItem('token');
+  //       throw redirect({
+  //         to: '/'
+  //       });
+  //     }
+  //   } catch (error) {
+  //     localStorage.removeItem('token');
+  //     throw redirect({
+  //       to: '/'
+  //     });
+  //   }
+  // }
 });

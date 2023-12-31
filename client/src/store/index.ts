@@ -49,7 +49,7 @@ export const useAuthStore = create<Store>((set) => ({
   isLoggedIn: false,
   selectedCompany: null,
   companies: [],
-  isFetchingUser: true,
+  isFetchingUser: false,
   toggleUserFetching: () => set((state) => ({ isFetchingUser: !state.isFetchingUser })),
   setSelectedCompany: (company) => set({ selectedCompany: company }),
   setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
