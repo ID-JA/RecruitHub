@@ -21,9 +21,9 @@ export function PortalNavbar() {
     return (
       <div key={item.path}>
         <Link
+          preload={false}
           to={item.path}
           className={classes.link}
-          preload='intent'
           activeProps={{
             style: {
               fontWeight: 'bold'
