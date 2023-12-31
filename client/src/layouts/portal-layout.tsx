@@ -23,6 +23,7 @@ export const useCurrentUser = () => {
     },
     staleTime: Infinity,
     refetchOnWindowFocus: false,
+    retry: false,
     enabled: isLoggedIn === false
   });
 
