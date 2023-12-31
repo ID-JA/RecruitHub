@@ -1,4 +1,4 @@
-import { Route, useNavigate, useRouter, useRouterState } from '@tanstack/react-router';
+import { Route, useNavigate, useRouterState } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
   Badge,
@@ -178,7 +178,8 @@ const AppliedJobs = () => {
     queryFn: async () => {
       const response = await axiosInstance.get('/candidate/applied-jobs');
       return response.data;
-    }
+    },
+    refetchOnWindowFocus: true
   });
   const queryClient = useQueryClient();
 

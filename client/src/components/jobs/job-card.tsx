@@ -19,6 +19,7 @@ import { TJobData, useAddEditJobOffer } from './create-job-modal';
 import { modals } from '@mantine/modals';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { notifications, showNotification } from '@mantine/notifications';
+import { Link } from '@tanstack/react-router';
 
 const deleteJobOfferRequest = async (id: number) => {
   const response = await axiosInstance.delete(`/jobs/${id}`);
@@ -100,17 +101,24 @@ function JobCard({ props }: { props: TJobData }) {
       <AddEditJobOfferModal />
       <Group justify='space-between' align='center'>
         <div>
-          <Title
-            order={5}
-            fw={600}
-            style={{
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden'
+          <Link
+            to='/portal/candidates/$jobId'
+            params={{
+              jobId: props.id
             }}
           >
-            {props.title}
-          </Title>
+            <Title
+              order={5}
+              fw={600}
+              style={{
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden'
+              }}
+            >
+              {props.title}
+            </Title>
+          </Link>
           <Group align='center' gap='xs'>
             <div
               style={{
