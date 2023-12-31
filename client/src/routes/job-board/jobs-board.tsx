@@ -1,45 +1,95 @@
 import { Route } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
-import { Box, Container, Grid, Stack, Tabs } from '@mantine/core';
+import {
+  Box,
+  Button,
+  CloseButton,
+  Combobox,
+  Container,
+  Grid,
+  Group,
+  Input,
+  InputBase,
+  Stack,
+  Tabs
+} from '@mantine/core';
 import { TextInput, ActionIcon, rem } from '@mantine/core';
-import { IconSearch, IconArrowRight } from '@tabler/icons-react';
+import { IconSearch, IconArrowRight, IconCurrentLocation } from '@tabler/icons-react';
 import { jobData } from './components/jobData';
 import { JobOfferPreviewCard } from './components/preview-card';
-import { JobOfferCard } from './components/offer-card';
+import { JobData, JobOfferCard, OfferCardPlaceholder } from './components/offer-card';
 import { useAuthStore } from '../../store';
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '../../utils';
+import { useState } from 'react';
 
 const stickHederHeight = 64;
 
 export function JobBoard() {
-  const handleJobCardClick = () => {
-    console.log('preview');
+  const [selectedItem, setSelectedItem] = useState<JobData | undefined>();
+  const [filterOptions, setFilterOptions] = useState({
+    location: '',
+    title: ''
+  });
+  const handleJobCardClick = (item: JobData) => {
+    setSelectedItem(item);
   };
-  const jobList = jobData.map((job) => (
-    <JobOfferCard key={job.id} offer={job} onClick={handleJobCardClick} />
+
+  const queryJobs = useQuery({
+    queryKey: ['jobs-ads', filterOptions],
+    queryFn: async () => {
+      const response = await axiosInstance.get('/jobs', {
+        params: filterOptions
+      });
+      return response.data;
+    }
+  });
+
+  const jobList = queryJobs.data?.map((job: JobData) => (
+    <JobOfferCard key={job.id} offer={job} onSelect={handleJobCardClick} />
   ));
 
+  const jobCardSkelton = Array.from({ length: 5 }).map((_, i) => <OfferCardPlaceholder key={i} />);
   const { isLoggedIn, isFetchingUser } = useAuthStore();
 
+  // dynamic handleChange
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterOptions({
+      ...filterOptions,
+      [e.target.name]: e.target.value
+    });
+  };
   return (
-    <Container fluid={true}>
-      <Box>
-        {isFetchingUser ? 'Fetching' : 'Fetched'}
-        {isLoggedIn ? 'YES' : 'NO'}
-        <TextInput
-          radius='xl'
-          size='lg'
-          placeholder='Find your perfect job'
-          rightSectionWidth={90}
-          m='auto'
-          w='50%'
-          leftSection={<IconSearch style={{ width: rem(22), height: rem(22) }} stroke={1.5} />}
-          rightSection={
-            <ActionIcon size={28} radius='xl' variant='filled'>
-              <IconArrowRight style={{ width: rem(26), height: rem(26) }} stroke={1.5} />
-            </ActionIcon>
-          }
+    <Container fluid={true} mb='xl'>
+      <Group gap='xs' my='lg' justify='center'>
+        <Input
+          name='title'
+          onChange={handleChange}
+          leftSection={<IconSearch size={16} />}
+          placeholder='Job title, keyword...'
+          rightSectionPointerEvents='all'
+          rightSection={<CloseButton aria-label='Clear input' />}
+          w='25%'
         />
-      </Box>
+        <Input
+          name='location'
+          onChange={handleChange}
+          leftSection={<IconCurrentLocation size={16} />}
+          placeholder='Your Location'
+          rightSectionPointerEvents='all'
+          rightSection={<CloseButton aria-label='Clear input' />}
+          w='25%'
+        />
+        <Button
+          radius='sm'
+          variant='gradient'
+          gradient={{ from: 'blue', to: '#8FBBE7', deg: 90 }}
+          type='submit'
+          size='sm'
+        >
+          Search
+        </Button>
+      </Group>
       <Box
         style={{
           position: 'sticky',
@@ -51,42 +101,49 @@ export function JobBoard() {
         bg='#F8F9FA'
         p='md'
       >
-        <Tabs defaultValue='first'>
+        <Tabs defaultValue='latest'>
           <Tabs.List justify='center'>
-            <Tabs.Tab value='first'>Latest</Tabs.Tab>
-            <Tabs.Tab value='second' disabled>
-              For you
-            </Tabs.Tab>
-            <Tabs.Tab value='third' disabled>
-              Applied
-            </Tabs.Tab>
-            <Tabs.Tab value='third' disabled>
-              Saved
-            </Tabs.Tab>
+            <Tabs.Tab value='latest'>Latest</Tabs.Tab>
+            {isLoggedIn && (
+              <>
+                <Tabs.Tab value='for-you'>For you</Tabs.Tab>
+                <Tabs.Tab value='applied'>Applied</Tabs.Tab>
+                <Tabs.Tab value='saved'>Saved</Tabs.Tab>
+              </>
+            )}
           </Tabs.List>
         </Tabs>
       </Box>
-      <Grid>
-        <Grid.Col
-          span={{
-            md: 6,
-            xs: 12
-          }}
-        >
-          <Stack gap='md'>{jobList}</Stack>
-        </Grid.Col>
-        <Grid.Col span={6} visibleFrom='md'>
-          <div
-            style={{
-              position: 'sticky',
-              top: `${stickHederHeight + 30}px`
+      <Container size='xl'>
+        <Grid>
+          <Grid.Col
+            span={{
+              md: 4,
+              xs: 12
             }}
           >
-            {/* TODO: if offer is selected render the JobOfferPreviewCard otherwise render the JobOfferPreviewPlaceHolder */}
-            <JobOfferPreviewCard />
-          </div>
-        </Grid.Col>
-      </Grid>
+            <Stack gap='md'>
+              {queryJobs.isFetching ? (
+                jobCardSkelton
+              ) : queryJobs.data.length === 0 ? (
+                <div>No offers</div>
+              ) : (
+                jobList
+              )}
+            </Stack>
+          </Grid.Col>
+          <Grid.Col span={8} visibleFrom='md'>
+            <div
+              style={{
+                position: 'sticky',
+                top: `${stickHederHeight + 30}px`
+              }}
+            >
+              <JobOfferPreviewCard selectedOffer={selectedItem} />
+            </div>
+          </Grid.Col>
+        </Grid>
+      </Container>
     </Container>
   );
 }
