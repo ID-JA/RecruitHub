@@ -85,4 +85,21 @@ class RecruiterController extends Controller
     //         'application'=>$application
     //     ]);
     // }
+
+    public function acceptedApplications()
+    {
+        $interviews = auth()->user()->jobs;
+
+        $interviews = $interviews->each(function ($interview) {
+            $interview->applications = $interview->applications()
+                ->whereDoesntHave('meeting')
+                ->where('status','accepted')
+                ->with('candidate')
+                ->get();
+        })->pluck('applications')->flatten();
+  
+        return response()->json([
+            'applications'=>$interviews
+        ]);
+    }
 }

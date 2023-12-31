@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MessageController; 
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\SavedJobController;
 use Illuminate\Support\Facades\Notification;
@@ -19,6 +19,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -79,6 +80,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/received-applications/{jobId}', [RecruiterController::class, 'receivedApplications']);
         Route::get('/application/{applicationId}', [RecruiterController::class, 'applicationDetails']);
         Route::post('/update-application/{applicationId}', [RecruiterController::class, 'updateStatusApplication']);
+        Route::get('/accepted-applications', [RecruiterController::class, 'acceptedApplications']);
         // Route::post('/reject-application/{applicationId}', [RecruiterController::class, 'rejectApplication']);
     });
 
@@ -106,6 +108,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{job}', [JobController::class, 'update']);
         Route::delete('/{job}', [JobController::class, 'destroy']);
     });
+
+    Route::prefix('interviews')->group(function () {
+        Route::post('/create', [InterviewController::class, 'create']);
+        Route::get('/', [InterviewController::class, 'index']);
+        Route::delete('/delete/{id}', [InterviewController::class, 'destroy']);
+    });
+
+    
 
     
 });  
