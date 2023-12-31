@@ -39,7 +39,7 @@ class RecruiterController extends Controller
         return response()->json([
             "total_pending_jobs" => $totalPendingJobs,
             "total_active_jobs" => $totalActiveJobs,
-            "total_applications_jobs" => $totalApplicationsJobs,
+            "total_candidate_jobs" => $totalApplicationsJobs,
             "total_interviews" => $totalInterviews,
         ]);
     }
