@@ -1,4 +1,4 @@
-import { Link, Route } from '@tanstack/react-router';
+import { Link, Route, useNavigate } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
   Paper,
@@ -21,12 +21,21 @@ import { useState } from 'react';
 export function ForgotPassword() {
   const [email,setEmail]=useState('');
   const [error,setError]=useState(null);
+  const navigate=useNavigate()
+
 
   const handleReset=async()=>{
     try {
-      await axiosInstance.post('/password/email', {
+      const response= await axiosInstance.post('/password/email', {
         email
-      });  
+      }); 
+      if(response){
+        navigate({
+          replace: true,
+          to: '/reset-password'
+        }); 
+      }
+      
     } catch (error) {
       if (error.response) {
           if (error.response.data.errors) {
