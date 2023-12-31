@@ -31,11 +31,4 @@ class NotificationController extends Controller
     }
     
 
-    // $user=auth()->user();
-    // $data=[
-    //     'id'=>$user->id,
-    //     'title'=>'hello world title',
-    //     'body'=>'body'
-    // ];
-    // $user->notify(new Notifications($data));
 }
