@@ -14,8 +14,34 @@ import {
   Flex
 } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
+import { axiosInstance } from '../../utils';
+import { useState } from 'react';
+
 
 export function ForgotPassword() {
+  const [email,setEmail]=useState('');
+  const [error,setError]=useState(null);
+
+  const handleReset=async()=>{
+    try {
+      await axiosInstance.post('/password/email', {
+        email
+      });  
+    } catch (error) {
+      if (error.response) {
+          if (error.response.data.errors) {
+          setError(error.response.data.errors.email)
+        }
+  
+      } 
+    }
+  }
+  const handleEmail=(e)=>{
+    setEmail(e.target.value)
+    if(error!=null){
+      setError(null)
+    }
+  }
   return (
     <Container h='100vh'>
       <Flex align='center' justify='center' h='100vh' maw='500px' m='auto' w='100%'>
@@ -26,7 +52,14 @@ export function ForgotPassword() {
           <Text c='dimmed' fz='sm' ta='center'>
             Enter your email to get a reset link
           </Text>
-          <TextInput label='Your email' placeholder='you@gmail.com' required />
+          <TextInput 
+            value={email}
+            onChange={handleEmail}
+            label='Your email' 
+            placeholder='you@gmail.com' 
+            error={error}
+            required 
+          />
           <Group justify='space-between' mt='lg'>
             <Anchor c='dimmed' size='sm'>
               <Center inline>
@@ -36,7 +69,7 @@ export function ForgotPassword() {
                 </Link>
               </Center>
             </Anchor>
-            <Button>Reset password</Button>
+            <Button onClick={handleReset}>Reset password</Button>
           </Group>
         </Paper>
       </Flex>
