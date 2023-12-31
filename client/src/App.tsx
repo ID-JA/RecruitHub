@@ -7,7 +7,7 @@ import { ModalsProvider } from '@mantine/modals';
 
 const theme = createTheme({});
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false

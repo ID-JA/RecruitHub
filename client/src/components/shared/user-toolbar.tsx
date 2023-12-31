@@ -9,6 +9,7 @@ import { useCurrentUser } from '../../layouts/portal-layout';
 import { axiosInstance } from '../../utils';
 import { ColorSchemaToggle } from './theme-toggler/color-schema-toggle';
 import { NotificationData } from '../../types';
+import { TUser, useAuthStore } from '../../store';
 
 function UserToolbar() {
   const [myNotifications, setMyNotifications] = useState([]);
@@ -16,7 +17,7 @@ function UserToolbar() {
 
   const [unReadNotificationsCount, setUnReadNotificationsCount] = useState([]);
 
-  const { logout, isLoggedIn, user } = useCurrentUser();
+  const { logout, isLoggedIn, user } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
