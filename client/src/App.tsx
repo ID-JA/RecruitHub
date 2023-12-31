@@ -22,7 +22,6 @@ function App() {
         <ModalsProvider>
           <Notifications position='top-right' />
           <AppRouter />
-          <ReactQueryDevtools initialIsOpen={false} />
         </ModalsProvider>
       </MantineProvider>
     </QueryClientProvider>
