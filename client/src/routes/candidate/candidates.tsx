@@ -1,11 +1,10 @@
 import { Route } from '@tanstack/react-router';
-import { portalLayoutRoute } from '../layouts/portal-layout';
+import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { Anchor, Group, Loader, Select, Table } from '@mantine/core';
-import { axiosInstance } from '../utils';
+import { axiosInstance } from '../../utils';
 import { Fragment, useEffect, useState } from 'react';
-import { formatDate } from '../utils/formatDate';
+import { formatDate } from '../../utils/formatDate';
 // import { Avatar, Text, Button, Paper } from '@mantine/core';
-import './candidate.css';
 import { notifications } from '@mantine/notifications';
 
 interface Candidate {

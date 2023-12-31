@@ -1,21 +1,21 @@
 import { Route } from '@tanstack/react-router';
-import { portalLayoutRoute } from '../layouts/portal-layout';
+import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { Grid, Skeleton, Container, Input, Badge, Paper, Image } from '@mantine/core';
 import { UnstyledButton, Group, Avatar, Text } from '@mantine/core';
 import classes from './message.module.css';
-import logo from '../assets/apple-touch-icon.png';
+import logo from '../../assets/apple-touch-icon.png';
 import { useEffect, useRef, useState } from 'react';
 import { ScrollArea, Stack } from '@mantine/core';
 import { IconSend } from '@tabler/icons-react';
-import { axiosInstance } from '../utils';
-import { useAuthStore } from '../store';
+import { axiosInstance } from '../../utils';
+import { useAuthStore } from '../../store';
 import { IconChecks } from '@tabler/icons-react';
 import { IconCheck } from '@tabler/icons-react';
-import { formatDate } from '../utils/formatDate';
+import { formatDate } from '../../utils/formatDate';
 import { IconCircleArrowDownFilled } from '@tabler/icons-react';
 import './messages.css';
 import { IconArrowNarrowLeft } from '@tabler/icons-react';
-import aud from '../assets/notify.mp3';
+import aud from '../../assets/notify.mp3';
 function Messages() {
   const [chats, setChats] = useState([]);
   const [conversation, setConversation] = useState<any[]>([]);

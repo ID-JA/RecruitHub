@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Job;
 use App\Models\Company;
+use App\Models\Interview;
 
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable; use SoftDeletes;
+
 
     public function companies()
     {
@@ -32,6 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
     ];
 
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The methods of the user model
@@ -83,6 +88,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function savedJobs()
     {
         return $this->belongsToMany(Job::class, 'saved_jobs', 'user_id', 'job_id')->withTimestamps();
+    }
+
+    public function meetings()
+    {
+        return $this->hasMany(Interview::class);
     }
 
     /**
