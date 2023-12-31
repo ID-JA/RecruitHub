@@ -14,8 +14,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { z } from 'zod';
 import { useForm, zodResolver } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
-import { axiosInstance } from '../utils';
-import BaseModal from '../components/shared/modal/base-modal';
+import { axiosInstance } from '../../utils';
+import BaseModal from '../../components/shared/modal/base-modal';
 import { notifications } from '@mantine/notifications';
 import { DateInput } from '@mantine/dates';
 

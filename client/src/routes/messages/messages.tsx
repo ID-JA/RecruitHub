@@ -1,27 +1,27 @@
 import { Route } from '@tanstack/react-router';
-import { portalLayoutRoute } from '../layouts/portal-layout';
+import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { Grid, Skeleton, Container, Input, Badge, Paper, Image } from '@mantine/core';
 import { UnstyledButton, Group, Avatar, Text } from '@mantine/core';
 import classes from './message.module.css';
-import logo from '../assets/apple-touch-icon.png';
+import logo from '../../assets/apple-touch-icon.png';
 import { useEffect, useRef, useState } from 'react';
 import { ScrollArea, Stack } from '@mantine/core';
 import { IconSend } from '@tabler/icons-react';
-import { axiosInstance } from '../utils';
-import { useAuthStore } from '../store';
+import { axiosInstance } from '../../utils';
+import { useAuthStore } from '../../store';
 import { IconChecks } from '@tabler/icons-react';
 import { IconCheck } from '@tabler/icons-react';
-import { formatDate } from '../utils/formatDate';
+import { formatDate } from '../../utils/formatDate';
 import { IconCircleArrowDownFilled } from '@tabler/icons-react';
 import './messages.css';
 import { IconArrowNarrowLeft } from '@tabler/icons-react';
-import aud from '../assets/notify.mp3';
+import aud from '../../assets/notify.mp3';
 function Messages() {
   const [chats, setChats] = useState([]);
-  const [conversation, setConversation] = useState([]);
+  const [conversation, setConversation] = useState<any[]>([]);
   const [message, setMessage] = useState('');
-  const [receiver, setReceiver] = useState(null);
-  const [chatId, setChatId] = useState(null);
+  const [receiver, setReceiver] = useState<any | undefined>();
+  const [chatId, setChatId] = useState<string | undefined>();
   const { user } = useAuthStore();
   // const [soundMute,setSoundMute]=useState(true)
   const [isDiv1Visible, setDiv1Visibility] = useState(false);
@@ -42,13 +42,13 @@ function Messages() {
     sound.play();
   };
   useEffect(() => {
-    const channel = window.Echo.channel(`chat.${user.id}`);
-    channel.listen('.MessageSent', function (data: object) {
-      setConversation((prevArray) => [...prevArray, data.message]);
+    const channel = window.Echo.channel(`chat.${user?.id}`);
+    channel.listen('.MessageSent', function (data: any) {
+      setConversation((prevArray: any) => [...prevArray, data.message]);
       playSound();
     });
     return () => {
-      window.Echo.leave(`chat.${user.id}`);
+      window.Echo.leave(`chat.${user?.id}`);
     };
   }, []);
 
@@ -60,14 +60,14 @@ function Messages() {
     viewport.current!.scrollTo({ top: viewport.current!.scrollHeight, behavior: 'auto' });
   }, [conversation]);
 
-  const getConveration = async (id, receive) => {
+  const getConveration = async (id: string, receive: any) => {
     setConversation([]);
     setDiv1Visibility(true);
     setChatId(id);
     setReceiver(receive);
     const response = await axiosInstance.get(`/chats/${id}`);
-    setChats((prevChats) => {
-      return prevChats.map((chat) =>
+    setChats((prevChats: any) => {
+      return prevChats.map((chat: any) =>
         chat.id === chatId ? { ...chat, unreadMessagesCount: null } : chat
       );
     });
@@ -81,21 +81,21 @@ function Messages() {
     const formattedDate = new Date().toISOString().slice(0, -1) + '000000Z';
     const newMessage = {
       id: 1,
-      user_id: user.id,
-      receiver_id: receiver.id,
+      user_id: user?.id,
+      receiver_id: receiver?.id,
       chat_id: chatId,
       message,
       read_at: null,
       created_at: formattedDate
     };
-    setConversation((prevArray) => [...prevArray, newMessage]);
+    setConversation((prevArray: any) => [...prevArray, newMessage]);
     await axiosInstance.post(`/chats/messages/send`, {
-      receiver_id: receiver.id,
+      receiver_id: receiver?.id,
       chat_id: chatId,
       message: message
     });
   };
-  const handleKeyDown = async (event) => {
+  const handleKeyDown = async (event: any) => {
     if (event.key === 'Enter') {
       await handleSubmit();
     }
@@ -113,7 +113,7 @@ function Messages() {
             <Stack align='center' w={'100%'}>
               <ScrollArea style={{ height: 'calc(70vh + 50px)' }} viewportRef={viewport} w={'100%'}>
                 {chats.length > 0 ? (
-                  chats.map((e, i) => (
+                  chats.map((e: any, i) => (
                     <UnstyledButton
                       onClick={() => {
                         getConveration(e.id, e.users[0]);
@@ -184,7 +184,7 @@ function Messages() {
                 <div className='back-chat-hold'></div>
                 <IconArrowNarrowLeft onClick={toggleVisibility} className='back-chat' size={28} />
                 <Group align='center'>
-                  <b>{receiver.name} </b>
+                  <b>{receiver?.name} </b>
                   <Avatar
                     src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png'
                     radius='xl'
@@ -195,7 +195,7 @@ function Messages() {
                 <Stack align='center' h={'70vh'} w={'100%'}>
                   <ScrollArea h={'100%'} viewportRef={viewport} w={'100%'}>
                     {conversation.length > 0 ? (
-                      conversation.map((e, i) => (
+                      conversation.map((e: any, i) => (
                         <Paper
                           key={i}
                           shadow='xs'
@@ -204,9 +204,9 @@ function Messages() {
                           fw={'bold'}
                           my={'md'}
                           style={{
-                            backgroundColor: e.user_id == user.id ? '#00c4aa7d' : '#f8f8f8',
+                            backgroundColor: e.user_id == user?.id ? '#00c4aa7d' : '#f8f8f8',
                             maxWidth: '300px',
-                            marginLeft: e.user_id == user.id ? '' : 'auto'
+                            marginLeft: e.user_id == user?.id ? '' : 'auto'
                           }}
                         >
                           <Text size='sm'>{e.message}</Text>
@@ -214,7 +214,15 @@ function Messages() {
                             {formatDate(e.created_at)}
                           </Text>
                           <Group c={e.read_at ? 'blue' : 'gray'}>
-                            {e.user_id == user.id ? e.read_at ? <IconChecks /> : <IconCheck /> : ''}
+                            {e.user_id == user?.id ? (
+                              e.read_at ? (
+                                <IconChecks />
+                              ) : (
+                                <IconCheck />
+                              )
+                            ) : (
+                              ''
+                            )}
                           </Group>
                         </Paper>
                       ))

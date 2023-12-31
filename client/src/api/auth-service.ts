@@ -1,23 +1,37 @@
-import { useMutation } from '@tanstack/react-query';
+import { MutationFunction, MutationOptions, useMutation } from '@tanstack/react-query';
 import { axiosInstance } from '../utils';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from '@tanstack/react-router';
 import { z } from 'zod';
-import { useAuthStore } from '../store';
+import { TUser, useAuthStore } from '../store';
 
 export const authenticationSchema = z.object({
   password: z.string().min(6, { message: 'Name should have at least 6 letters' }),
   email: z.string().email({ message: 'Invalid email' })
 });
 
-type TAuthPayload = {
+// The payload sent when authenticating a user
+interface TAuthPayload {
   email: string;
   password: string;
-};
+}
 
-type TAuthResponse = {
-  token: string;
-};
+// The response received when a user is successfully authenticated
+interface TAuthResponse {
+  data: {
+    token: string;
+    user: TUser;
+  };
+}
+
+// The error received when authentication fails
+export interface TAuthError {
+  response: {
+    data: {
+      error: string;
+    };
+  };
+}
 
 export const authenticateUser = async (credentials: TAuthPayload): Promise<TAuthResponse> => {
   return await axiosInstance.post('login', credentials);
@@ -26,12 +40,16 @@ export const authenticateUser = async (credentials: TAuthPayload): Promise<TAuth
 export const useAuthenticate = () => {
   const router = useRouter();
   const authStore = useAuthStore();
-  const mutation = useMutation({
-    mutationFn: authenticateUser,
+
+  const mutationFn: MutationFunction<TAuthResponse, TAuthPayload> = authenticateUser;
+
+  const mutationOptions: MutationOptions<TAuthResponse, TAuthError, TAuthPayload, unknown> = {
+    mutationFn,
     onSuccess(response) {
       localStorage.setItem('token', response.data.token);
       authStore.setIsLoggedIn(true);
-      if (response.data['1'].role === 'recruiter') {
+      authStore.setUser(response.data.user);
+      if (response.data.user.role === 'recruiter') {
         router.history.replace('/portal');
       } else {
         console.log('else');
@@ -45,7 +63,10 @@ export const useAuthenticate = () => {
         message: 'Email / password is wrong'
       });
     }
-  });
+  };
+
+  const mutation = useMutation<TAuthResponse, TAuthError, TAuthPayload, unknown>(mutationOptions);
+
   const authenticate = (data: TAuthPayload) => mutation.mutate(data);
 
   return { authenticate, mutation };

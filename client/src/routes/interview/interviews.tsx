@@ -1,8 +1,8 @@
 import { Route } from '@tanstack/react-router';
-import { portalLayoutRoute } from '../layouts/portal-layout';
+import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { Anchor, Group, Loader, Table } from '@mantine/core';
 import { Fragment, useEffect, useState } from 'react';
-import { axiosInstance } from '../utils';
+import { axiosInstance } from '../../utils';
 import { IconEye, IconEyeClosed, IconTrash } from '@tabler/icons-react';
 import CreateInterviewModal from './create-interview-modal';
 

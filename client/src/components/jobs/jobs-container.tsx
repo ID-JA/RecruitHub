@@ -1,12 +1,15 @@
-import { Box, Group, Pagination, Select, Skeleton, Stack } from '@mantine/core';
+import { Box, Group, Pagination, Select, Stack } from '@mantine/core';
 import JobCard from './job-card';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import JobCardPlaceholder from './job-card-placeholder';
 import NoJobsPlaceholder from './no-job-palceholder';
-import { keepPreviousData, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
 import { ICompanyData, useAuthStore } from '../../store';
 import { NoCompanyPlaceHolder } from '../companies/no-company-placeholder';
+import { jobsRoute } from '../../routes/jobs';
+import { useNavigate } from '@tanstack/react-router';
+import { TJobData } from './create-job-modal';
 
 export interface JobData {
   id: number;
@@ -33,19 +36,9 @@ export interface JobDataWithPagination {
 }
 
 function JobsContainer() {
-  const { selectedCompany, companies, setCompanies, setSelectedCompany } = useAuthStore();
-  const queryClient = useQueryClient();
-  const [filterOptions, setFilterOptions] = useState<{
-    company: string | null;
-    status: string | null;
-    order: 'desc' | 'asc';
-    page: number;
-  }>({
-    company: selectedCompany?.value || null,
-    status: null,
-    order: 'desc',
-    page: 1
-  });
+  const { page, company, status } = jobsRoute.useSearch();
+  const navigate = useNavigate();
+  const { companies, setCompanies, setSelectedCompany } = useAuthStore();
 
   const [queryCompanies, queryJobs] = useQueries({
     queries: [
@@ -68,56 +61,52 @@ function JobsContainer() {
           }
           return response.data;
         },
-        staleTime: Infinity,
         refetchOnWindowFocus: false
       },
       {
-        queryKey: ['my-jobs', filterOptions],
-        queryFn: () => fetchJobs(filterOptions),
-        placeholderData: keepPreviousData,
-        staleTime: 5000
-      }
-    ]
-  });
-  // Prefetch the next page!
-  useEffect(() => {
-    const hasMore = queryJobs.data?.to != queryJobs.data?.total;
-    if (!queryJobs.isPlaceholderData && hasMore) {
-      queryClient.prefetchQuery({
         queryKey: [
           'my-jobs',
           {
-            ...filterOptions,
-            page: filterOptions.page + 1
+            page,
+            company,
+            status
           }
         ],
         queryFn: () =>
           fetchJobs({
-            ...filterOptions,
-            page: filterOptions.page + 1
-          })
-      });
-    }
-  }, [queryJobs.data, queryJobs.isPlaceholderData, filterOptions, queryClient]);
+            company,
+            status,
+            page
+          }),
+        staleTime: 5000
+      }
+    ]
+  });
 
   const handleChangeCompany = (value: string | null) => {
-    setFilterOptions({
-      ...filterOptions,
-      company: value
+    navigate({
+      search: (old) => ({
+        ...old,
+        company: value ? Number(value) : undefined
+      })
     });
   };
 
   const handleStatusChange = (value: string | null) => {
-    setFilterOptions({
-      ...filterOptions,
-      status: value
+    navigate({
+      search: (old) => ({
+        ...old,
+        status: value ? value : undefined
+      })
     });
   };
 
   const handlePageChange = (value: number) => {
-    setFilterOptions({
-      ...filterOptions,
-      page: value
+    navigate({
+      search: (old) => ({
+        ...old,
+        page: value ? value : undefined
+      })
     });
   };
 
@@ -128,14 +117,14 @@ function JobsContainer() {
           placeholder='company'
           title='filter by company'
           data={companies}
-          value={filterOptions.company}
+          value={company?.toString()}
           onChange={handleChangeCompany}
           clearable
         />
         <Select
           placeholder='status'
           title='filter by status'
-          value={filterOptions.status}
+          value={status}
           onChange={handleStatusChange}
           clearable
           data={['Active', 'Closed', 'Pending', 'Achieve']}
@@ -156,7 +145,7 @@ function JobsContainer() {
       ) : (
         <>
           <Stack my='xl'>
-            {queryJobs.data.data.map((props) => (
+            {queryJobs.data.data.map((props: TJobData) => (
               <Suspense key={props.id} fallback={<JobCardPlaceholder />}>
                 <JobCard props={props} />
               </Suspense>
@@ -175,9 +164,9 @@ function JobsContainer() {
 
 export default JobsContainer;
 async function fetchJobs(filterOptions: {
-  company: string | null;
-  status: string | null;
-  order: 'desc' | 'asc';
+  company: number | undefined;
+  status: string | undefined;
+  // order: 'desc' | 'asc';
   page: number;
 }) {
   const response = await axiosInstance.get('/my-jobs', {

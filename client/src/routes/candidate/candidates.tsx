@@ -1,14 +1,28 @@
 import { Route } from '@tanstack/react-router';
-import { portalLayoutRoute } from '../layouts/portal-layout';
+import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { Anchor, Group, Loader, Select, Table } from '@mantine/core';
-import { axiosInstance } from '../utils';
+import { axiosInstance } from '../../utils';
 import { Fragment, useEffect, useState } from 'react';
-import { formatDate } from '../utils/formatDate';
+import { formatDate } from '../../utils/formatDate';
 // import { Avatar, Text, Button, Paper } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
+interface Candidate {
+  name: string;
+  // Add other candidate properties as needed
+}
+
+interface Application {
+  id: string;
+  candidate: Candidate;
+  resume: string;
+  cover_letter: string;
+  status: string; // 'pending', 'accepted', 'rejected'
+  created_at: string; // ISO date string
+}
+
 function Candidates() {
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [applicationsLoading, setApplicationsLoading] = useState(true);
   // const [hoveredUserId, setHoveredUserId] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
@@ -21,15 +35,15 @@ function Candidates() {
       .then((response) => {
         if (response.data.applications) {
           setApplications(response.data.applications.applications);
+          setApplicationsLoading(false);
         }
-        setApplicationsLoading(false);
       })
       .catch(() => {
         alert('something went wrong');
         setApplicationsLoading(false);
       });
   }, []);
-  const handleStatus = async (e, id, name) => {
+  const handleStatus = async (e: any, id: any, name: any) => {
     setStatusLoading(id);
 
     await axiosInstance.post(`/recruiter/update-application/${id}`, { status: e });
@@ -41,7 +55,7 @@ function Candidates() {
     });
   };
 
-  const handleDownload = (textContent) => {
+  const handleDownload = (textContent: string) => {
     const blob = new Blob([textContent], { type: 'text/plain' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(blob);

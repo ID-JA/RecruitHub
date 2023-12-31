@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppRouter } from './routes/Router';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { ModalsProvider } from '@mantine/modals';
 
 const theme = createTheme({});
 
@@ -18,9 +19,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme}>
-        <Notifications position='top-right' />
-        <AppRouter />
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ModalsProvider>
+          <Notifications position='top-right' />
+          <AppRouter />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </ModalsProvider>
       </MantineProvider>
     </QueryClientProvider>
   );

@@ -2,41 +2,44 @@ import { Grid, ActionIcon, Text, Paper, Box } from '@mantine/core';
 import { IconBookmark, IconDeviceLaptop } from '@tabler/icons-react';
 
 export interface JobCardProps {
-  offer: JobData;
-  onClick: (id: number) => void;
-}
-
-export interface JobData {
   id: number;
   title: string;
-  jobDescription: string;
-  postedDate: string;
-  jobType: string;
   companyName: string;
-  aboutCompany: string;
-  companyLogo: string;
   location: string;
-  category: string;
-  salaryCurrency: string;
-  salary: string;
+  onClick: (id: number) => void;
+  companyLogo: string;
+  jobType: string;
+  isSelected: boolean;
 }
 
-export function JobOfferCard({ onClick, offer }: JobCardProps): JSX.Element {
+export function JobOfferCard({
+  id,
+  title,
+  companyName,
+  location,
+  onClick,
+  companyLogo,
+  jobType,
+  isSelected
+}: JobCardProps): JSX.Element {
   //  const isSelected: boolean = id === 0;
-  const { id, companyLogo, companyName, title, location, jobType } = offer;
+
   return (
     <Paper
-      withBorder
       p='md'
+      radius='md'
       style={{
-        cursor: 'pointer'
+        cursor: 'pointer',
+        backgroundColor: isSelected ? '#F8F9FA' : 'initial',
+        borderBottom: '0.5px solid #B6BBC4',
+        borderLeft: isSelected ? '3px solid #B6BBC4' : '3px solid white'
       }}
       onClick={() => onClick(id)}
     >
       <Grid>
         {/* Left Column: Image */}
         <Grid.Col
-          span={3}
+          span={2}
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -61,7 +64,7 @@ export function JobOfferCard({ onClick, offer }: JobCardProps): JSX.Element {
           )}
         </Grid.Col>
         {/* Right Column: Text */}
-        <Grid.Col span={9}>
+        <Grid.Col span={10}>
           <Box>
             <div style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}>
               <div style={{ flex: 9 }}>

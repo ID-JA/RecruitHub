@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { registerUser } from '../../api/auth-service';
 import { notifications } from '@mantine/notifications';
+import { TRegisterError } from '../../types';
 
 function CompanyDetails({ form }: { form: any }) {
   const router = useRouter();
@@ -14,7 +15,7 @@ function CompanyDetails({ form }: { form: any }) {
         message: 'Verify your email address to complete registration'
       });
     },
-    onError: (error) => {
+    onError: (error: TRegisterError) => {
       notifications.show({
         message: error.response.data.message,
         color: 'red'

@@ -4,10 +4,10 @@ import { RouterProvider } from '@tanstack/react-router';
 import { jobsRoute } from './jobs';
 import { portalLayoutRoute } from '../layouts/portal-layout';
 import { dashboardRoute } from './dashboard';
-import { messagesRoute } from './messages';
-import { candidatesRoute } from './candidates';
+import { messagesRoute } from './messages/messages';
+import { candidatesRoute } from './candidate/candidates';
 import { settingsRoute } from './settings';
-import { interviewsRoute } from './interviews';
+import { interviewsRoute } from './interview/interviews';
 import { loginRoute } from './auth/login';
 import { signUpRoute } from './auth/singup';
 import { forgotPasswordRoute } from './auth/forgot-password';
@@ -17,6 +17,7 @@ import { resetPasswordRoute } from './auth/reset-password';
 import { profileRoute } from './profile/profile';
 import { SearchjobRoute } from './SearchPage/Searchjob';
 import { jobsBoardRoute } from './job-board/jobs-board';
+import { ApplyJobRoute } from './Apply-job/ApplyJob';
 
 export const rootRoute = new RootRoute();
 const routeTree = rootRoute.addChildren([
@@ -38,7 +39,8 @@ const routeTree = rootRoute.addChildren([
     resetPasswordRoute,
     profileRoute,
     SearchjobRoute,
-    jobsBoardRoute
+    jobsBoardRoute,
+    ApplyJobRoute
   ])
 ]);
 

@@ -1,16 +1,19 @@
 import { Route } from '@tanstack/react-router';
-import { Group } from '@mantine/core';
+import { Button, Group } from '@mantine/core';
 
 import { portalLayoutRoute } from '../../layouts/portal-layout';
-import CreateJobModal from '../../components/jobs/create-job-modal';
+import { useAddEditJobOffer } from '../../components/jobs/create-job-modal';
 import JobsContainer from '../../components/jobs/jobs-container';
+import { z } from 'zod';
 
 export function Jobs() {
+  const { AddEditJobOfferModal, openAddEditJobOfferModal } = useAddEditJobOffer();
   return (
     <div>
+      <AddEditJobOfferModal />
       <Group justify='space-between'>
         <h1>Jobs Advertisements</h1>
-        <CreateJobModal />
+        <Button onClick={openAddEditJobOfferModal}>Create Job</Button>
       </Group>
       <section>
         <JobsContainer />
@@ -19,8 +22,15 @@ export function Jobs() {
   );
 }
 
+const jobSearchParamsSchema = z.object({
+  page: z.number().catch(1),
+  company: z.number().optional(),
+  status: z.string().optional()
+});
+
 export const jobsRoute = new Route({
   path: 'jobs',
   component: Jobs,
-  getParentRoute: () => portalLayoutRoute
+  getParentRoute: () => portalLayoutRoute,
+  validateSearch: jobSearchParamsSchema
 });

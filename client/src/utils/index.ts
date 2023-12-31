@@ -27,9 +27,7 @@ export const timeAgo = (
 
 export const version = 'v1';
 export const baseURL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://www.recruite.hub/api'
-    : 'http://localhost:8000/api';
+  process.env.NODE_ENV === 'production' ? 'http://localhost:8000/api' : 'http://localhost:8000/api';
 
 export const axiosInstance = axios.create({
   baseURL,
