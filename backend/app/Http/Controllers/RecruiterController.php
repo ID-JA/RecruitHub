@@ -43,7 +43,7 @@ class RecruiterController extends Controller
             "total_pending_jobs" => $totalPendingJobs,
             "total_closed_jobs" => $totalClosedJobs,
             "total_active_jobs" => $totalActiveJobs,
-            "total_candidate_jobs" => $totalApplicationsJobs,
+            "total_applications_jobs" => $totalApplicationsJobs,
             "total_interviews" => $totalInterviews,
         ]);
     }
