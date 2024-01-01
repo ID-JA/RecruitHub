@@ -6,6 +6,7 @@ use App\Models\Chat;
 use App\Models\Message;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
+use App\Notifications\Notifications;
 
 class MessageController extends Controller
 {
@@ -44,6 +45,14 @@ class MessageController extends Controller
     {
         Message::where('user_id',$id)
         ->where('receiver_id',  auth()->user()->id)
+        ->whereNull('read_at')    
+        ->update(['read_at' => now()]);
+
+        return response()->json(['status' => 'All messages marked as read']);
+    }
+    public function readAll(Request $request)
+    {
+        Message::where('receiver_id',  auth()->user()->id)
         ->whereNull('read_at')    
         ->update(['read_at' => now()]);
 

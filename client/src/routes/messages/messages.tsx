@@ -16,8 +16,13 @@ import { IconCircleArrowDownFilled } from '@tabler/icons-react';
 import './messages.css';
 import { IconArrowNarrowLeft } from '@tabler/icons-react';
 import aud from '../../assets/notify.mp3';
+import { defaultLayoutRoute } from '../../layouts/default-layout';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
 function Messages() {
   const [chats, setChats] = useState([]);
+  const [chatsLoading,setChatsLoading]=useState(true)
   const [conversation, setConversation] = useState<any[]>([]);
   const [message, setMessage] = useState('');
   const [receiver, setReceiver] = useState<any | undefined>();
@@ -25,14 +30,25 @@ function Messages() {
   const { user } = useAuthStore();
   // const [soundMute,setSoundMute]=useState(true)
   const [isDiv1Visible, setDiv1Visibility] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const chatIdRef = useRef(chatId);
 
+  const filteredChats = chats.filter((chat) =>
+    chat.users[0].name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const toggleVisibility = () => {
     setDiv1Visibility(false);
   };
 
   useEffect(() => {
+    chatIdRef.current = chatId; 
+  }, [chatId]);
+
+  useEffect(() => {
     axiosInstance.get('/chats').then((data) => {
       setChats(data.data.chats);
+      setChatsLoading(false)
+  
     });
   }, []);
 
@@ -41,16 +57,31 @@ function Messages() {
   const playSound = () => {
     sound.play();
   };
+  window.Pusher = Pusher;
+  window.Echo = new Echo({
+    broadcaster: import.meta.env.VITE_ECHO_BROADCASTER,
+    key: import.meta.env.VITE_ECHO_KEY,
+    cluster: import.meta.env.VITE_ECHO_CLUSTER,
+    encrypted: import.meta.env.VITE_ECHO_ENCRYPTED
+  });
   useEffect(() => {
     const channel = window.Echo.channel(`chat.${user?.id}`);
     channel.listen('.MessageSent', function (data: any) {
       setConversation((prevArray: any) => [...prevArray, data.message]);
+      console.log(chatIdRef.current);
+      if(data.message){
+        if(data.message.chat_id==chatIdRef.current){
+          updateUnreadMessage(chatIdRef.current,'clear',data.message)
+        }else{
+          updateUnreadMessage(data.message.chat_id,'increment',data.message)
+        }
+      }
       playSound();
     });
     return () => {
       window.Echo.leave(`chat.${user?.id}`);
     };
-  }, []);
+  }, [user]);
 
   const viewport = useRef<HTMLDivElement>(null);
   const scrollToBottom = () =>
@@ -60,17 +91,33 @@ function Messages() {
     viewport.current!.scrollTo({ top: viewport.current!.scrollHeight, behavior: 'auto' });
   }, [conversation]);
 
+  const updateUnreadMessage = (id, action, newLatestMessage = null) => {
+    setChats((prevChat) =>
+      prevChat.map((item) => {
+        if (item.id === id) {
+          const updatedItem = {
+            ...item,
+            unreadMessagesCount: action === 'clear' ? 0 : (item.unreadMessagesCount || 0) + 1,
+            latest_message: newLatestMessage !== null ? newLatestMessage : item.latest_message,
+          };
+  
+          return updatedItem;
+        }
+        return item;
+      })
+    );
+  };
+  
+  
   const getConveration = async (id: string, receive: any) => {
     setConversation([]);
     setDiv1Visibility(true);
     setChatId(id);
+    console.log(chats)
+    console.log(conversation)
+    updateUnreadMessage(id,'clear')
     setReceiver(receive);
     const response = await axiosInstance.get(`/chats/${id}`);
-    setChats((prevChats: any) => {
-      return prevChats.map((chat: any) =>
-        chat.id === chatId ? { ...chat, unreadMessagesCount: null } : chat
-      );
-    });
     //NOTE the state of unread count didn't change // need to be rerender
     setConversation(response.data.messages);
     await axiosInstance.post(`/chats/messages/mark-as-read/${receive.id}`);
@@ -112,8 +159,18 @@ function Messages() {
           <Group>
             <Stack align='center' w={'100%'}>
               <ScrollArea style={{ height: 'calc(70vh + 50px)' }} viewportRef={viewport} w={'100%'}>
-                {chats.length > 0 ? (
-                  chats.map((e: any, i) => (
+              <Input
+                  onKeyDown={handleKeyDown}
+                  value={searchQuery}
+                  onChange={(e) =>setSearchQuery(e.target.value)}
+                  // w={'85%'}
+                  size='md'
+                  my={'lg'}
+                  radius='lg'
+                  placeholder='Search chats...'
+                />
+                {filteredChats.length > 0 ? (
+                  filteredChats.map((e: any, i) => (
                     <UnstyledButton
                       onClick={() => {
                         getConveration(e.id, e.users[0]);
@@ -148,7 +205,7 @@ function Messages() {
                       </Group>
                     </UnstyledButton>
                   ))
-                ) : (
+                ): chatsLoading? 
                   <>
                     <UnstyledButton h={70} className={classes.user}>
                       <Group align='center' justify='space-between'>
@@ -168,8 +225,10 @@ function Messages() {
                         </div>
                       </Group>
                     </UnstyledButton>
-                  </>
-                )}
+                  </>:
+                  <Group justify='center' align='center' p={'lg'} fw={'bold'}>Not Found</Group>
+                
+              }
               </ScrollArea>
             </Stack>
           </Group>
@@ -342,4 +401,9 @@ export const messagesRoute = new Route({
   component: Messages,
   path: 'messages',
   getParentRoute: () => portalLayoutRoute
+});
+export const messagesCandidateRoute = new Route({
+  component: Messages,
+  path: 'messages',
+  getParentRoute: () => defaultLayoutRoute
 });

@@ -4,7 +4,7 @@ import { RouterProvider } from '@tanstack/react-router';
 import { jobsRoute } from './jobs';
 import { portalLayoutRoute } from '../layouts/portal-layout';
 import { dashboardRoute } from './dashboard';
-import { messagesRoute } from './messages/messages';
+import { messagesCandidateRoute, messagesRoute } from './messages/messages';
 import { candidatesRoute } from './candidate/candidates';
 import { settingsRoute } from './settings/settings';
 import { interviewsRoute } from './interview/interviews';
@@ -40,7 +40,8 @@ const routeTree = rootRoute.addChildren([
     profileRoute,
     SearchjobRoute,
     jobsBoardRoute,
-    ApplyJobRoute
+    ApplyJobRoute,
+    messagesCandidateRoute
   ])
 ]);
 

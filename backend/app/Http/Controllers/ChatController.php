@@ -12,12 +12,16 @@ class ChatController extends Controller
     public function index(){
         $chats=auth()->user()->chats;
         $chats->load('latestMessage');
-        $chats->each(function ($chat) {
+        $totalUnreadMessage=0;
+
+        $chats->each(function ($chat)use(&$totalUnreadMessage) {
             $chat->unreadMessagesCount = $chat->unreadMessagesCount()->count();
+            $totalUnreadMessage+=$chat->unreadMessagesCount;
             $chat->load('users');
         });
         return response()->json([
-            'chats'=>$chats
+            'chats'=>$chats,
+            'totalUnreadMessage'=>$totalUnreadMessage
         ]);
     }
     public function show(Chat $chat)
