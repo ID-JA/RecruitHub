@@ -52,8 +52,7 @@ export const useAuthenticate = () => {
       if (response.data.user.role === 'recruiter') {
         router.history.replace('/portal');
       } else {
-        console.log('else');
-        router.history.replace('/jobs-board');
+        router.history.replace('/jobs-board#latest');
       }
     },
     onError(error) {
