@@ -17,25 +17,30 @@ import {
 } from '@tabler/icons-react';
 import { JobData } from './offer-card';
 import { IconCurrencyDollar } from '@tabler/icons-react';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
 
 export function JobOfferPreviewCard({ selectedOffer }: { selectedOffer: JobData | undefined }) {
+  const state = useRouterState();
   return selectedOffer ? (
     <>
       <Paper style={{ height: '100vh', position: 'relative' }} withBorder>
         <ScrollArea h={700} py='md' mx='md' mb='md'>
-          <ActionIcon
-            style={{
-              position: 'absolute',
-              top: '10px',
-              right: '10px'
-            }}
-            variant='subtle'
-            size='xl'
-            aria-label='Settings'
-          >
-            <IconBookmark style={{ width: '70%', height: '70%' }} stroke={1.5} />
-          </ActionIcon>
+          {state.location.hash !== 'saved' && (
+            <ActionIcon
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px'
+              }}
+              variant='subtle'
+              size='xl'
+              aria-label='save-job'
+              className='btn-save-job'
+              data-job-id={selectedOffer.id}
+            >
+              <IconBookmark style={{ width: '70%', height: '70%' }} stroke={1.5} />
+            </ActionIcon>
+          )}
           <Title order={3} my='md'>
             {selectedOffer.title}
           </Title>
