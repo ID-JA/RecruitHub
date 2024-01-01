@@ -59,6 +59,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/{chat}', [ChatController::class, 'show']);
             Route::post('/messages/send', [MessageController::class, 'send']);
             Route::post('/messages/mark-as-read/{id}', [MessageController::class, 'markMessageAsRead']);
+            Route::post('/messages/read-all', [MessageController::class, 'readAll']);
         Route::delete('/{chat}', [ChatController::class, 'delete']);
             Route::get('/', [ChatController::class, 'index']);
             //delete not used in client

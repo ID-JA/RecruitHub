@@ -19,12 +19,15 @@ const DefaultLayout = (): JSX.Element => {
   // useCurrentUser();
   useEffect(() => {
     toggleUserFetching();
-    if (user.data.role !== 'recruiter') {
-      navigate({
-        replace: true,
-        to: '/'
-      });
-    }
+    // if (user.data.role !== 'recruiter') {
+    //   navigate({
+    //     replace: true,
+    //     to: '/'
+    //   });
+    // } 
+    //NOTE i needed to access messages component that has route /messages , and this condition 
+    //is preventing candidate to access that route, maybe you can make condition if role==recruiter==> /portal
+    
     if (user.data) {
       toggleUserFetching();
 

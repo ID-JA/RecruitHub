@@ -98,7 +98,7 @@ function JobCard({ props }: { props: TJobData }) {
 
   return (
     <Paper radius='md' withBorder p='md' component='li'>
-      <AddEditJobOfferModal />
+      <AddEditJobOfferModal /> 
       <Group justify='space-between' align='center'>
         <div>
           <Link
