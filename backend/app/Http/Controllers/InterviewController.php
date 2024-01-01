@@ -7,6 +7,7 @@ use App\Models\Interview;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use MacsiDigital\Zoom\Facades\Zoom;
+use App\Notifications\Notifications;
 
 class InterviewController extends Controller
 {
@@ -65,6 +66,18 @@ class InterviewController extends Controller
             'start_url' => $meeting->start_url,
             'join_url' => $meeting->join_url,
         ]);
+        $candidate=Application::find($request->application_id)->candidate;
+        if($candidate){
+            $data=[
+                'id'=>$candidate->id,
+                'title'=>'Interview up coming 🎉',
+                'body'=>"You are going to pass an interview at $interview->start_at, check your email for the LINK!😁",
+                'url'=>$interview->join_url
+            ];
+   
+            $candidate->notify(new Notifications($data));
+        }
+       
         return response()->json([
             'success'=>"You have created an interview successfully!",
             "room"=>$interview
@@ -76,10 +89,25 @@ class InterviewController extends Controller
         try {
             $meeting = Zoom::meeting()->find($id);
             $meeting->delete();
-            Interview::where('meeting_id', $id)->delete();
+            $interview=Interview::where('meeting_id', $id)->first();
+
+            $candidate=$interview->application->candidate;
+           
+            
+            $interview->delete();
+
+            if($candidate){
+                $data=[
+                    'id'=>$candidate->id,
+                    'title'=>'unfortunately 😶',
+                    'body'=>"Your interview was cancled!, don't be sad"
+                ];
+                $candidate->notify(new Notifications($data));
+            }
 
             return response()->json([
                 'success'=>"you have deleted interview successfully!",
+                'h'=>$candidate
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);

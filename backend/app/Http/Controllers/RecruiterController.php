@@ -60,7 +60,7 @@ class RecruiterController extends Controller
             
         }
         return response()->json([
-            "applications"=>$job,
+            "applications"=>$job
         ]);
     }
 
@@ -87,16 +87,18 @@ class RecruiterController extends Controller
         $candidate=$application->candidate;
         $data=[
             'id'=>$candidate->id,
-            'title'=>'congratulations 🎉',
         ];
         if($status=='accepted'){
             $application->update(['status' => $status]);
+            $data['title']='congratulations 🎉';
             $data['body']="Your application for offer '$job->title' was accepted!😁";
         }else if($status=='pending'){
             $application->update(['status' => $status]);
+            $data['title']='You are on pending!';
             $data['body']="Your application for offer '$job->title' still pending!";
         }else if($status=='rejected'){
             $application->update(['status' => $status]);
+            $data['title']='Bad luck 😐';
             $data['body']="Your application for offer '$job->title' was rejected 😐!";
         }
         $candidate->notify(new Notifications($data));

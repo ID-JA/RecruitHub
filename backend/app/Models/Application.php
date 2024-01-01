@@ -28,7 +28,7 @@ class Application extends Model
 
     public function meeting()
     {
-        return $this->hasOne(Interview::class,'application_id');
+        return $this->hasOne(Interview::class);
     }
     
 

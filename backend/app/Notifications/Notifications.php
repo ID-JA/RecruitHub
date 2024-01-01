@@ -16,10 +16,15 @@ class Notifications extends Notification
 
 
      private $data;
-
+        private $url;
      public function __construct($data)
      {
          $this->data = $data;
+         if(isset($data['url'])){
+            $this->url=$data['url'];
+         }else{
+            $this->url='/zoome';
+         }
      }
 
     /**
@@ -39,7 +44,8 @@ class Notifications extends Notification
     {
         return (new MailMessage)
                     ->line('You have received new notifications !✨')
-                    ->action('Check it out', url(env('FRONTEND_URL')))
+                    ->action('Check it out', url(isset($this->data['url']) ? $this->data['url'] : env('FRONTEND_URL')))
+                    // ->action('Check it out', url(env('FRONTEND_URL')))
                     ->line('Thank you for using our application!');
     }
 

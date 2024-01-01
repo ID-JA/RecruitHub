@@ -11,7 +11,7 @@ class Interview extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
+    public $fillable = [
         'user_id',
         'application_id',
         'meeting_id',
