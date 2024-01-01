@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { axiosInstance } from '../../utils';
 import { ColorSchemaToggle } from './theme-toggler/color-schema-toggle';
 import { NotificationData } from '../../types';
-import { TUser, useAuthStore } from '../../store';
+import { TUser } from '../../store';
 import { IconMessageCircle2 } from '@tabler/icons-react';
 
 function UserToolbar() {
@@ -18,7 +18,7 @@ function UserToolbar() {
   const [chats,setChats]=useState([])
   const [chatsLoading,setChatsLoading]=useState(true)
   const [chatsUnreadMessages,setChatsUnreadMessages]=useState(0)
- 
+
 
   const [unReadNotificationsCount, setUnReadNotificationsCount] = useState(0);
 
@@ -86,7 +86,7 @@ function UserToolbar() {
   const markMessageRead=async()=>{
     if(chatsUnreadMessages>0){
       try {
-        const response = await axiosInstance.post('/chats/messages/read-all');
+        await axiosInstance.post('/chats/messages/read-all');
         setChatsUnreadMessages(0);
       } catch (error) {
         console.error('Error ', error);
@@ -97,7 +97,7 @@ function UserToolbar() {
   const markNotificationsRead=async()=>{
     if(unReadNotificationsCount>0){
       try {
-        const response = await axiosInstance.post('/notifications/read-all');
+        await axiosInstance.post('/notifications/read-all');
         setUnReadNotificationsCount(0);
       } catch (error) {
         console.error('Error ', error);
@@ -163,7 +163,8 @@ function UserToolbar() {
           ) : chats.length > 0 ? (
             chats.map((e: any, i) => (
               <Menu.Item key={i}>
-                    <UnstyledButton
+                    <UnstyledButton 
+                    style={{ justifyContent:'space-between' }}
                       onClick={() => {
                         navigate({
                           replace: true,
@@ -177,7 +178,7 @@ function UserToolbar() {
                           src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png'
                           radius='xl'
                         />
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1,justifyContent:'space-between' }}>
                           <Text c='#4f4f4f' size='sm' fw={500}>
                             {e.users[0].name}
                           </Text>

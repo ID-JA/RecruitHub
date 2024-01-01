@@ -30,21 +30,30 @@ export default function CreateInterviewModal() {
   const [createotherinterview, setCreateOtherInterview] = useState<boolean>(false);
   const [opened, { open, close }] = useDisclosure();
   const [applications, setApplications] = useState([]);
-  const [dataApp, setDataApp] = useState([]);
-
-  useEffect(() => {
+  const [dataApp, setDataApp] = useState(['Loading']);
+  const [candidatesStatus,setCondidatesStatus]=useState('Select a Candidate')
+  
+  const getCandidates=async()=>{
+    setCondidatesStatus("Loading")
     axiosInstance
       .get(`/recruiter/accepted-applications`)
       .then((response) => {
-        console.log(response.data.applications);
         if (response.data.applications) {
           setApplications(response.data.applications);
+          setCondidatesStatus("Select a Candidate")
+        }else{
+          setCondidatesStatus("Not Found")
+        }
+        if(response.data.applications.length===0){
+          setCondidatesStatus("Not Found")
         }
       })
       .catch(() => {
         alert('Something went wrong');
+        setCondidatesStatus("Not Found")
+
       });
-  }, []);
+  }
 
   useEffect(() => {
     if (applications.length > 0) {
@@ -58,9 +67,7 @@ export default function CreateInterviewModal() {
 
   const mutation = useMutation({
     mutationFn: async (data: TInterviewData) => {
-      console.log(data);
       const response = await axiosInstance.post('/interviews/create', data);
-      console.log(response);
       const updatedData = dataApp.filter((item) => item.value !== data.application_id.toString());
       setDataApp(updatedData);
       return response.data;
@@ -137,6 +144,9 @@ export default function CreateInterviewModal() {
           <Stack mt='lg' px='xl'>
             <Select
               data={dataApp}
+              onClick={getCandidates}
+              placeholder={candidatesStatus}
+              disabled={candidatesStatus==='Not Found'}
               label='select a condidate'
               {...form.getInputProps('application_id')}
             />

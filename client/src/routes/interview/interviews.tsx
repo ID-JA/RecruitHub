@@ -3,7 +3,7 @@ import { portalLayoutRoute } from '../../layouts/portal-layout';
 import { Anchor, Group, Loader, Table } from '@mantine/core';
 import { Fragment, useEffect, useState } from 'react';
 import { axiosInstance } from '../../utils';
-import { IconEye, IconEyeClosed, IconTrash } from '@tabler/icons-react';
+import { IconEye,  IconTrash } from '@tabler/icons-react';
 import CreateInterviewModal from './create-interview-modal';
 
 function Interviews() {
@@ -11,7 +11,9 @@ function Interviews() {
   const [interviewsLoading, setInterviewsLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState({});
 
+
   useEffect(() => {
+    console.log("hi")
     axiosInstance
       .get(`/interviews`)
       .then((response) => {
@@ -34,12 +36,12 @@ function Interviews() {
   //   return isWithin15Minutes;
   // };
 
-  const isFutureDate = (inputDate) => {
-    const currentDate = new Date();
-    const targetDate = new Date(inputDate);
-    const isFuture = targetDate.getTime() > currentDate.getTime();
-    return isFuture;
-  };
+  // const isFutureDate = (inputDate) => {
+  //   const currentDate = new Date();
+  //   const targetDate = new Date(inputDate);
+  //   const isFuture = targetDate.getTime() > currentDate.getTime();
+  //   return isFuture;
+  // };
   const handleDelete = async (jobId, applicationId, meetingId) => {
     setDeleteLoading((prevLoading) => ({ ...prevLoading, [applicationId]: true }));
     try {
@@ -100,13 +102,10 @@ function Interviews() {
                       <Table.Td>{application.meeting.duration}</Table.Td>
                       <Table.Td>{application.meeting.start_at}</Table.Td>
                       <Table.Td>
-                        {isFutureDate(application.meeting.start_at) ? (
                           <Anchor target='_blank' href={application.meeting.start_url}>
                             <IconEye style={{ cursor: 'pointer' }} color='blue' size={20} />
                           </Anchor>
-                        ) : (
-                          <IconEyeClosed style={{ cursor: 'not-allowed' }} size={20} />
-                        )}
+                       
                       </Table.Td>
                       <Table.Td>
                         {deleteLoading[application.id] ? (
