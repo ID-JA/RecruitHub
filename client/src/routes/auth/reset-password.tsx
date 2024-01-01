@@ -18,52 +18,50 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import { axiosInstance } from '../../utils';
 import { useState } from 'react';
 
-
 export function ResetPassword() {
-  const [error,setError]=useState(null);
-  const navigate=useNavigate()
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({
+    password: null,
+    code: null
+  });
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     password: '',
-    code: '',
+    code: ''
   });
 
   const handleInputChange = (e) => {
-    console.log(e.target)
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: value
     }));
   };
 
-
-  const handleReset=async()=>{
+  const handleSubmit = async () => {
     try {
-      const response= await axiosInstance.post('/password/reset', {
-        password
-      }); 
-      if(response){
+      setLoading(true);
+      const response = await axiosInstance.post('/password/reset', formData);
+      if (response) {
         navigate({
           replace: true,
-          to: '/reset-password'
-        }); 
+          to: '/login'
+        });
       }
-      
     } catch (error) {
       if (error.response) {
-          if (error.response.data.errors) {
-          setError(error.response.data.errors.email)
+        if (error.response.data.errors) {
+          setError({
+            password: error.response.data.errors.password,
+            code: error.response.data.errors.code
+          });
         }
-  
-      } 
+      }
+    } finally {
+      setLoading(false);
     }
-  }
-  const handleEmail=(e)=>{
-    setEmail(e.target.value)
-    if(error!=null){
-      setError(null)
-    }
-  }
+  };
+
   return (
     <Container h='100vh'>
       <Flex align='center' justify='center' h='100vh' maw='500px' m='auto' w='100%'>
@@ -72,25 +70,25 @@ export function ResetPassword() {
             Reset Your Password
           </Title>
           <Text c='dimmed' fz='sm' ta='center'>
-            Check the reset code in your email inobx.
+            Check the reset code in your email inbox.
           </Text>
-          <TextInput 
+          <TextInput
             name='code'
             value={formData.code}
             onChange={handleInputChange}
-            label='Enter reset code' 
-            placeholder='code' 
-            error={error}
-            required 
+            label='Enter reset code'
+            placeholder='code'
+            error={error.code}
+            required
           />
-          <PasswordInput 
+          <PasswordInput
             name='password'
             value={formData.password}
             onChange={handleInputChange}
-            label='Enter Your New Password' 
-            placeholder='password' 
-            error={error}
-            required 
+            label='Enter Your New Password'
+            placeholder='password'
+            error={error.password}
+            required
           />
           <Group justify='space-between' mt='lg'>
             <Anchor c='dimmed' size='sm'>
@@ -101,14 +99,15 @@ export function ResetPassword() {
                 </Link>
               </Center>
             </Anchor>
-            <Button onClick={handleReset}>Reset password</Button>
+            <Button onClick={handleSubmit} loading={loading}>
+              Reset password
+            </Button>
           </Group>
         </Paper>
       </Flex>
     </Container>
   );
 }
-
 
 export const resetPasswordRoute = new Route({
   path: 'reset-password',

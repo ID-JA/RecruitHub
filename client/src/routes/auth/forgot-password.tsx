@@ -17,40 +17,42 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import { axiosInstance } from '../../utils';
 import { useState } from 'react';
 
-
 export function ForgotPassword() {
-  const [email,setEmail]=useState('');
-  const [error,setError]=useState(null);
-  const navigate=useNavigate()
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-
-  const handleReset=async()=>{
+  const handleReset = async () => {
     try {
-      const response= await axiosInstance.post('/password/email', {
+      setLoading(true);
+      const response = await axiosInstance.post('/password/email', {
         email
-      }); 
-      if(response){
+      });
+      if (response) {
         navigate({
           replace: true,
           to: '/reset-password'
-        }); 
+        });
       }
-      
     } catch (error) {
       if (error.response) {
-          if (error.response.data.errors) {
-          setError(error.response.data.errors.email)
+        if (error.response.data.errors) {
+          setError(error.response.data.errors.email);
         }
-  
-      } 
+      }
+    } finally {
+      setLoading(false);
     }
-  }
-  const handleEmail=(e)=>{
-    setEmail(e.target.value)
-    if(error!=null){
-      setError(null)
+  };
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    if (error !== null) {
+      setError(null);
     }
-  }
+  };
+
   return (
     <Container h='100vh'>
       <Flex align='center' justify='center' h='100vh' maw='500px' m='auto' w='100%'>
@@ -61,13 +63,13 @@ export function ForgotPassword() {
           <Text c='dimmed' fz='sm' ta='center'>
             Enter your email to get a reset link
           </Text>
-          <TextInput 
+          <TextInput
             value={email}
             onChange={handleEmail}
-            label='Your email' 
-            placeholder='you@gmail.com' 
+            label='Your email'
+            placeholder='you@gmail.com'
             error={error}
-            required 
+            required
           />
           <Group justify='space-between' mt='lg'>
             <Anchor c='dimmed' size='sm'>
@@ -78,7 +80,9 @@ export function ForgotPassword() {
                 </Link>
               </Center>
             </Anchor>
-            <Button onClick={handleReset}>Reset password</Button>
+            <Button onClick={handleReset} loading={loading}>
+              Reset password
+            </Button>
           </Group>
         </Paper>
       </Flex>
