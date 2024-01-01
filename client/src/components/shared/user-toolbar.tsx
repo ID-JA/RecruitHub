@@ -11,7 +11,6 @@ import { ColorSchemaToggle } from './theme-toggler/color-schema-toggle';
 import { NotificationData } from '../../types';
 import { TUser } from '../../store';
 import { IconMessageCircle2 } from '@tabler/icons-react';
-import { useAuthStore } from '../../store';
 
 function UserToolbar() {
   const [myNotifications, setMyNotifications] = useState([]);
@@ -19,6 +18,7 @@ function UserToolbar() {
   const [chats,setChats]=useState([])
   const [chatsLoading,setChatsLoading]=useState(true)
   const [chatsUnreadMessages,setChatsUnreadMessages]=useState(0)
+
 
   const [unReadNotificationsCount, setUnReadNotificationsCount] = useState(0);
 
