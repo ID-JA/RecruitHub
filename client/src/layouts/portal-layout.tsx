@@ -12,25 +12,25 @@ import { useAuthStore } from '../store';
 import { useEffect } from 'react';
 import UserToolbar from '../components/shared/user-toolbar';
 import { queryClient } from '../App';
+import { useRouterState } from '@tanstack/react-router';
 
 export const useCurrentUser = () => {
-  const { setUser, logout, isLoggedIn, user, toggleUserFetching } = useAuthStore();
-  const userQuery = useQuery({
-    queryKey: ['current-user'],
-    queryFn: async () => {
-      const response = await axiosInstance.get('/user');
-      setUser(response.data);
-      return response.data;
-    },
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-    retry: false,
-    enabled: isLoggedIn === false
-  });
+  const { setUser, logout, isLoggedIn, user } = useAuthStore();
+  const navigate = useNavigate();
+  const state = useRouterState();
+  const userQuery = useSuspenseQuery(currentUserQueryOptions);
 
   useEffect(() => {
-    toggleUserFetching();
-  }, [userQuery.isFetching]);
+    if (!userQuery.isFetching) {
+      if (userQuery.isFetched && userQuery.data) {
+        setUser(userQuery.data);
+      } else if (state.location.pathname === '/portal') {
+        navigate({
+          to: '/login'
+        });
+      }
+    }
+  }, []);
 
   return {
     isLoggedIn,
@@ -41,8 +41,15 @@ export const useCurrentUser = () => {
 };
 
 const fetchUser = async () => {
-  const response = await axiosInstance.get('/user');
-  return response.data;
+  try {
+    const response = await axiosInstance.get('/user');
+    if (response.status === 401) {
+      return null;
+    }
+    return response.data;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const currentUserQueryOptions = queryOptions({
@@ -52,26 +59,8 @@ export const currentUserQueryOptions = queryOptions({
 
 export function PortalLayout() {
   const [opened, { toggle }] = useDisclosure();
-  const user = useSuspenseQuery(currentUserQueryOptions);
-  const { setUser, toggleUserFetching } = useAuthStore();
-  const navigate = useNavigate();
+  useCurrentUser();
 
-  useEffect(() => {
-    toggleUserFetching();
-    if (user.data.role !== 'recruiter') {
-      navigate({
-        replace: true,
-        to: '/'
-      });
-    }
-    if (user.data) {
-      setUser(user.data);
-    }
-  }, [user.isFetching]);
-
-  if (!user.data) {
-    return null;
-  }
   return (
     <AppShell
       header={{ height: 60 }}

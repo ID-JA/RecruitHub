@@ -97,7 +97,7 @@ export function JobBoard() {
         </Button>
       </Group>
 
-      <Box
+      <Paper
         style={{
           position: 'sticky',
           top: '0px',
@@ -105,7 +105,6 @@ export function JobBoard() {
           zIndex: 50,
           marginTop: '0px'
         }}
-        bg='#F8F9FA'
         p='md'
       >
         <Tabs
@@ -128,7 +127,7 @@ export function JobBoard() {
             )}
           </Tabs.List>
         </Tabs>
-      </Box>
+      </Paper>
       <Container size='xl'>
         {routerState.location.hash === 'latest' && (
           <Grid>

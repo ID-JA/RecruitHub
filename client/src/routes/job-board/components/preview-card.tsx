@@ -1,4 +1,14 @@
-import { Paper, Title, Button, ActionIcon, ScrollArea, Text, Alert, Stack } from '@mantine/core';
+import {
+  Paper,
+  Title,
+  Button,
+  ActionIcon,
+  ScrollArea,
+  Text,
+  Alert,
+  Stack,
+  Flex
+} from '@mantine/core';
 import {
   IconClock,
   IconLocationExclamation,
@@ -104,6 +114,8 @@ export function JobOfferPreviewCard({ selectedOffer }: { selectedOffer: JobData 
       </Paper>
     </>
   ) : (
-    <p>Select an item to preview</p>
+    <Flex align='center' justify='center' fw='bold' h='500px'>
+      <p>Select job to preview</p>
+    </Flex>
   );
 }
