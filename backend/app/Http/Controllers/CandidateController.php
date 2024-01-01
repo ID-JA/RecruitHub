@@ -17,7 +17,10 @@ class CandidateController extends Controller
         ->select('applications.*', 'jobs.id as job_id', 'jobs.title as job_title')
         ->get();
     
-        
+        foreach($joinedDetails as $joinedDetail){
+            $joinedDetail->meeting;
+        }
+
     
         return response()->json([
             'applications' => $joinedDetails,

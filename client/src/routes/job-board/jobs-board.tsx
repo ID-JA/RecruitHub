@@ -1,6 +1,7 @@
 import { Route, useNavigate, useRouterState } from '@tanstack/react-router';
 import { defaultLayoutRoute } from '../../layouts/default-layout';
 import {
+  Anchor,
   Badge,
   Box,
   Button,
@@ -17,7 +18,7 @@ import {
   Text,
   Title
 } from '@mantine/core';
-import { IconSearch, IconCurrentLocation } from '@tabler/icons-react';
+import { IconSearch, IconCurrentLocation, IconEyeClosed } from '@tabler/icons-react';
 import { JobOfferPreviewCard } from './components/preview-card';
 import { JobData, JobOfferCard, OfferCardPlaceholder } from './components/offer-card';
 import { useAuthStore } from '../../store';
@@ -26,6 +27,7 @@ import { axiosInstance } from '../../utils';
 import { useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import { IconArchiveOff } from '@tabler/icons-react';
+import { IconEye } from '@tabler/icons-react';
 
 const stickHederHeight = 64;
 
@@ -205,6 +207,11 @@ const AppliedJobs = () => {
         <Group align='center' justify='space-between'>
           <Title size='h4'>{item.job_title}</Title>
           <Badge variant='outline'>{item.status}</Badge>
+          <Badge variant='outline'>{item.status}hi</Badge>
+          {item.meeting?
+          <Anchor style={{ cursor:'pointer' }} href={item.meeting.join_url} target="_blank">
+            <IconEye color='red' size={25}/>
+          </Anchor>:<IconEyeClosed size={25}/>}
           <Text>{new Date(item.created_at).toLocaleDateString()}</Text>
           <Button
             disabled={item.status !== 'pending'}
