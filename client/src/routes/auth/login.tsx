@@ -60,7 +60,9 @@ export default function Login() {
           Sign in
         </Button>
         <Text mt='md' c='dimmed' size='sm' ta='center'>
-          <Link to='/signup'>Create account</Link>
+          <Link to='/signup' hash='candidate-credentials'>
+            Create account
+          </Link>
         </Text>
       </Paper>
     </Flex>

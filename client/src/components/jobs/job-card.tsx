@@ -20,6 +20,7 @@ import { modals } from '@mantine/modals';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { notifications, showNotification } from '@mantine/notifications';
 import { Link } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 const deleteJobOfferRequest = async (id: number) => {
   const response = await axiosInstance.delete(`/jobs/${id}`);

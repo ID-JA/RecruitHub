@@ -1,5 +1,8 @@
 import { Grid, ActionIcon, Text, Paper, Box, Skeleton, Group, Stack } from '@mantine/core';
 import { IconBookmark, IconDeviceLaptop } from '@tabler/icons-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { axiosInstance } from '../../../utils';
+import { notifications } from '@mantine/notifications';
 
 export interface JobCardProps {
   offer: JobData;
@@ -30,8 +33,23 @@ export interface JobData {
 }
 
 export function JobOfferCard({ onSelect, offer }: JobCardProps): JSX.Element {
-  //  const isSelected: boolean = id === 0;
   const { id, company_name, title, location, employmentType } = offer;
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ['save-job'],
+    mutationFn: async () => {
+      const response = await axiosInstance.post(`/save-job/${id}`);
+      return response.data;
+    },
+    onSuccess: () => {
+      notifications.show({
+        title: 'Success',
+        message: 'Job saved with success',
+        color: 'green'
+      });
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['user-saved-jobs'] })
+  });
   return (
     <Paper
       withBorder
@@ -43,6 +61,8 @@ export function JobOfferCard({ onSelect, offer }: JobCardProps): JSX.Element {
       onClick={() => onSelect(offer)}
     >
       <ActionIcon
+        className='btn-save-job'
+        data-job-id={id}
         variant='transparent'
         aria-label='Save'
         color='#53A8E6'
@@ -50,6 +70,10 @@ export function JobOfferCard({ onSelect, offer }: JobCardProps): JSX.Element {
           position: 'absolute',
           top: '10px',
           right: '10px'
+        }}
+        disabled={mutation.isPending}
+        onClick={() => {
+          mutation.mutate();
         }}
       >
         <IconBookmark style={{ width: '80%', height: '80%' }} stroke={2} />

@@ -24,10 +24,11 @@ import { JobData, JobOfferCard, OfferCardPlaceholder } from './components/offer-
 import { useAuthStore } from '../../store';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '../../utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import { IconArchiveOff } from '@tabler/icons-react';
 import { IconEye } from '@tabler/icons-react';
+import SavedJobs from './components/SavedJobs';
 
 const stickHederHeight = 64;
 
@@ -38,6 +39,7 @@ export function JobBoard() {
     location: '',
     title: ''
   });
+  const queryClient = useQueryClient();
   const handleJobCardClick = (item: JobData) => {
     setSelectedItem(item);
   };
@@ -67,6 +69,32 @@ export function JobBoard() {
       [e.target.name]: e.target.value
     });
   };
+
+  const [savedJobIds, setSavedJobIds] = useState();
+
+  const query = useQuery({
+    queryKey: ['user-saved-jobs'],
+    queryFn: async () => {
+      const response = await axiosInstance.get('/saved-jobs');
+      setSavedJobIds(response.data.saved_jobs.map((item) => item.pivot.job_id.toString()));
+      return response.data;
+    },
+    enabled: isLoggedIn
+  });
+
+  useEffect(() => {
+    const disableSavedButtons = () => {
+      const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-save-job');
+      buttons.forEach((button) => {
+        const jobId = button.dataset.jobId;
+        if (jobId !== undefined && savedJobIds.includes(jobId)) {
+          button.disabled = true;
+        }
+      });
+    };
+
+    disableSavedButtons();
+  }, [savedJobIds, routerState.location.hash, selectedItem]);
   return (
     <Container fluid={true} mb='xl'>
       <Group gap='xs' my='lg' justify='center'>
@@ -162,6 +190,12 @@ export function JobBoard() {
           </Grid>
         )}
         {routerState.location.hash === 'applied' && <AppliedJobs />}
+        {routerState.location.hash === 'saved' && (
+          <SavedJobs
+            isFetching={query.isFetching}
+            savedJobs={query.data ? query.data.saved_jobs : []}
+          />
+        )}
       </Container>
     </Container>
   );
@@ -207,11 +241,13 @@ const AppliedJobs = () => {
         <Group align='center' justify='space-between'>
           <Title size='h4'>{item.job_title}</Title>
           <Badge variant='outline'>{item.status}</Badge>
-          <Badge variant='outline'>{item.status}hi</Badge>
-          {item.meeting?
-          <Anchor style={{ cursor:'pointer' }} href={item.meeting.join_url} target="_blank">
-            <IconEye color='red' size={25}/>
-          </Anchor>:<IconEyeClosed size={25}/>}
+          {item.meeting ? (
+            <Anchor style={{ cursor: 'pointer' }} href={item.meeting.join_url} target='_blank'>
+              <IconEye color='red' size={25} />
+            </Anchor>
+          ) : (
+            <IconEyeClosed size={25} />
+          )}
           <Text>{new Date(item.created_at).toLocaleDateString()}</Text>
           <Button
             disabled={item.status !== 'pending'}
