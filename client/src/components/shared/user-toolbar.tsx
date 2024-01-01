@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { axiosInstance } from '../../utils';
 import { ColorSchemaToggle } from './theme-toggler/color-schema-toggle';
 import { NotificationData } from '../../types';
-import { TUser } from '../../store';
+import { TUser, useAuthStore } from '../../store';
 import { IconMessageCircle2 } from '@tabler/icons-react';
 
 function UserToolbar() {
