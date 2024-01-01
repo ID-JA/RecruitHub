@@ -4,6 +4,7 @@ import { AppRouter } from './routes/Router';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
+import { useAuthStore } from './store';
 
 const theme = createTheme({});
 
@@ -22,6 +23,7 @@ function App() {
         <ModalsProvider>
           <Notifications position='top-right' />
           <AppRouter />
+          <ReactQueryDevtools />
         </ModalsProvider>
       </MantineProvider>
     </QueryClientProvider>

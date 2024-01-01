@@ -20,12 +20,12 @@ export function MainHeader() {
         <Link
           to={to}
           className={classes.link}
-          preload='intent'
           activeProps={{
             style: {
               fontWeight: 'bold'
             }
           }}
+          hash={label === 'Jobs' ? 'latest' : ' '}
         >
           {label}
         </Link>
