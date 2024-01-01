@@ -1,15 +1,14 @@
 import { Menu, ActionIcon, Group, Loader, Avatar, rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconBellRinging2, IconUserCircle, IconSettings, IconLogout } from '@tabler/icons-react';
-import { useRouter } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import { useState, useEffect } from 'react';
-import { useCurrentUser } from '../../layouts/portal-layout';
 import { axiosInstance } from '../../utils';
 import { ColorSchemaToggle } from './theme-toggler/color-schema-toggle';
 import { NotificationData } from '../../types';
-import { TUser, useAuthStore } from '../../store';
+import { useAuthStore } from '../../store';
 
 function UserToolbar() {
   const [myNotifications, setMyNotifications] = useState([]);
@@ -18,7 +17,7 @@ function UserToolbar() {
   const [unReadNotificationsCount, setUnReadNotificationsCount] = useState([]);
 
   const { logout, isLoggedIn, user } = useAuthStore();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.Pusher = Pusher;
@@ -127,7 +126,7 @@ function UserToolbar() {
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Menu.Label>Application</Menu.Label>
+          <Menu.Label>{user?.name}</Menu.Label>
           <Menu.Item leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}>
             Profile
           </Menu.Item>
@@ -136,8 +135,11 @@ function UserToolbar() {
           </Menu.Item>
           <Menu.Item
             onClick={() => {
+              navigate({
+                to: '/',
+                replace: true
+              });
               logout();
-              router.history.replace('/');
             }}
             leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
           >

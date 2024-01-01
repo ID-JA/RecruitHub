@@ -107,12 +107,12 @@ export const Searchjob = () => {
     </Combobox.Option>
   ));
   return (
-    <Container fluid={true}>
+    <Container>
       {/*-----------------------------
                  Hero
       -----------------------------*/}
       <section className='heroS' id='heroS'>
-        <Container style={{ padding: '5px 10px 0px 40px' }}>
+        <Container>
           <Grid>
             <Grid.Col span={6}>
               <div style={{ marginBottom: '36px', maxWidth: '800px' }}>
