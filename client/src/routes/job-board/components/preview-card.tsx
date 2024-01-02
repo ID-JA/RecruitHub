@@ -18,6 +18,7 @@ import {
 import { JobData } from './offer-card';
 import { IconCurrencyDollar } from '@tabler/icons-react';
 import { Link, useRouterState } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 export function JobOfferPreviewCard({ selectedOffer }: { selectedOffer: JobData | undefined }) {
   const state = useRouterState();
@@ -99,6 +100,8 @@ export function JobOfferPreviewCard({ selectedOffer }: { selectedOffer: JobData 
               gradient={{ from: 'blue', to: '#8FBBE7', deg: 90 }}
               type='submit'
               size='sm'
+              data-job-id={selectedOffer.id}
+              className='btn-apply'
             >
               Apply now
             </Button>

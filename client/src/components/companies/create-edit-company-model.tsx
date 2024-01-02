@@ -20,14 +20,14 @@ import { useGeoLocation } from '../../hook/use-geolocation';
 import { notifications } from '@mantine/notifications';
 
 const companySchema = z.object({
-  title: z.string(),
-  location: z.string(),
-  description: z.string(),
+  title: z.string().min(1),
+  location: z.string().min(1),
+  description: z.string().min(1),
   founded_at: z.number(),
-  type: z.string(),
-  website: z.string().url(),
-  contact_email: z.string().email(),
-  contact_phone: z.string(),
+  type: z.string().min(1),
+  website: z.string().min(1).url(),
+  contact_email: z.string().min(1).email(),
+  contact_phone: z.string().min(1),
   logo: z.string().optional(),
   revenue: z.number().default(0),
   facebook: z.string().optional(),
@@ -43,7 +43,22 @@ function CreateEditCompanyModel() {
   const { onInputChange, suggestions } = useGeoLocation();
 
   const form = useForm<TCompanyData>({
-    validate: zodResolver(companySchema)
+    validate: zodResolver(companySchema),
+    initialValues: {
+      title: '',
+      location: '',
+      description: '',
+      founded_at: 0,
+      type: '',
+      website: '',
+      contact_email: '',
+      contact_phone: '',
+      logo: '',
+      revenue: 0,
+      facebook: '',
+      instagram: '',
+      linkedin: ''
+    }
   });
   const mutation = useMutation({
     mutationFn: async (values: TCompanyData) => {
@@ -67,6 +82,7 @@ function CreateEditCompanyModel() {
       });
     }
   });
+
   const handleSubmit = () => (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     form.onSubmit((values) => {
@@ -78,7 +94,13 @@ function CreateEditCompanyModel() {
       <Button variant='outline' onClick={close}>
         Cancel
       </Button>
-      <Button type='submit' onClick={handleSubmit} loading={mutation.isPending}>
+      <Button
+        type='submit'
+        onClick={form.onSubmit((values) => {
+          mutation.mutate(values);
+        })}
+        loading={mutation.isPending}
+      >
         Create
       </Button>
     </Flex>
@@ -87,7 +109,6 @@ function CreateEditCompanyModel() {
     <>
       <BaseModal opened={opened} actions={Actions} close={close} title='Create a company'>
         <form>
-          <pre>{JSON.stringify(form.errors, null, 2)}</pre>
           <Stack mt='lg' px='xl'>
             <TextInput
               label='Title'

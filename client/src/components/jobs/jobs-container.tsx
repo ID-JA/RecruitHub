@@ -1,4 +1,4 @@
-import { Box, Group, Pagination, Select, Stack } from '@mantine/core';
+import { Box, Button, Group, Pagination, Select, Stack } from '@mantine/core';
 import JobCard from './job-card';
 import { Suspense } from 'react';
 import JobCardPlaceholder from './job-card-placeholder';
@@ -9,7 +9,7 @@ import { ICompanyData, useAuthStore } from '../../store';
 import { NoCompanyPlaceHolder } from '../companies/no-company-placeholder';
 import { jobsRoute } from '../../routes/jobs';
 import { useNavigate } from '@tanstack/react-router';
-import { TJobData } from './create-job-modal';
+import { TJobData, useAddEditJobOffer } from './create-job-modal';
 
 export interface JobData {
   id: number;
@@ -109,9 +109,17 @@ function JobsContainer() {
       })
     });
   };
+  const { AddEditJobOfferModal, openAddEditJobOfferModal } = useAddEditJobOffer();
 
   return (
     <>
+      <AddEditJobOfferModal />
+      <Group justify='space-between'>
+        <h1>Jobs Advertisements</h1>
+        {queryCompanies.data?.length && (
+          <Button onClick={openAddEditJobOfferModal}>Create Job</Button>
+        )}
+      </Group>
       <Group mt='xl'>
         <Select
           placeholder='company'
