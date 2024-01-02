@@ -7,14 +7,8 @@ import JobsContainer from '../../components/jobs/jobs-container';
 import { z } from 'zod';
 
 export function Jobs() {
-  const { AddEditJobOfferModal, openAddEditJobOfferModal } = useAddEditJobOffer();
   return (
     <div>
-      <AddEditJobOfferModal />
-      <Group justify='space-between'>
-        <h1>Jobs Advertisements</h1>
-        <Button onClick={openAddEditJobOfferModal}>Create Job</Button>
-      </Group>
       <section>
         <JobsContainer />
       </section>

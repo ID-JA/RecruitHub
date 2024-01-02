@@ -33,17 +33,17 @@ import SavedJobs from './components/SavedJobs';
 const stickHederHeight = 64;
 
 export function JobBoard() {
+  const navigate = useNavigate();
   const routerState = useRouterState();
   const [selectedItem, setSelectedItem] = useState<JobData | undefined>();
   const [filterOptions, setFilterOptions] = useState({
     location: '',
     title: ''
   });
-  const queryClient = useQueryClient();
+
   const handleJobCardClick = (item: JobData) => {
     setSelectedItem(item);
   };
-  const navigate = useNavigate();
 
   const queryJobs = useQuery({
     queryKey: ['jobs-ads', filterOptions],
@@ -70,8 +70,8 @@ export function JobBoard() {
     });
   };
 
-  const [savedJobIds, setSavedJobIds] = useState();
-
+  const [savedJobIds, setSavedJobIds] = useState([]);
+  const [appliedJobIds, setAppliedJobsIds] = useState([]);
   const query = useQuery({
     queryKey: ['user-saved-jobs'],
     queryFn: async () => {
@@ -82,19 +82,41 @@ export function JobBoard() {
     enabled: isLoggedIn
   });
 
+  const queryAppliedJob = useQuery({
+    queryKey: ['applied-jobs'],
+    queryFn: async () => {
+      const response = await axiosInstance.get('/candidate/applied-jobs');
+      setAppliedJobsIds(response.data.applications.map((item) => item.job_id.toString()));
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    enabled: isLoggedIn
+  });
+
   useEffect(() => {
     const disableSavedButtons = () => {
-      const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-save-job');
-      buttons.forEach((button) => {
-        const jobId = button.dataset.jobId;
-        if (jobId !== undefined && savedJobIds.includes(jobId)) {
-          button.disabled = true;
-        }
-      });
+      if (isLoggedIn) {
+        const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-save-job');
+        const applyBtns = document.querySelectorAll<HTMLButtonElement>('.btn-apply');
+        buttons.forEach((button) => {
+          const jobId = button.dataset.jobId;
+          if (jobId !== undefined && savedJobIds.includes(jobId)) {
+            button.disabled = true;
+          }
+        });
+
+        applyBtns.forEach((button) => {
+          const jobId = button.dataset.jobId;
+          if (jobId !== undefined && appliedJobIds.includes(jobId)) {
+            button.disabled = true;
+            button.textContent = 'Already applied';
+          }
+        });
+      }
     };
 
     disableSavedButtons();
-  }, [savedJobIds, routerState.location.hash, selectedItem]);
+  }, [savedJobIds, routerState.location.hash, selectedItem, appliedJobIds]);
   return (
     <Container fluid={true} mb='xl'>
       <Group gap='xs' my='lg' justify='center'>
@@ -189,7 +211,12 @@ export function JobBoard() {
             </Grid.Col>
           </Grid>
         )}
-        {routerState.location.hash === 'applied' && <AppliedJobs />}
+        {routerState.location.hash === 'applied' && (
+          <AppliedJobs
+            isFetching={queryAppliedJob.isFetching}
+            appliedJobs={queryAppliedJob.data ? queryAppliedJob.data.applications : []}
+          />
+        )}
         {routerState.location.hash === 'saved' && (
           <SavedJobs
             isFetching={query.isFetching}
@@ -207,17 +234,8 @@ export const jobsBoardRoute = new Route({
   getParentRoute: () => defaultLayoutRoute
 });
 
-const AppliedJobs = () => {
-  const queryAppliedJob = useQuery({
-    queryKey: ['applied-jobs'],
-    queryFn: async () => {
-      const response = await axiosInstance.get('/candidate/applied-jobs');
-      return response.data;
-    },
-    refetchOnWindowFocus: true
-  });
+const AppliedJobs = ({ appliedJobs, isFetching }: { appliedJobs: any[]; isFetching: boolean }) => {
   const queryClient = useQueryClient();
-
   const mutation = useMutation({
     mutationKey: ['cancel-application'],
     mutationFn: async (id) => {
@@ -235,7 +253,7 @@ const AppliedJobs = () => {
     }
   });
 
-  const applications = queryAppliedJob.data?.applications.map((item) => {
+  const applications = appliedJobs?.map((item) => {
     return (
       <Paper withBorder p='lg' key={item.id}>
         <Group align='center' justify='space-between'>
@@ -264,7 +282,7 @@ const AppliedJobs = () => {
   return (
     <Container>
       <Stack>
-        {queryAppliedJob.isFetching ? (
+        {isFetching ? (
           Array.from({ length: 5 }).map((_, i) => (
             <Paper withBorder key={i} p='lg'>
               <Group align='center' justify='space-between'>
@@ -275,7 +293,7 @@ const AppliedJobs = () => {
               </Group>
             </Paper>
           ))
-        ) : queryAppliedJob.data?.applications.length ? (
+        ) : appliedJobs.length ? (
           applications
         ) : (
           <Flex align='center' justify='center' h='200'>
